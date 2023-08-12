@@ -1,8 +1,12 @@
 from enum import Enum
-from typing import Dict, Callable, List
+from typing import Callable, Dict, List
 
 import numpy as np
-from src.sample_tree_structure import _count_children, _get_children, sample_tree_structure
+from src.sample_tree_structure import (
+    _count_children,
+    _get_children,
+    sample_tree_structure,
+)
 from util.priors import set_priors
 from util.type_check import is_numeric
 
@@ -19,11 +23,11 @@ class NodeKind(Enum):
 
 class TreeNode:
     def __init__(
-            self,
-            left=None,
-            right=None,
-            kind=NodeKind.NONE,
-            attribute="",
+        self,
+        left=None,
+        right=None,
+        kind=NodeKind.NONE,
+        attribute="",
     ):
 
         self.attribute = attribute
@@ -42,23 +46,29 @@ class TreeNode:
             right.parent = self
         self.is_leaf = self.children == []
 
-    def check_validity(self,
-                       zero_representations=['0'],
-                       log_representations=['log', 'Log'],
-                       division_representations=['/', ':'],
-                       verbose=False):
-        return check_node_validity(self,
-                                   zero_representations,
-                                   log_representations,
-                                   division_representations,
-                                   verbose)
+    def check_validity(
+        self,
+        zero_representations=["0"],
+        log_representations=["log", "Log"],
+        division_representations=["/", ":"],
+        verbose=False,
+    ):
+        return check_node_validity(
+            self,
+            zero_representations,
+            log_representations,
+            division_representations,
+            verbose,
+        )
 
 
-def check_node_validity(node=None,
-                        zero_representations=['0'],
-                        log_representations=['log', 'Log'],
-                        division_representations=['/', ':'],
-                        verbose=False):
+def check_node_validity(
+    node=None,
+    zero_representations=["0"],
+    log_representations=["log", "Log"],
+    division_representations=["/", ":"],
+    verbose=False,
+):
     if node is None:
         return True
 
@@ -67,9 +77,7 @@ def check_node_validity(node=None,
             return False
         if node.attribute in log_representations and node.left in zero_representations:
             if verbose:
-                print(
-                    "logarithm is applied to 0 which is results in not real number."
-                )
+                print("logarithm is applied to 0 which is results in not real number.")
             return False
         if node.left.kind == NodeKind.CONSTANT:  # unnecessary complexity
             if verbose:
@@ -83,32 +91,33 @@ def check_node_validity(node=None,
     elif node.kind == NodeKind.OPERATOR:
         if node.left is None or node.right is None:
             return False
-        if (node.attribute in division_representations and
-                node.right.attribute in zero_representations):
+        if (
+            node.attribute in division_representations
+            and node.right.attribute in zero_representations
+        ):
             if verbose:
                 print("division by 0 is not allowed.")
             return False
-        if (
-                node.left.kind == NodeKind.CONSTANT
-                and node.right.kind == NodeKind.CONSTANT
-        ):
+        if node.left.kind == NodeKind.CONSTANT and node.right.kind == NodeKind.CONSTANT:
             if verbose:
                 print(
                     f"{node.left.attribute} and {node.right.attribute} are constants applied "
                     f"to the operator {node.attribute}"
                 )
             return False  # operation of two constants is a constant (unnecessary complexity)
-        return check_node_validity(node.left, verbose) and check_node_validity(node.right, verbose)
+        return check_node_validity(node.left, verbose) and check_node_validity(
+            node.right, verbose
+        )
     else:
         return True
 
 
 def node_from_prefix(
-        prefix_notation: List[str],
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+    prefix_notation: List[str],
+    function_test: Callable = lambda _: False,
+    operator_test: Callable = lambda _: False,
+    variable_test: Callable = lambda _: False,
+    constant_test: Callable = lambda _: False,
 ):
     """
     Create a tree from a prefix notation
@@ -179,21 +188,16 @@ def node_from_prefix(
         'y'
 
     """
-    node, _ = _from_prefix_recursion(prefix_notation,
-                                     function_test,
-                                     operator_test,
-                                     variable_test,
-                                     constant_test)
+    node, _ = _from_prefix_recursion(
+        prefix_notation, function_test, operator_test, variable_test, constant_test
+    )
 
     return node
 
 
-def _from_prefix_recursion(prefix_notation,
-                           function_test,
-                           operator_test,
-                           variable_test,
-                           constant_test,
-                           index=0):
+def _from_prefix_recursion(
+    prefix_notation, function_test, operator_test, variable_test, constant_test, index=0
+):
     attribute = prefix_notation[index]
 
     if function_test(attribute):
@@ -226,7 +230,7 @@ def _from_prefix_recursion(prefix_notation,
             operator_test,
             variable_test,
             constant_test,
-            index + 1
+            index + 1,
         )
 
     if children == 2:
@@ -236,7 +240,7 @@ def _from_prefix_recursion(prefix_notation,
             operator_test,
             variable_test,
             constant_test,
-            index + 1
+            index + 1,
         )
 
     node = TreeNode(left_node, right_node, kind=kind, attribute=attribute)
@@ -253,12 +257,12 @@ def sample_attribute(priors: Dict, parent_attribute=""):
 
 
 def sample_attribute_from_tree(
-        tree_structure,
-        index,
-        feature_priors,
-        function_priors,
-        operator_priors,
-        parent_attribute="",
+    tree_structure,
+    index,
+    feature_priors,
+    function_priors,
+    operator_priors,
+    parent_attribute="",
 ):
     num_children = _count_children(tree_structure, index)
     if num_children == 0:
@@ -272,12 +276,12 @@ def sample_attribute_from_tree(
 
 
 def sample_equation_tree_from_structure(
-        tree_structure,
-        index,
-        feature_priors,
-        function_priors,
-        operator_priors,
-        parent_attribute="",
+    tree_structure,
+    index,
+    feature_priors,
+    function_priors,
+    operator_priors,
+    parent_attribute="",
 ):
     attribute = sample_attribute_from_tree(
         tree_structure,
@@ -329,11 +333,11 @@ def sample_equation_tree_from_structure(
 
 
 def sample_tree(
-        max_depth,
-        feature_priors={},
-        function_priors={},
-        operator_priors={},
-        structure_priors={},
+    max_depth,
+    feature_priors={},
+    function_priors={},
+    operator_priors={},
+    structure_priors={},
 ):
     tree_structure = sample_tree_structure(max_depth=max_depth, priors=structure_priors)
     tree = sample_equation_tree_from_structure(

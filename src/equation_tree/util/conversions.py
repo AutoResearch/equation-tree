@@ -4,7 +4,9 @@ from sympy import symbols
 from util.type_check import is_numeric
 
 
-def prefix_to_infix(prefix, function_test=lambda _: False, operator_test=lambda _: False):
+def prefix_to_infix(
+    prefix, function_test=lambda _: False, operator_test=lambda _: False
+):
     """
     Transforms prefix notation to infix notation
 
@@ -36,20 +38,20 @@ def prefix_to_infix(prefix, function_test=lambda _: False, operator_test=lambda 
 
 def infix_to_prefix(infix, function_test, operator_test):
     """
-        Transforms prefix notation to infix notation
+    Transforms prefix notation to infix notation
 
-        Example:
-            >>> is_function = lambda x: x in ['sin', 'cos']
-            >>> is_operator = lambda x : x in ['+', '-', '*']
-            >>> infix_to_prefix('x_1-x_2', is_function, is_operator)
-            ['-', 'x_1', 'x_2']
+    Example:
+        >>> is_function = lambda x: x in ['sin', 'cos']
+        >>> is_operator = lambda x : x in ['+', '-', '*']
+        >>> infix_to_prefix('x_1-x_2', is_function, is_operator)
+        ['-', 'x_1', 'x_2']
 
 
-            >>> infix_to_prefix(
-            ...     'x_1*cos(c_1+x_2)', is_function, is_operator)
-            ['*', 'x_1', 'cos', '+', 'c_1', 'x_2']
+        >>> infix_to_prefix(
+        ...     'x_1*cos(c_1+x_2)', is_function, is_operator)
+        ['*', 'x_1', 'cos', '+', 'c_1', 'x_2']
 
-        """
+    """
     n = len(infix)
 
     infix = list(infix[::-1].lower())
@@ -67,9 +69,9 @@ def infix_to_prefix(infix, function_test, operator_test):
     return prefix
 
 
-def standardize_sympy(sympy_expr,
-                      variable_test=lambda _: False,
-                      constant_test=lambda _: False):
+def standardize_sympy(
+    sympy_expr, variable_test=lambda _: False, constant_test=lambda _: False
+):
     """
     replace all variables and constants with standards
 
@@ -113,13 +115,12 @@ def standardize_sympy(sympy_expr,
     variables = {}
     constants = {}
 
-
     def replace_symbols(node):
         nonlocal variable_count, constant_count, variables, constants
         if variable_test(str(node)):
             if not str(node) in variables.keys():
                 variable_count += 1
-                new_symbol = symbols(f'x_{variable_count}')
+                new_symbol = symbols(f"x_{variable_count}")
                 variables[str(node)] = new_symbol
             else:
                 new_symbol = variables[str(node)]
@@ -127,7 +128,7 @@ def standardize_sympy(sympy_expr,
         elif constant_test(str(node)) and not is_numeric(str(node)):
             if not str(node) in constants.keys():
                 constant_count += 1
-                new_symbol = symbols(f'c_{constant_count}')
+                new_symbol = symbols(f"c_{constant_count}")
                 constants[str(node)] = new_symbol
             else:
                 new_symbol = constants[str(node)]
@@ -181,8 +182,8 @@ def unary_minus_to_binary(expr, operator_test):
 
 
 def _is_standard(s):
-    pattern_v = r'^x_\d+$'
-    pattern_c = r'^c_\d+$'
+    pattern_v = r"^x_\d+$"
+    pattern_c = r"^c_\d+$"
     return re.match(pattern_v, s) is not None or re.match(pattern_c, s) is not None
 
 
@@ -195,7 +196,7 @@ def _infix_to_postfix(infix, function_test, operator_test):
     while i < n:
         # Check if the character is alphabet or digit
         if infix[i].isdigit() and infix[i + 1] == "_":
-            output.append(infix[i: i + 3][::-1])
+            output.append(infix[i : i + 3][::-1])
             i += 2
         elif infix[i].isdigit():
             output.append(infix[i])
@@ -212,9 +213,9 @@ def _infix_to_postfix(infix, function_test, operator_test):
         # Found an operator
         else:
             if (
-                    function_test(char_stack[-1])
-                    or operator_test(char_stack[-1])
-                    or char_stack[-1] in [")", "("]
+                function_test(char_stack[-1])
+                or operator_test(char_stack[-1])
+                or char_stack[-1] in [")", "("]
             ):
                 if infix[i] == "^":
                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
@@ -246,7 +247,7 @@ def _get_priority(c):
         return 1
     elif c == "*" or c == "/":
         return 2
-    elif c == "^" or c == '**':
+    elif c == "^" or c == "**":
         return 3
     elif c[0].isalpha():
         return 4
@@ -283,9 +284,9 @@ def _move_placeholder(expression, operator_test):
             # Move the expression after % to the end of the equation
             j = i + 1
             while (
-                    j < len(expression)
-                    and not operator_test(expression[j])
-                    or open_brackets >= 1
+                j < len(expression)
+                and not operator_test(expression[j])
+                or open_brackets >= 1
             ):
                 j += 1
                 if j < len(expression) - 1 and expression[j] == "(":
@@ -311,7 +312,7 @@ def _move_placeholder(expression, operator_test):
         new_expression = __delete_chars_between_indexes(new_expression, start, end - 1)
         return new_expression
     else:
-        modified_expression = expression[:start] + "-" + expression[start + 1:]
+        modified_expression = expression[:start] + "-" + expression[start + 1 :]
         return modified_expression
 
 
@@ -328,9 +329,9 @@ def _replace_with_zero_minus(expression, operator_test):
             # Move the expression after % to the end of the equation
             j = i + 1
             while (
-                    j < len(expression)
-                    and not operator_test(expression[j])
-                    or open_brackets >= 1
+                j < len(expression)
+                and not operator_test(expression[j])
+                or open_brackets >= 1
             ):
                 j += 1
                 if j < len(expression) - 1 and expression[j] == "(":
@@ -359,7 +360,7 @@ def __delete_chars_between_indexes(input_string, i, j):
     if j >= len(input_string):
         j = len(input_string)
 
-    return input_string[:i] + input_string[j + 1:]
+    return input_string[:i] + input_string[j + 1 :]
 
 
 def __remove_character_from_string(input_string, character):
@@ -375,4 +376,3 @@ def __find_next_closing_parenthesis(input_string, j):
         if input_string[i] == ")":
             return i
     return -1  # Return -1 if closing parenthesis is not found after index j
-

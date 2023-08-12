@@ -1,12 +1,15 @@
 from typing import Callable, Dict, List, Union
 
-from src.tree_node import TreeNode, node_from_prefix, NodeKind, sample_tree
-from util.conversions import prefix_to_infix, infix_to_prefix, unary_minus_to_binary, \
-    standardize_sympy
-from util.type_check import is_numeric
-
 import numpy as np
-from sympy import sympify, simplify, symbols
+from src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
+from sympy import I, simplify, symbols, sympify
+from util.conversions import (
+    infix_to_prefix,
+    prefix_to_infix,
+    standardize_sympy,
+    unary_minus_to_binary,
+)
+from util.type_check import is_numeric
 
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
@@ -16,7 +19,7 @@ operators: Dict[str, BinaryOperator] = {
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
     "/": lambda a, b: a / b,
-    "^": lambda a, b: a ** b,
+    "^": lambda a, b: a**b,
 }
 
 functions: Dict[str, UnaryOperator] = {
@@ -151,12 +154,14 @@ class EquationTree:
         self._build()
 
     @classmethod
-    def from_prefix(cls,
-                    prefix_notation: List[str],
-                    function_test: Callable = lambda _: False,
-                    operator_test: Callable = lambda _: False,
-                    variable_test: Callable = lambda _: False,
-                    constant_test: Callable = lambda _: False):
+    def from_prefix(
+        cls,
+        prefix_notation: List[str],
+        function_test: Callable = lambda _: False,
+        operator_test: Callable = lambda _: False,
+        variable_test: Callable = lambda _: False,
+        constant_test: Callable = lambda _: False,
+    ):
         """
         Instantiate a tree from prefix notation
 
@@ -201,18 +206,20 @@ class EquationTree:
 
 
         """
-        root = node_from_prefix(prefix_notation, function_test, operator_test, variable_test,
-                                constant_test)
+        root = node_from_prefix(
+            prefix_notation, function_test, operator_test, variable_test, constant_test
+        )
         return cls(root)
 
     @classmethod
-    def from_priors(cls,
-                    max_depth,
-                    feature_priors={},
-                    function_priors={},
-                    operator_priors={},
-                    structure_priors={},
-                    ):
+    def from_priors(
+        cls,
+        max_depth,
+        feature_priors={},
+        function_priors={},
+        operator_priors={},
+        structure_priors={},
+    ):
         """
         Instantiate a tree from priors
 
@@ -258,17 +265,24 @@ class EquationTree:
             >>> equation_tree.functions
             ['cos', 'cos', 'sin', 'cos']
         """
-        root = sample_tree(max_depth, feature_priors, function_priors, operator_priors,
-                           structure_priors)
+        root = sample_tree(
+            max_depth,
+            feature_priors,
+            function_priors,
+            operator_priors,
+            structure_priors,
+        )
         return cls(root)
 
     @classmethod
-    def from_sympy(cls,
-                   expression,
-                   function_test: Callable = lambda _: False,
-                   operator_test: Callable = lambda _: False,
-                   variable_test: Callable = lambda _: False,
-                   constant_test: Callable = lambda _: False):
+    def from_sympy(
+        cls,
+        expression,
+        function_test: Callable = lambda _: False,
+        operator_test: Callable = lambda _: False,
+        variable_test: Callable = lambda _: False,
+        constant_test: Callable = lambda _: False,
+    ):
         """
         Instantiate a tree from a sympy function
 
@@ -314,8 +328,9 @@ class EquationTree:
         standard = standardize_sympy(expression, variable_test, constant_test)
         standard = unary_minus_to_binary(standard, operator_test)
         prefix = infix_to_prefix(str(standard), function_test, operator_test)
-        root = node_from_prefix(prefix, function_test, operator_test, variable_test,
-                                constant_test)
+        root = node_from_prefix(
+            prefix, function_test, operator_test, variable_test, constant_test
+        )
         return cls(root)
 
     @property
@@ -345,7 +360,8 @@ class EquationTree:
     @property
     def infix(self):
         return prefix_to_infix(
-            self.prefix, lambda x: x in self.functions, lambda x: x in self.operators)
+            self.prefix, lambda x: x in self.functions, lambda x: x in self.operators
+        )
 
     @property
     def sympy_expr(self):
@@ -353,16 +369,21 @@ class EquationTree:
         if sympy_expr.free_symbols:
             symbol_names = [str(symbol) for symbol in sympy_expr.free_symbols]
             real_symbols = symbols(" ".join(symbol_names), real=True)
-            if not isinstance(real_symbols, list) and not isinstance(real_symbols, tuple):
+            if not isinstance(real_symbols, list) and not isinstance(
+                real_symbols, tuple
+            ):
                 real_symbols = [real_symbols]
             subs_dict = {old: new for old, new in zip(symbol_names, real_symbols)}
             sympy_expr = sympy_expr.subs(subs_dict)
         return sympy_expr
 
-    def check_validity(self, zero_representations=['0'],
-                       log_representations=['log', 'Log'],
-                       division_representations=['/', ':'],
-                       verbose=False):
+    def check_validity(
+        self,
+        zero_representations=["0"],
+        log_representations=["log", "Log"],
+        division_representations=["/", ":"],
+        verbose=False,
+    ):
         """
         Check if the tree is valid:
             - Check if log(0) or x / 0 exists
@@ -412,10 +433,7 @@ class EquationTree:
             False
         """
         return self.root.check_validity(
-            zero_representations,
-            log_representations,
-            division_representations,
-            verbose
+            zero_representations, log_representations, division_representations, verbose
         )
 
     def standardize(self):
@@ -459,58 +477,88 @@ class EquationTree:
             if node.kind == NodeKind.VARIABLE:
                 if node.attribute not in variables.keys():
                     variable_count += 1
-                    variables[node.attribute] = f'x_{variable_count}'
+                    variables[node.attribute] = f"x_{variable_count}"
                 node.attribute = variables[node.attribute]
             if node.kind == NodeKind.CONSTANT and not is_numeric(node.attribute):
                 if node.attribute not in constants.keys():
                     constant_count += 1
-                    constants[node.attribute] = f'c_{constant_count}'
+                    constants[node.attribute] = f"c_{constant_count}"
                 node.attribute = constants[node.attribute]
             else:
                 rec_stand(node.left)
                 rec_stand(node.right)
             return node
 
-        new_root = rec_stand(self.root)
-        self.__init__(new_root)
+        self.root = rec_stand(self.root)
+        self._build()
 
+    def simplify(
+        self,
+        function_test: Union[Callable, None] = None,
+        operator_test: Union[Callable, None] = None,
+        is_unary_minus_only: bool = True,
+        is_power_caret: bool = True,
+        verbose: bool = False,
+    ):
+        """
+        simplify equation
+        :param function_test:
+        :param operator_test:
+        :param is_unary_minus_only:
+        :param is_power_caret:
+        :param verbose:
+        :return:
+        """
+        simplified_equation = simplify(self.sympy_expr)
+        if I in simplified_equation.free_symbols:
+            if verbose:
+                print(f"Simplify {str(self.sympy_expr)} results in complex values")
+            self.root = None
+            self._build()
+            return
+        if is_unary_minus_only:
+            simplified_equation = unary_minus_to_binary(
+                str(simplified_equation), lambda x: x in self.operators
+            )
 
-    # def simplify_tree(self,
-    #                   function_test: Callable,
-    #                   operator_test: Callable,
-    #                   is_unary_minus_only: bool = True,
-    #                   is_power_caret: bool = True,
-    #                   verbose: bool = True):
-    #     simplified_equation = simplify(self.sympy_expr)
-    #     if I in simplified_equation.free_symbols:
-    #         if verbose:
-    #             print(f'Simplify {str(self.sympy_expr)} results in complex values')
-    #         self.__init__(None)
-    #         return
-    #     if is_unary_minus_only:
-    #         simplified_equation = unary_minus_to_binary(
-    #             str(simplified_equation), lambda x: x in self.operators
-    #         )
-    #
-    #     simplified_equation = simplified_equation.replace(" ", "")
-    #     if is_power_caret:
-    #         simplified_equation = simplified_equation.replace("**", "^")
-    #
-    #     prefix = infix_to_prefix(simplified_equation, function_test, operator_test)
-    #     if verbose:
-    #         print("prefix", simplified_equation)
-    #         print("prefix tree", prefix)
-    #     if len(prefix) > len(expr):
-    #         prefix = expr
-    #     if "re" in prefix:
-    #         prefix.remove("re")
-    #     if "zoo" in prefix or "oo" in prefix:
-    #         return None
-    #     tree = EquationTree([], feature_space, function_space, operator_space)
-    #     tree.instantiate_from_prefix_notation(prefix)
-    #     return tree
+        simplified_equation = simplified_equation.replace(" ", "")
+        if is_power_caret:
+            simplified_equation = simplified_equation.replace("**", "^")
+
+        prefix = infix_to_prefix(simplified_equation, function_test, operator_test)
+        if verbose:
+            print("prefix", simplified_equation)
+            print("prefix tree", prefix)
+        if len(prefix) > len(self.expr):
+            prefix = self.expr
+        if "re" in prefix:
+            prefix.remove("re")
+        if "zoo" in prefix or "oo" in prefix:
+            if verbose:
+                print(f"Simplify {str(self.sympy_expr)} results in None")
+            self.root = None
+            self._build()
+            return
+        self.root = node_from_prefix(
+            prefix,
+            function_test,
+            operator_test,
+            lambda x: x in self.variables,
+            lambda x: x in self.constants,
+        )
+        self._build()
 
     def _build(self):
+        self.structure: List[int] = []
+
+        # make function to get this here
+        self.expr: List[str] = list()
+
+        self.variables: List[str] = list()
+        self.functions: List[str] = list()
+        self.operators: List[str] = list()
+        self.constants: List[str] = list()
+
         self._collect_structure(self.structure, 0, self.root)
 
         self._collect_attributes(
@@ -544,7 +592,7 @@ class EquationTree:
         self._collect_expr(expression, node.right)
 
     def _collect_attributes(
-            self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
+        self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
     ):
         if node is None:
             return list()
