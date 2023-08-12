@@ -1,4 +1,13 @@
 import warnings
+from typing import List
+
+
+def priors_from_space(space: List):
+    _lst = list(set(space))
+    res = {}
+    for key in _lst:
+        res[key] = 1 / len(_lst)
+    return res
 
 
 def set_priors(priors=None, space=None):

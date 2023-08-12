@@ -603,17 +603,16 @@ class EquationTree:
         if verbose:
             print("prefix", simplified_equation)
             print("prefix tree", prefix)
-        if len(prefix) > len(self.expr):
-            prefix = self.expr
         if "re" in prefix:
             prefix.remove("re")
+        if len(prefix) > len(self.expr):
+            prefix = self.expr
         if "zoo" in prefix or "oo" in prefix:
             if verbose:
                 print(f"Simplify {str(self.sympy_expr)} results in None")
             self.root = None
             self._build()
             return
-        print(prefix)
         self.root = node_from_prefix(
             prefix,
             function_test,
