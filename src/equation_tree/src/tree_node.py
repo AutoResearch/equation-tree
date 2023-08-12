@@ -8,7 +8,7 @@ from src.sample_tree_structure import (
     sample_tree_structure,
 )
 from util.priors import set_priors
-from util.type_check import is_numeric
+from util.type_check import is_numeric, is_known_constant
 
 MAX_ITER = 1000
 
@@ -75,7 +75,7 @@ def check_node_validity(
     if node.kind == NodeKind.FUNCTION:
         if node.left is None or node.right is not None:
             return False
-        if node.attribute in log_representations and node.left in zero_representations:
+        if node.attribute in log_representations and node.left.attribute in zero_representations:
             if verbose:
                 print("logarithm is applied to 0 which is results in not real number.")
             return False
@@ -86,7 +86,7 @@ def check_node_validity(
                     f"applied to a function {node.attribute}"
                 )
             return False
-        return check_node_validity(node.left, verbose)
+        return check_node_validity(node.left, verbose=verbose)
 
     elif node.kind == NodeKind.OPERATOR:
         if node.left is None or node.right is None:
@@ -105,8 +105,8 @@ def check_node_validity(
                     f"to the operator {node.attribute}"
                 )
             return False  # operation of two constants is a constant (unnecessary complexity)
-        return check_node_validity(node.left, verbose) and check_node_validity(
-            node.right, verbose
+        return check_node_validity(node.left, verbose=verbose) and check_node_validity(
+            node.right, verbose=verbose
         )
     else:
         return True
@@ -206,7 +206,7 @@ def _from_prefix_recursion(
         kind = NodeKind.OPERATOR
     elif variable_test(attribute):
         kind = NodeKind.VARIABLE
-    elif constant_test(attribute) or is_numeric(attribute):
+    elif constant_test(attribute) or is_numeric(attribute) or is_known_constant(attribute):
         kind = NodeKind.CONSTANT
     else:
         raise Exception(f"{attribute} has no defined type in any space")

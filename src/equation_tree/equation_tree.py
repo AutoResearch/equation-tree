@@ -1,3 +1,4 @@
+import warnings
 from typing import Callable, Dict, List, Union
 
 import numpy as np
@@ -9,7 +10,7 @@ from util.conversions import (
     standardize_sympy,
     unary_minus_to_binary,
 )
-from util.type_check import is_numeric
+from util.type_check import is_numeric, check_functions, is_known_constant
 
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
@@ -19,7 +20,7 @@ operators: Dict[str, BinaryOperator] = {
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
     "/": lambda a, b: a / b,
-    "^": lambda a, b: a**b,
+    "^": lambda a, b: a ** b,
 }
 
 functions: Dict[str, UnaryOperator] = {
@@ -155,12 +156,12 @@ class EquationTree:
 
     @classmethod
     def from_prefix(
-        cls,
-        prefix_notation: List[str],
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+            cls,
+            prefix_notation: List[str],
+            function_test: Callable = lambda _: False,
+            operator_test: Callable = lambda _: False,
+            variable_test: Callable = lambda _: False,
+            constant_test: Callable = lambda _: False,
     ):
         """
         Instantiate a tree from prefix notation
@@ -213,12 +214,12 @@ class EquationTree:
 
     @classmethod
     def from_priors(
-        cls,
-        max_depth,
-        feature_priors={},
-        function_priors={},
-        operator_priors={},
-        structure_priors={},
+            cls,
+            max_depth,
+            feature_priors={},
+            function_priors={},
+            operator_priors={},
+            structure_priors={},
     ):
         """
         Instantiate a tree from priors
@@ -276,12 +277,12 @@ class EquationTree:
 
     @classmethod
     def from_sympy(
-        cls,
-        expression,
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+            cls,
+            expression,
+            function_test: Callable = lambda _: False,
+            operator_test: Callable = lambda _: False,
+            variable_test: Callable = lambda _: False,
+            constant_test: Callable = lambda _: False,
     ):
         """
         Instantiate a tree from a sympy function
@@ -370,19 +371,23 @@ class EquationTree:
             symbol_names = [str(symbol) for symbol in sympy_expr.free_symbols]
             real_symbols = symbols(" ".join(symbol_names), real=True)
             if not isinstance(real_symbols, list) and not isinstance(
-                real_symbols, tuple
+                    real_symbols, tuple
             ):
                 real_symbols = [real_symbols]
             subs_dict = {old: new for old, new in zip(symbol_names, real_symbols)}
             sympy_expr = sympy_expr.subs(subs_dict)
         return sympy_expr
 
+    @property
+    def is_nan(self):
+        return self.root is None
+
     def check_validity(
-        self,
-        zero_representations=["0"],
-        log_representations=["log", "Log"],
-        division_representations=["/", ":"],
-        verbose=False,
+            self,
+            zero_representations=["0"],
+            log_representations=["log", "Log"],
+            division_representations=["/", ":"],
+            verbose=False,
     ):
         """
         Check if the tree is valid:
@@ -435,6 +440,39 @@ class EquationTree:
         return self.root.check_validity(
             zero_representations, log_representations, division_representations, verbose
         )
+
+    def check_possible(
+            self,
+            feature_priors: Dict,
+            function_priors: Dict,
+            operator_priors: Dict,
+            structure_priors: Dict
+    ):
+        """
+        Check weather a tree is a possible tree given the priors
+        Attention:
+            If no prior is given, interpreted as all possibilities are allowed
+        """
+        if feature_priors != {}:
+            for c in self.constants:
+                if c not in feature_priors.keys() or feature_priors[c] <= 0:
+                    return False
+            for v in self.variables:
+                if v not in feature_priors.keys() or feature_priors[v] <= 0:
+                    return False
+        if function_priors != {}:
+            for fun in self.functions:
+                if fun not in function_priors.keys() or function_priors[fun] <= 0:
+                    return False
+        if operator_priors != {}:
+            for op in self.operators:
+                if op not in operator_priors.keys() or operator_priors[op] <= 0:
+                    return False
+        if structure_priors != {}:
+            if str(self.structure) not in structure_priors.keys() or \
+                structure_priors[str(self.structure)] <= 0:
+                return False
+        return True
 
     def standardize(self):
         """
@@ -493,12 +531,12 @@ class EquationTree:
         self._build()
 
     def simplify(
-        self,
-        function_test: Union[Callable, None] = None,
-        operator_test: Union[Callable, None] = None,
-        is_binary_minus_only: bool = True,
-        is_power_caret: bool = True,
-        verbose: bool = False,
+            self,
+            function_test: Union[Callable, None] = None,
+            operator_test: Union[Callable, None] = None,
+            is_binary_minus_only: bool = True,
+            is_power_caret: bool = True,
+            verbose: bool = False,
     ):
         """
         Simplify equation if the simplified equation has a shorter prefix
@@ -515,7 +553,7 @@ class EquationTree:
 
         Examples:
             >>> is_variable = lambda x: 'x_' in x
-            >>> is_constant = lambda x: 'c_' in x
+            >>> is_constant = lambda x: 'c_' in x or is_numeric(x) or is_known_constant(x)
             >>> is_operator = lambda x: len(x) == 1 and not is_numeric(x)
             >>> is_function = lambda x: not (is_variable(x) or is_constant(x) or is_operator(x))
             >>> prefix = ['+', 'x_1', 'x_1' ]
@@ -560,7 +598,29 @@ class EquationTree:
             >>> equation_tree.expr
             ['abs', 'x_1']
 
+            >>> prefix = ['*', '-', 'c_1', 'x_1', '-', 'x_1', 'c_1']
+            >>> equation_tree = EquationTree.from_prefix(
+            ...     prefix_notation=prefix,
+            ...     variable_test=is_variable,
+            ...     constant_test=is_constant,
+            ...     operator_test=is_operator,
+            ...     function_test=is_function)
+            >>> equation_tree.expr
+            ['*', '-', 'c_1', 'x_1', '-', 'x_1', 'c_1']
+
+            >>> equation_tree.sympy_expr
+            (-c_1 + x_1)*(c_1 - x_1)
+
+            # it is good practice to define tests at the begining of a script and use them
+            # throughout the project
+            >>> equation_tree.simplify(
+            ...     operator_test=is_operator,
+            ...     function_test=is_function
+            ... )
+            >>> equation_tree.expr
+             ['^', '-', '0', '-', 'c_1', 'x_1', '2']
         """
+
         if function_test is None:
 
             def function_test(x):
@@ -584,20 +644,30 @@ class EquationTree:
                 return tmp_o(x) or x in self.operators
 
         simplified_equation = simplify(self.sympy_expr)
+        if not check_functions(simplified_equation, function_test):
+            warnings.warn(f"{simplified_equation} has functions that are not in function_test type")
+            self.root = None
+            self._build()
+            return
         if I in simplified_equation.free_symbols:
             if verbose:
                 print(f"Simplify {str(self.sympy_expr)} results in complex values")
             self.root = None
             self._build()
             return
+        if is_power_caret:
+            simplified_equation = str(simplified_equation).replace("**", "^")
         if is_binary_minus_only:
+            #print(simplified_equation)
             simplified_equation = unary_minus_to_binary(
-                str(simplified_equation), operator_test
+                simplified_equation, operator_test
             )
+            #print(simplified_equation)
 
         simplified_equation = simplified_equation.replace(" ", "")
         if is_power_caret:
             simplified_equation = simplified_equation.replace("**", "^")
+
 
         prefix = infix_to_prefix(simplified_equation, function_test, operator_test)
         if verbose:
@@ -618,7 +688,7 @@ class EquationTree:
             function_test,
             operator_test,
             lambda x: x in self.variables,
-            lambda x: x in self.constants,
+            lambda x: x in self.constants or is_numeric(x) or is_known_constant(x),
         )
         self._build()
 
@@ -666,7 +736,7 @@ class EquationTree:
         self._collect_expr(expression, node.right)
 
     def _collect_attributes(
-        self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
+            self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
     ):
         if node is None:
             return list()

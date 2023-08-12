@@ -1,4 +1,7 @@
 import re
+from sympy import symbols, Function, Add, Mul, Pow
+
+DEFAULT_CONSTANTS = ['e', 'pi']
 
 
 def is_numeric(s):
@@ -58,3 +61,40 @@ def is_constant_formatted(s: str):
         """
     pattern = r'^c_\d+$'
     return re.match(pattern, s) is not None
+
+
+def is_known_constant(s: str):
+    return s in DEFAULT_CONSTANTS
+
+
+def check_functions(expression, function_test):
+    """
+    Example:
+        >>> from sympy import sympify
+        >>> expr = sympify('sin(x)')
+        >>> contains_function(expr, lambda x: x in ['sin'])
+        True
+
+        >>> expr = sympify('x + y')
+        >>> contains_function(expr, lambda x: x in ['sin'])
+        True
+
+        >>> expr = sympify('sin(x) + cos(y)')
+        >>> contains_function(expr, lambda x: x in ['sin', 'cos'])
+        True
+
+        >>> contains_function(expr, lambda x: x in ['sin'])
+        False
+
+    """
+
+    def apply_test(node):
+        if isinstance(node, Function):
+            return function_test(str(node.func).lower()) or str(node.func) == 're'
+        elif isinstance(node, (Add, Mul)):
+            return all(apply_test(arg) or str(node.func) == 're' for arg in node.args)
+        return True
+
+    return apply_test(expression)
+
+    #return not has_any_function(expression) or has_function(expression, function_test)
