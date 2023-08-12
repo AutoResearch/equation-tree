@@ -4,6 +4,7 @@ from typing import Dict, Callable, List
 import numpy as np
 from src.sample_tree_structure import _count_children, _get_children, sample_tree_structure
 from util.priors import set_priors
+from util.type_check import is_numeric
 
 MAX_ITER = 1000
 
@@ -201,7 +202,7 @@ def _from_prefix_recursion(prefix_notation,
         kind = NodeKind.OPERATOR
     elif variable_test(attribute):
         kind = NodeKind.VARIABLE
-    elif constant_test(attribute):
+    elif constant_test(attribute) or is_numeric(attribute):
         kind = NodeKind.CONSTANT
     else:
         raise Exception(f"{attribute} has no defined type in any space")

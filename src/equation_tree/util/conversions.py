@@ -1,6 +1,7 @@
 import re
 
 from sympy import symbols
+from util.type_check import is_numeric
 
 
 def prefix_to_infix(prefix, function_test=lambda _: False, operator_test=lambda _: False):
@@ -66,7 +67,9 @@ def infix_to_prefix(infix, function_test, operator_test):
     return prefix
 
 
-def standardize_sympy(sympy_expr, variable_test=lambda _: False, constant_test=lambda _: False):
+def standardize_sympy(sympy_expr,
+                      variable_test=lambda _: False,
+                      constant_test=lambda _: False):
     """
     replace all variables and constants with standards
 
@@ -121,7 +124,7 @@ def standardize_sympy(sympy_expr, variable_test=lambda _: False, constant_test=l
             else:
                 new_symbol = variables[str(node)]
             return new_symbol
-        elif constant_test(str(node)):
+        elif constant_test(str(node)) and not is_numeric(str(node)):
             if not str(node) in constants.keys():
                 constant_count += 1
                 new_symbol = symbols(f'c_{constant_count}')
@@ -372,3 +375,4 @@ def __find_next_closing_parenthesis(input_string, j):
         if input_string[i] == ")":
             return i
     return -1  # Return -1 if closing parenthesis is not found after index j
+

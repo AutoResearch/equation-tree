@@ -3,6 +3,7 @@ from typing import Callable, Dict, List, Union
 from src.tree_node import TreeNode, node_from_prefix, NodeKind, sample_tree
 from util.conversions import prefix_to_infix, infix_to_prefix, unary_minus_to_binary, \
     standardize_sympy
+from util.type_check import is_numeric
 
 import numpy as np
 from sympy import sympify, simplify, symbols
@@ -212,7 +213,12 @@ class EquationTree:
                     operator_priors={},
                     structure_priors={},
                     ):
-        """Instantiate a tree from priors
+        """
+        Instantiate a tree from priors
+
+        Attention
+            - use standard notation here:   variables should be in form x_{number}
+                                            constants should be in form c_{number}
 
         Args:
             max_depth: Maximum depth of the tree
@@ -288,12 +294,28 @@ class EquationTree:
             >>> equation_tree.sympy_expr
             c_1*x_2 + x_1
 
+            # Numbers don't get standardized but are constants
+            >>> expr = sympify('x_a + 2 * y')
+            >>> expr
+            x_a + 2*y
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     operator_test=is_operator,
+            ...     variable_test=is_variable,
+            ...     constant_test=is_constant
+            ... )
+            >>> equation_tree.expr
+            ['+', 'x_1', '*', '2', 'x_2']
+            >>> equation_tree.sympy_expr
+            x_1 + 2*x_2
+
+
         """
         standard = standardize_sympy(expression, variable_test, constant_test)
         standard = unary_minus_to_binary(standard, operator_test)
         prefix = infix_to_prefix(str(standard), function_test, operator_test)
         root = node_from_prefix(prefix, function_test, operator_test, variable_test,
-                           constant_test)
+                                constant_test)
         return cls(root)
 
     @property
@@ -397,7 +419,61 @@ class EquationTree:
         )
 
     def standardize(self):
-        pass
+        """
+        Standardize variable and constant names
+
+        Example:
+            >>> is_variable = lambda x : x in ['x', 'y', 'z']
+            >>> is_constant = lambda x : x in ['0', '1', '2']
+            >>> is_function = lambda x : x in ['sin', 'cos']
+            >>> is_operator = lambda x: x in ['+', '-', '*', '/']
+            >>> prefix = ['+', '-', 'x', '1', '*', 'sin', 'y', 'cos', 'z']
+
+            # then we create the node root
+            >>> equation_tree = EquationTree.from_prefix(
+            ...     prefix_notation=prefix,
+            ...     variable_test=is_variable,
+            ...     constant_test=is_constant,
+            ...     function_test=is_function,
+            ...     operator_test=is_operator
+            ...     )
+
+            >>> equation_tree.sympy_expr
+            x + sin(y)*cos(z) - 1
+
+            >>> equation_tree.standardize()
+            >>> equation_tree.sympy_expr
+            x_1 + sin(x_2)*cos(x_3) - 1
+
+        """
+        variable_count = 0
+        constant_count = 0
+        variables = {}
+        constants = {}
+
+        def rec_stand(node):
+            if node is None:
+                return
+            nonlocal variable_count, constant_count
+            nonlocal variables, constants
+            if node.kind == NodeKind.VARIABLE:
+                if node.attribute not in variables.keys():
+                    variable_count += 1
+                    variables[node.attribute] = f'x_{variable_count}'
+                node.attribute = variables[node.attribute]
+            if node.kind == NodeKind.CONSTANT and not is_numeric(node.attribute):
+                if node.attribute not in constants.keys():
+                    constant_count += 1
+                    constants[node.attribute] = f'c_{constant_count}'
+                node.attribute = constants[node.attribute]
+            else:
+                rec_stand(node.left)
+                rec_stand(node.right)
+            return node
+
+        new_root = rec_stand(self.root)
+        self.__init__(new_root)
+
 
     # def simplify_tree(self,
     #                   function_test: Callable,
@@ -434,7 +510,6 @@ class EquationTree:
     #     tree.instantiate_from_prefix_notation(prefix)
     #     return tree
 
-
     def _build(self):
         self._collect_structure(self.structure, 0, self.root)
 
@@ -453,7 +528,6 @@ class EquationTree:
 
         self._collect_expr(self.expr, self.root)
 
-
     def _collect_structure(self, structure=[], level=0, node=None):
         if node is None:
             return
@@ -462,14 +536,12 @@ class EquationTree:
         self._collect_structure(structure, level + 1, node.right)
         return
 
-
     def _collect_expr(self, expression=[], node=None):
         if node is None:
             return
         expression.append(node.attribute)
         self._collect_expr(expression, node.left)
         self._collect_expr(expression, node.right)
-
 
     def _collect_attributes(
             self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
@@ -484,7 +556,6 @@ class EquationTree:
             self._collect_attributes(attribute_identifier, attributes, node.right)
         return attributes
 
-
     def evaluate(self, features: Dict):
         eval: List[float] = list()
 
@@ -493,7 +564,6 @@ class EquationTree:
             eval = self.get_full_evaluation(self.root)
 
         return eval
-
 
     def get_full_evaluation(self, node: TreeNode):
         eval = list()
@@ -516,7 +586,6 @@ class EquationTree:
             for eval_element in eval_add:
                 eval.append(eval_element)
         return eval
-
 
     def evaluate_node(self, features: Dict, node: NodeKind):
         if node is None:
@@ -546,4 +615,3 @@ class EquationTree:
 
         node.evaluation = value
         return value
-
