@@ -496,19 +496,93 @@ class EquationTree:
         self,
         function_test: Union[Callable, None] = None,
         operator_test: Union[Callable, None] = None,
-        is_unary_minus_only: bool = True,
+        is_binary_minus_only: bool = True,
         is_power_caret: bool = True,
         verbose: bool = False,
     ):
         """
         Simplify equation if the simplified equation has a shorter prefix
-        :param function_test:
-        :param operator_test:
-        :param is_unary_minus_only:
-        :param is_power_caret:
-        :param verbose:
-        :return:
+        Args:
+            function_test: A function that tests weather an attribute is a function
+                Attention: simplifying may lead to new functions that were not in the equation
+                    before. If so, add this to the test here.
+            operator_test: A function that tests weather an attribute is an operator
+                Attention: simplifying may lead to new operators that were not in the equation
+                    before. If so, add this to the test here.
+            is_binary_minus_only: Convert all unary minus to binary after simplification
+            is_power_caret: Represent power as a caret after simplification
+            verbose: Show messages if simplification results in errors
+
+        Examples:
+            >>> is_variable = lambda x: 'x_' in x
+            >>> is_constant = lambda x: 'c_' in x
+            >>> is_operator = lambda x: len(x) == 1 and not is_numeric(x)
+            >>> is_function = lambda x: not (is_variable(x) or is_constant(x) or is_operator(x))
+            >>> prefix = ['+', 'x_1', 'x_1' ]
+            >>> equation_tree = EquationTree.from_prefix(
+            ...     prefix_notation=prefix,
+            ...     variable_test=is_variable,
+            ...     constant_test=is_constant,
+            ...     operator_test=is_operator,
+            ...     function_test=is_function)
+            >>> equation_tree.expr
+            ['+', 'x_1', 'x_1']
+
+            # simplifying the expression without function test will result in an error since the
+            # new function has an unknown operator:
+            >>> equation_tree.simplify()
+            Traceback (most recent call last):
+            ...
+            Exception: * has no defined type in any space
+
+            # we can provide the same function that we used to generate the equation though since
+            # it takes care of multiplication:
+            >>> equation_tree.simplify(operator_test=is_operator)
+            >>> equation_tree.expr
+            ['*', '2', 'x_1']
+
+            >>> prefix = ['sqrt', '*', 'x_1', 'x_1']
+            >>> equation_tree = EquationTree.from_prefix(
+            ...     prefix_notation=prefix,
+            ...     variable_test=is_variable,
+            ...     constant_test=is_constant,
+            ...     operator_test=is_operator,
+            ...     function_test=is_function)
+            >>> equation_tree.expr
+            ['sqrt', '*', 'x_1', 'x_1']
+
+            # it is good practice to define tests at the begining of a script and use them
+            # throughout the project
+            >>> equation_tree.simplify(
+            ...     operator_test=is_operator,
+            ...     function_test=is_function
+            ... )
+            >>> equation_tree.expr
+            ['abs', 'x_1']
+
         """
+        if function_test is None:
+
+            def function_test(x):
+                return x in self.functions
+
+        else:
+            tmp_f = function_test
+
+            def function_test(x):
+                return tmp_f(x) or x in self.functions
+
+        if operator_test is None:
+
+            def operator_test(x):
+                return x in self.operators
+
+        else:
+            tmp_o = operator_test
+
+            def operator_test(x):
+                return tmp_o(x) or x in self.operators
+
         simplified_equation = simplify(self.sympy_expr)
         if I in simplified_equation.free_symbols:
             if verbose:
@@ -516,9 +590,9 @@ class EquationTree:
             self.root = None
             self._build()
             return
-        if is_unary_minus_only:
+        if is_binary_minus_only:
             simplified_equation = unary_minus_to_binary(
-                str(simplified_equation), lambda x: x in self.operators
+                str(simplified_equation), operator_test
             )
 
         simplified_equation = simplified_equation.replace(" ", "")
@@ -539,6 +613,7 @@ class EquationTree:
             self.root = None
             self._build()
             return
+        print(prefix)
         self.root = node_from_prefix(
             prefix,
             function_test,
