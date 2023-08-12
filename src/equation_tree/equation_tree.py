@@ -501,7 +501,7 @@ class EquationTree:
         verbose: bool = False,
     ):
         """
-        simplify equation
+        Simplify equation if the simplified equation has a shorter prefix
         :param function_test:
         :param operator_test:
         :param is_unary_minus_only:
