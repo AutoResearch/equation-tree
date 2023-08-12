@@ -1,0 +1,33 @@
+[project]
+# UPDATE THIS BEFORE PUBLISHING
+name = "equation_tree"
+description = "Describe your contribution"
+authors = [{ name = "Younes Strittmatter", email = "younes_strittmatter@brown.edu" }]
+dynamic = ["version"]
+
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8,<4"
+
+# ADD NEW DEPENDENCIES HERE
+dependencies = [
+    "numpy",
+    "sympy"
+]
+
+[project.optional-dependencies]
+dev = [
+    "autora-core[dev]"
+]
+
+[project.urls]
+homepage = "http://www.empiricalresearch.ai"
+repository = "https://github.com/AutoResearch/equation-tree"
+documentation = "https://autoresearch.github.io/autora/"
+
+
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
