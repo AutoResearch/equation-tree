@@ -66,7 +66,7 @@ def infix_to_prefix(infix, function_test, operator_test):
     return prefix
 
 
-def standardize_sympy(sympy_expr, variable_test, constant_test):
+def standardize_sympy(sympy_expr, variable_test=lambda _: False, constant_test=lambda _: False):
     """
     replace all variables and constants with standards
 
@@ -89,25 +89,51 @@ def standardize_sympy(sympy_expr, variable_test, constant_test):
         >>> standardize_sympy(expr, is_variable, is_constant)
         c_1*x_2 + x_1
 
+        >>> expr = sympify('x ** x')
+        >>> expr
+        x**x
+        >>> is_variable = lambda x: x in ['x']
+        >>> standardize_sympy(expr, is_variable)
+        x_1**x_1
+
+        >>> expr = sympify('sin(C*x) + cos(C*x)')
+        >>> expr
+        sin(C*x) + cos(C*x)
+
+        >>> is_variable = lambda x: x == 'x'
+        >>> is_constant = lambda x: x == 'C'
+        >>> standardize_sympy(expr, is_variable, is_constant)
+        sin(c_1*x_1) + cos(c_1*x_1)
     """
     variable_count = 0
     constant_count = 0
+    variables = {}
+    constants = {}
+
 
     def replace_symbols(node):
-        nonlocal variable_count, constant_count
+        nonlocal variable_count, constant_count, variables, constants
         if variable_test(str(node)):
-            variable_count += 1
-            new_symbol = symbols(f'x_{variable_count}')
+            if not str(node) in variables.keys():
+                variable_count += 1
+                new_symbol = symbols(f'x_{variable_count}')
+                variables[str(node)] = new_symbol
+            else:
+                new_symbol = variables[str(node)]
             return new_symbol
         elif constant_test(str(node)):
-            constant_count += 1
-            new_constant = symbols(f'c_{constant_count}')
-            return new_constant
+            if not str(node) in constants.keys():
+                constant_count += 1
+                new_symbol = symbols(f'c_{constant_count}')
+                constants[str(node)] = new_symbol
+            else:
+                new_symbol = constants[str(node)]
+            return new_symbol
         else:
             return node
 
     def recursive_replace(node):
-        if node.is_Function or node.is_Add or node.is_Mul:
+        if node.is_Function or node.is_Add or node.is_Mul or node.is_Pow:
             return node.func(*[recursive_replace(arg) for arg in node.args])
         return replace_symbols(node)
 
