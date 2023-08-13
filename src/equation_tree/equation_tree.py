@@ -341,16 +341,16 @@ class EquationTree:
         return cls(root)
 
     @property
+    def constants_unique(self):
+        return list(set(self.constants))
+
+    @property
     def n_constants(self):
         return len(self.constants)
 
     @property
     def n_constants_unique(self):
         return len(set(self.constants))
-
-    @property
-    def constants_unique(self):
-        return list(set(self.constants))
 
     @property
     def non_numeric_constants(self):
@@ -363,12 +363,16 @@ class EquationTree:
         return list(set(self.non_numeric_constants))
 
     @property
+    def n_non_numeric_constants_unique(self):
+        return len(self.non_numeric_constants_unique)
+
+    @property
     def n_non_numeric_constants(self):
         return len(self.non_numeric_constants)
 
     @property
-    def n_non_numeric_constants_unique(self):
-        return len(self.non_numeric_constants_unique)
+    def variables_unique(self):
+        return list(set(self.variables))
 
     @property
     def n_variables(self):
@@ -379,8 +383,12 @@ class EquationTree:
         return len(set(self.variables))
 
     @property
-    def variables_unique(self):
-        return list(set(self.variables))
+    def functions_unique(self):
+        return list(set(self.functions))
+
+    @property
+    def operators_unique(self):
+        return list(set(self.operators))
 
     @property
     def n_leafs(self):
@@ -438,6 +446,40 @@ class EquationTree:
             return False
         ev = self.evaluation[0, :]
         return np.any(np.isfinite(ev) & ~np.isnan(ev))
+
+    @property
+    def info(self):
+        """
+        Get al information as dictionary
+        """
+        info = {}
+        info["depth"] = max(self.structure)
+        info["structure"] = self.structure
+        info["features"] = {
+            "constants": self.n_constants,
+            "variables": self.n_variables,
+        }
+        functions = {}
+        function_conditionals = {key: {} for key in self.functions_unique}
+        for f in self.functions_unique:
+            functions[f] = len([_f for _f in self.functions if _f == f])
+            p_functions, p_operators, p_features = self._get_conditionals(f)
+            function_conditionals[f]["functions"] = p_functions
+            function_conditionals[f]["operators"] = p_operators
+            function_conditionals[f]["features"] = p_features
+        operators = {}
+        operator_conditionals = {key: {} for key in self.operators_unique}
+        for o in self.operators_unique:
+            operators[o] = len([_o for _o in self.operators if _o == o])
+            p_functions, p_operators, p_features = self._get_conditionals(o)
+            operator_conditionals[o]["functions"] = p_functions
+            operator_conditionals[o]["operators"] = p_operators
+            operator_conditionals[o]["features"] = p_features
+        info["functions"] = functions
+        info["function_conditionals"] = function_conditionals
+        info["operators"] = operators
+        info["operator_conditionals"] = operator_conditionals
+        return info
 
     def check_validity(
         self,
@@ -907,20 +949,49 @@ class EquationTree:
             self._collect_attributes(attribute_identifier, attributes, node.right)
         return attributes
 
+    def _get_conditionals(self, attribute):
+        functions = {}
+        operators = {}
+        features = {"constants": 0, "variables": 0}
 
-#
-# expr = sympify('x_1 + I*pi')
-# print(expr.free_symbols)
+        def get_child(node):
+            nonlocal functions, operators, features
+            if node is None:
+                return
+            if node.attribute == attribute:
+                if node.kind == NodeKind.FUNCTION or NodeKind.OPERATOR:
+                    if node.left.kind == NodeKind.FUNCTION:
+                        if node.left.attribute in functions.keys():
+                            functions[node.left.attribute] += 1
+                        else:
+                            functions[node.left.attribute] = 1
+                    if node.left.kind == NodeKind.OPERATOR:
+                        if node.left.attribute in functions.keys():
+                            operators[node.left.attribute] += 1
+                        else:
+                            operators[node.left.attribute] = 1
+                    if node.left.kind == NodeKind.CONSTANT:
+                        features["constants"] += 1
+                    if node.left.kind == NodeKind.VARIABLE:
+                        features["variables"] += 1
+                if node.kind == NodeKind.OPERATOR:
+                    if node.right.kind == NodeKind.FUNCTION:
+                        if node.right.attribute in functions.keys():
+                            functions[node.right.attribute] += 1
+                        else:
+                            functions[node.right.attribute] = 1
+                    if node.right.kind == NodeKind.OPERATOR:
+                        if node.right.attribute in functions.keys():
+                            operators[node.right.attribute] += 1
+                        else:
+                            operators[node.right.attribute] = 1
+                    if node.right.kind == NodeKind.CONSTANT:
+                        features["constants"] += 1
+                    if node.right.kind == NodeKind.VARIABLE:
+                        features["variables"] += 1
+            get_child(node.left)
+            get_child(node.right)
 
-# equation_tree = EquationTree.from_sympy(
-#     expression=sympify('e + sin(x) + x + B'),
-#     function_test=lambda x: x in ['cos', 'sin'],
-#     operator_test=lambda x: x in ['*', '+'],
-#     variable_test=lambda x: x in ['x'],
-#     constant_test=lambda x: x in ['B', 'A']
-# )
-# print(equation_tree.expr)
-# print(equation_tree.sympy_expr)
-# print(equation_tree.get_evaluation())
-# print(equation_tree.value_samples_as_df)
-# print(equation_tree.has_valid_value)
+        get_child(self.root)
+
+        return functions, operators, features

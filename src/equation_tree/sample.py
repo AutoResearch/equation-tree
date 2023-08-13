@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional, Union
 
-from util.priors import priors_from_space
-from util.type_check import is_constant_formatted, is_variable_formatted
+from .util.priors import priors_from_space
+from .util.type_check import is_constant_formatted, is_variable_formatted
 
 from .equation_tree import EquationTree
 
@@ -135,3 +135,6 @@ def sample_tree_iter(
         )
         if equation_tree is not None:
             return equation_tree
+
+
+

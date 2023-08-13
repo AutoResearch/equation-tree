@@ -70,3 +70,22 @@ def _normalize(priors):
         default_prior = 1 / n
         return {el: default_prior for el in priors.keys()}
     return {el: priors[el] / total for el in priors.keys()}
+
+
+def normalized_dict(d):
+    """
+    Examples:
+        >>> t_d = {'a': 1, 'b': 3}
+        >>> t_d = normalized_dict(t_d)
+        >>> t_d
+        {'a': 0.25, 'b': 0.75}
+        >>> t_d = {'c': 0, 'd': 0}
+        >>> t_d = normalized_dict(t_d)
+        >>> t_d
+        {'c': 0, 'd': 0}
+    """
+    n = sum(d.values())
+    if n == 0:
+        return d
+    else:
+        return {key: value / n for key, value in d.items()}

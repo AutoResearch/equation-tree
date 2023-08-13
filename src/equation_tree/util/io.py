@@ -14,7 +14,7 @@ HASH_FILE = "_hashed_probabilities.json"
 
 def load(hash_id, hash_fall_back, file):
     """
-    Loads the hashed probabilities from the file with fall back options
+    Loads the hashed probabilities from the file with fall back options.
     """
     data = _load(hash_id, file)
     if data is None:
@@ -41,6 +41,9 @@ def load(hash_id, hash_fall_back, file):
 
 
 def store(hash_id, data, file):
+    """
+    Store hashed probabilities to a file.
+    """
     if not os.path.isfile(file):
         with open(file, "w") as f:
             json.dump({hash_id: data}, f)
@@ -66,18 +69,3 @@ def _load_default(hash_id):
     pkg = importlib_resources.files(PACKAGE_NAME)
     hash_file = pkg / "data" / HASH_FILE
     return _load(hash_id, hash_file)
-
-
-def store_adjusted_probabilities_default(
-    hash_id, adjusted_probabilities_functions, adjusted_probabilities_operators
-):
-    pkg = importlib_resources.files(PACKAGE_NAME)
-    hash_file = pkg / "data" / HASH_FILE
-    with open(hash_file, "r") as file:
-        data = json.load(file)
-    data[hash_id] = {
-        "adjusted_probabilities_functions": adjusted_probabilities_functions,
-        "adjusted_probabilities_operators": adjusted_probabilities_operators,
-    }
-    with open(hash_file, "w") as file:
-        json.dump(data, file)
