@@ -2,7 +2,8 @@ import warnings
 from typing import Dict
 
 import numpy as np
-from util.priors import set_priors
+
+from equation_tree.util.priors import set_priors
 
 MAX_ITER = 1000
 

@@ -2,13 +2,11 @@ from enum import Enum
 from typing import Callable, Dict, List
 
 import numpy as np
-from src.sample_tree_structure import (
-    _count_children,
-    _get_children,
-    sample_tree_structure,
-)
-from util.priors import set_priors
-from util.type_check import is_known_constant, is_numeric
+
+from equation_tree.util.priors import set_priors
+from equation_tree.util.type_check import is_known_constant, is_numeric
+
+from .sample_tree_structure import _count_children, _get_children, sample_tree_structure
 
 MAX_ITER = 1000
 

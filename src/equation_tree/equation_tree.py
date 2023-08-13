@@ -3,15 +3,16 @@ from typing import Callable, Dict, List, Union
 
 import numpy as np
 import pandas as pd
-from src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
 from sympy import simplify, symbols, sympify
-from util.conversions import (
+
+from .src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
+from .util.conversions import (
     infix_to_prefix,
     prefix_to_infix,
     standardize_sympy,
     unary_minus_to_binary,
 )
-from util.type_check import check_functions, is_known_constant, is_numeric
+from .util.type_check import check_functions, is_known_constant, is_numeric
 
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
@@ -140,7 +141,7 @@ class EquationTree:
             True
         """
 
-        self.root: TreeNode = node
+        self.root: Union[TreeNode, None] = node
 
         self.structure: List[int] = []
 

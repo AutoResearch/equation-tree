@@ -1,7 +1,8 @@
 import re
 
 from sympy import symbols
-from util.type_check import is_numeric
+
+from .type_check import is_numeric
 
 
 def prefix_to_infix(
