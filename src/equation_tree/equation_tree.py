@@ -1,18 +1,17 @@
 import warnings
 from typing import Callable, Dict, List, Union
-import itertools
 
 import numpy as np
 import pandas as pd
 from src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
-from sympy import I, simplify, symbols, sympify
+from sympy import simplify, symbols, sympify
 from util.conversions import (
     infix_to_prefix,
     prefix_to_infix,
     standardize_sympy,
     unary_minus_to_binary,
 )
-from util.type_check import is_numeric, check_functions, is_known_constant
+from util.type_check import check_functions, is_known_constant, is_numeric
 
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
@@ -22,7 +21,7 @@ OPERATORS: Dict[str, BinaryOperator] = {
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
     "/": lambda a, b: a / b,
-    "^": lambda a, b: a ** b,
+    "^": lambda a, b: a**b,
 }
 
 FUNCTIONS: Dict[str, UnaryOperator] = {
@@ -143,10 +142,8 @@ class EquationTree:
 
         self.root: TreeNode = node
 
-        # make function to get tree structure here
         self.structure: List[int] = []
 
-        # make function to get this here
         self.expr: List[str] = list()
 
         self.variables: List[str] = list()
@@ -160,12 +157,12 @@ class EquationTree:
 
     @classmethod
     def from_prefix(
-            cls,
-            prefix_notation: List[str],
-            function_test: Callable = lambda _: False,
-            operator_test: Callable = lambda _: False,
-            variable_test: Callable = lambda _: False,
-            constant_test: Callable = lambda _: False,
+        cls,
+        prefix_notation: List[str],
+        function_test: Callable = lambda _: False,
+        operator_test: Callable = lambda _: False,
+        variable_test: Callable = lambda _: False,
+        constant_test: Callable = lambda _: False,
     ):
         """
         Instantiate a tree from prefix notation
@@ -218,12 +215,12 @@ class EquationTree:
 
     @classmethod
     def from_priors(
-            cls,
-            max_depth,
-            feature_priors={},
-            function_priors={},
-            operator_priors={},
-            structure_priors={},
+        cls,
+        max_depth,
+        feature_priors={},
+        function_priors={},
+        operator_priors={},
+        structure_priors={},
     ):
         """
         Instantiate a tree from priors
@@ -281,12 +278,12 @@ class EquationTree:
 
     @classmethod
     def from_sympy(
-            cls,
-            expression,
-            function_test: Callable = lambda _: False,
-            operator_test: Callable = lambda _: False,
-            variable_test: Callable = lambda _: False,
-            constant_test: Callable = lambda _: False,
+        cls,
+        expression,
+        function_test: Callable = lambda _: False,
+        operator_test: Callable = lambda _: False,
+        variable_test: Callable = lambda _: False,
+        constant_test: Callable = lambda _: False,
     ):
         """
         Instantiate a tree from a sympy function
@@ -334,7 +331,11 @@ class EquationTree:
         standard = unary_minus_to_binary(standard, operator_test)
         prefix = infix_to_prefix(str(standard), function_test, operator_test)
         root = node_from_prefix(
-            prefix, function_test, operator_test, lambda x: 'x_' in x, lambda x: 'c_' in x
+            prefix,
+            function_test,
+            operator_test,
+            lambda x: "x_" in x,
+            lambda x: "c_" in x,
         )
         return cls(root)
 
@@ -352,7 +353,9 @@ class EquationTree:
 
     @property
     def non_numeric_constants(self):
-        return [c for c in self.constants if not is_numeric(c) and not is_known_constant(c)]
+        return [
+            c for c in self.constants if not is_numeric(c) and not is_known_constant(c)
+        ]
 
     @property
     def non_numeric_constants_unique(self):
@@ -399,7 +402,7 @@ class EquationTree:
             symbol_names = [str(symbol) for symbol in sympy_expr.free_symbols]
             real_symbols = symbols(" ".join(symbol_names), real=True)
             if not isinstance(real_symbols, list) and not isinstance(
-                    real_symbols, tuple
+                real_symbols, tuple
             ):
                 real_symbols = [real_symbols]
             subs_dict = {old: new for old, new in zip(symbol_names, real_symbols)}
@@ -413,9 +416,11 @@ class EquationTree:
     @property
     def value_samples_as_df(self):
         if self.evaluation is None:
-            warnings.warn(f'Tree not yet evaluated. Use method get_evaluation to evaluate the tree')
+            warnings.warn(
+                "Tree not yet evaluated. Use method get_evaluation to evaluate the tree"
+            )
             return None
-        data = {'observation': self.evaluation[:, 0]}
+        data = {"observation": self.evaluation[:, 0]}
         for idx, key in enumerate(self.expr):
             if key in self.variables:
                 data[key] = self.evaluation[:, idx]
@@ -426,17 +431,19 @@ class EquationTree:
     @property
     def has_valid_value(self):
         if self.evaluation is None:
-            warnings.warn(f'Tree not yet evaluated. Use method get_evaluation to evaluate the tree')
+            warnings.warn(
+                "Tree not yet evaluated. Use method get_evaluation to evaluate the tree"
+            )
             return False
         ev = self.evaluation[0, :]
         return np.any(np.isfinite(ev) & ~np.isnan(ev))
 
     def check_validity(
-            self,
-            zero_representations=["0"],
-            log_representations=["log", "Log"],
-            division_representations=["/", ":"],
-            verbose=False,
+        self,
+        zero_representations=["0"],
+        log_representations=["log", "Log"],
+        division_representations=["/", ":"],
+        verbose=False,
     ):
         """
         Check if the tree is valid:
@@ -491,11 +498,11 @@ class EquationTree:
         )
 
     def check_possible(
-            self,
-            feature_priors: Dict,
-            function_priors: Dict,
-            operator_priors: Dict,
-            structure_priors: Dict
+        self,
+        feature_priors: Dict,
+        function_priors: Dict,
+        operator_priors: Dict,
+        structure_priors: Dict,
     ):
         """
         Check weather a tree is a possible tree given the priors
@@ -518,8 +525,10 @@ class EquationTree:
                 if op not in operator_priors.keys() or operator_priors[op] <= 0:
                     return False
         if structure_priors != {}:
-            if str(self.structure) not in structure_priors.keys() or \
-                    structure_priors[str(self.structure)] <= 0:
+            if (
+                str(self.structure) not in structure_priors.keys()
+                or structure_priors[str(self.structure)] <= 0
+            ):
                 return False
         return True
 
@@ -580,12 +589,12 @@ class EquationTree:
         self._build()
 
     def simplify(
-            self,
-            function_test: Union[Callable, None] = None,
-            operator_test: Union[Callable, None] = None,
-            is_binary_minus_only: bool = True,
-            is_power_caret: bool = True,
-            verbose: bool = False,
+        self,
+        function_test: Union[Callable, None] = None,
+        operator_test: Union[Callable, None] = None,
+        is_binary_minus_only: bool = True,
+        is_power_caret: bool = True,
+        verbose: bool = False,
     ):
         """
         Simplify equation if the simplified equation has a shorter prefix
@@ -605,9 +614,9 @@ class EquationTree:
             >>> is_constant = lambda x: 'c_' in x or is_numeric(x) or is_known_constant(x)
             >>> is_operator = lambda x: len(x) == 1 and not is_numeric(x)
             >>> is_function = lambda x: not (is_variable(x) or is_constant(x) or is_operator(x))
-            >>> prefix = ['+', 'x_1', 'x_1' ]
+            >>> prefix_notation = ['+', 'x_1', 'x_1' ]
             >>> equation_tree = EquationTree.from_prefix(
-            ...     prefix_notation=prefix,
+            ...     prefix_notation=prefix_notation,
             ...     variable_test=is_variable,
             ...     constant_test=is_constant,
             ...     operator_test=is_operator,
@@ -628,9 +637,9 @@ class EquationTree:
             >>> equation_tree.expr
             ['*', '2', 'x_1']
 
-            >>> prefix = ['sqrt', '*', 'x_1', 'x_1']
+            >>> prefix_notation = ['sqrt', '*', 'x_1', 'x_1']
             >>> equation_tree = EquationTree.from_prefix(
-            ...     prefix_notation=prefix,
+            ...     prefix_notation=prefix_notation,
             ...     variable_test=is_variable,
             ...     constant_test=is_constant,
             ...     operator_test=is_operator,
@@ -647,9 +656,9 @@ class EquationTree:
             >>> equation_tree.expr
             ['abs', 'x_1']
 
-            >>> prefix = ['*', '-', 'c_1', 'x_1', '-', 'x_1', 'c_1']
+            >>> prefix_notation = ['*', '-', 'c_1', 'x_1', '-', 'x_1', 'c_1']
             >>> equation_tree = EquationTree.from_prefix(
-            ...     prefix_notation=prefix,
+            ...     prefix_notation=prefix_notation,
             ...     variable_test=is_variable,
             ...     constant_test=is_constant,
             ...     operator_test=is_operator,
@@ -691,13 +700,19 @@ class EquationTree:
 
             def operator_test(x):
                 return tmp_o(x) or x in self.operators
+
         simplified_equation = simplify(self.sympy_expr)
         if not check_functions(simplified_equation, function_test):
-            warnings.warn(f"{simplified_equation} has functions that are not in function_test type")
+            warnings.warn(
+                f"{simplified_equation} has functions that are not in function_test type"
+            )
             self.root = None
             self._build()
             return
-        if 'I' in str(simplified_equation) or 'accumbounds' in str(simplified_equation).lower():
+        if (
+            "I" in str(simplified_equation)
+            or "accumbounds" in str(simplified_equation).lower()
+        ):
             if verbose:
                 print(f"Simplify {str(self.sympy_expr)} results in complex values")
             self.root = None
@@ -735,15 +750,15 @@ class EquationTree:
         )
         self._build()
 
-    def get_evaluation(self, min_val: int = -1, max_val: int = 1, resolution: int = 100,
-                       num_samples: int = 100):
+    def get_evaluation(
+        self, min_val: int = -1, max_val: int = 1, num_samples: int = 100
+    ):
         """
         Evaluate the nodes with random samples for variables and constants.
         """
 
-        crossings = self._create_crossing(min_val, max_val, resolution, num_samples)
+        crossings = self._create_crossing(min_val, max_val, num_samples)
         evaluation = np.zeros((len(crossings), len(self.expr)))
-
 
         for i, crossing in enumerate(crossings):
             eqn_input = dict()
@@ -766,16 +781,13 @@ class EquationTree:
         return evaluation
 
     def _evaluate(self, features: Dict):
-        """
-        Evaluate the equation tree with input value
-        """
-        eval: List[float] = list()
+        values: List[float] = list()
 
         if self.root is not None:
             self._evaluate_node(features, self.root)
-            eval = self._get_full_evaluation(self.root)
+            values = self._get_full_evaluation(self.root)
 
-        return eval
+        return values
 
     def _evaluate_node(self, features: Dict, node: TreeNode):
         if node.kind == NodeKind.FUNCTION:
@@ -799,39 +811,36 @@ class EquationTree:
         return value
 
     def _get_full_evaluation(self, node: TreeNode):
-        eval = list()
-        eval.append(node.evaluation)
+        values = list()
+        values.append(node.evaluation)
 
         if node.kind == NodeKind.FUNCTION:
             if node.left is None:
                 raise Exception("Invalid tree: %s" % self.expr)
             eval_add = self._get_full_evaluation(node.left)
             for eval_element in eval_add:
-                eval.append(eval_element)
+                values.append(eval_element)
 
         if node.kind == NodeKind.OPERATOR:
             if node.left is None or node.right is None:
                 raise Exception("Invalid tree: %s" % self.expr)
             eval_add = self._get_full_evaluation(node.left)
             for eval_element in eval_add:
-                eval.append(eval_element)
+                values.append(eval_element)
             eval_add = self._get_full_evaluation(node.right)
             for eval_element in eval_add:
-                eval.append(eval_element)
+                values.append(eval_element)
 
-        return eval
+        return values
 
-    def _create_crossing(self,
-                         min_val: float = -1,
-                         max_val: float = 1,
-                         num_samples: int = 100,
-                         num_eval_samples: int = 100
-                         ):
+    def _create_crossing(
+        self, min_val: float = -1, max_val: float = 1, num_samples: int = 100
+    ):
         crossings = []
 
         total_unique = self.n_variables_unique + self.n_non_numeric_constants_unique
 
-        for _ in range(num_eval_samples):
+        for _ in range(num_samples):
             sample = []
             for _ in range(total_unique):
                 value = np.random.uniform(min_val, max_val)
@@ -839,50 +848,6 @@ class EquationTree:
             crossings.append(sample)
 
         return np.array(crossings)
-        # grids = []
-        # total_unique = self.n_variables_unique + self.n_non_numeric_constants_unique
-        #
-        # for _ in range(total_unique):
-        #     grid = np.linspace(min_val, max_val, num_samples)
-        #     grids.append(grid)
-        #
-        # crossings = np.vstack(np.meshgrid(*grids)).reshape(total_unique, -1).T
-        #
-        # if len(crossings) > num_eval_samples:
-        #     indices = np.random.choice(
-        #         len(crossings), num_eval_samples, replace=False
-        #     )
-        #     crossings = crossings[indices]
-        #
-        # return crossings
-        # grids = []
-        # for variable in range(self.n_variables_unique):
-        #     # Create an evenly spaced grid for each variable
-        #     grid = np.linspace(min_val, max_val, num_samples)
-        #     grids.append(grid)
-        #
-        # for constant in range(self.n_non_numeric_constants_unique):
-        #     # Create an evenly spaced grid for each constant
-        #     grid = np.linspace(min_val, max_val, num_samples)
-        #     grids.append(grid)
-        #
-        #     # Generate combinations of variables
-        #
-        #
-        #
-        # print('.')
-        # crossings = np.array(list(itertools.product(*grids)))
-        # print('..')
-        #
-        #
-        # # Randomly sample M crossings if the total number of crossings is greater than M
-        # if len(crossings) > num_eval_samples:
-        #     indices = np.random.choice(
-        #         len(crossings), num_eval_samples, replace=False
-        #     )
-        #     crossings = crossings[indices]
-        #
-        # return crossings
 
     def _build(self):
         self.structure: List[int] = []
@@ -911,7 +876,6 @@ class EquationTree:
         self._collect_attributes(
             lambda node: node.kind == NodeKind.OPERATOR, self.operators, self.root
         )
-
         self._collect_expr(self.expr, self.root)
 
     def _collect_structure(self, structure=[], level=0, node=None):
@@ -930,7 +894,7 @@ class EquationTree:
         self._collect_expr(expression, node.right)
 
     def _collect_attributes(
-            self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
+        self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
     ):
         if node is None:
             return list()
@@ -942,65 +906,6 @@ class EquationTree:
             self._collect_attributes(attribute_identifier, attributes, node.right)
         return attributes
 
-    def evaluate(self, features: Dict):
-        eval: List[float] = list()
-
-        if self.root is not None:
-            self.evaluate_node(features, self.root)
-            eval = self.get_full_evaluation(self.root)
-
-        return eval
-
-    def get_full_evaluation(self, node: TreeNode):
-        eval = list()
-        eval.append(node.evaluation)
-
-        if node.kind == NodeKind.FUNCTION:
-            if node.left is None:
-                raise Exception("Invalid tree: Left child of function node is None")
-            eval_add = self.get_full_evaluation(node.left)
-            for eval_element in eval_add:
-                eval.append(eval_element)
-
-        if node.kind == NodeKind.OPERATOR:
-            if node.left is None or node.right is None:
-                raise Exception("Invalid tree: operator node does not have 2 children")
-            eval_add = self.get_full_evaluation(node.left)
-            for eval_element in eval_add:
-                eval.append(eval_element)
-            eval_add = self.get_full_evaluation(node.right)
-            for eval_element in eval_add:
-                eval.append(eval_element)
-        return eval
-
-    def evaluate_node(self, features: Dict, node: NodeKind):
-        if node is None:
-            if self.root is not None:
-                value = self.evaluate_node(features, self.root)
-            else:
-                value = 0
-
-        if node.kind == NodeKind.FUNCTION:
-            if node.kind is None:
-                raise Exception("Invalid tree: %s" % self.expr)
-            value = FUNCTIONS[node.attribute](self.evaluate_node(features, node.left))
-
-        elif node.kind == NodeKind.OPERATOR:
-            if node.left is None or node.right is None:
-                raise Exception("Invalid tree: %s" % self.expr)
-            value = OPERATORS[node.attribute](
-                self.evaluate_node(features, node.left),
-                self.evaluate_node(features, node.right),
-            )
-
-        elif node.attribute in features:
-            value = features[node.attribute]
-
-        else:
-            raise Exception("Invalid attribute %s" % node.attribute)
-
-        node.evaluation = value
-        return value
 
 #
 # expr = sympify('x_1 + I*pi')

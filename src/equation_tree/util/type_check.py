@@ -1,7 +1,8 @@
 import re
-from sympy import symbols, Function, Add, Mul, Pow
 
-DEFAULT_CONSTANTS = ['e', 'pi']
+from sympy import Add, Function, Mul, Pow
+
+DEFAULT_CONSTANTS = ["e", "pi"]
 
 
 def is_numeric(s):
@@ -39,27 +40,27 @@ def is_variable_formatted(s: str):
         >>> is_variable_formatted('c_3')
         False
     """
-    pattern = r'^x_\d+$'
+    pattern = r"^x_\d+$"
     return re.match(pattern, s) is not None
 
 
 def is_constant_formatted(s: str):
     """
-        Tests weather the input is in standard format for a constant
+    Tests weather the input is in standard format for a constant
 
-        Examples:
-            >>> is_constant_formatted('c_4')
-            True
-            >>> is_constant_formatted('c_42')
-            True
-            >>> is_constant_formatted('c_a')
-            False
-            >>> is_constant_formatted('abc')
-            False
-            >>> is_constant_formatted('x_3')
-            False
-        """
-    pattern = r'^c_\d+$'
+    Examples:
+        >>> is_constant_formatted('c_4')
+        True
+        >>> is_constant_formatted('c_42')
+        True
+        >>> is_constant_formatted('c_a')
+        False
+        >>> is_constant_formatted('abc')
+        False
+        >>> is_constant_formatted('x_3')
+        False
+    """
+    pattern = r"^c_\d+$"
     return re.match(pattern, s) is not None
 
 
@@ -90,11 +91,9 @@ def check_functions(expression, function_test):
 
     def apply_test(node):
         if isinstance(node, Function):
-            return function_test(str(node.func).lower()) or str(node.func) == 're'
-        elif isinstance(node, (Add, Mul)):
-            return all(apply_test(arg) or str(node.func) == 're' for arg in node.args)
+            return function_test(str(node.func).lower()) or str(node.func) == "re"
+        elif isinstance(node, (Add, Mul, Pow)):
+            return all(apply_test(arg) or str(node.func) == "re" for arg in node.args)
         return True
 
     return apply_test(expression)
-
-    #return not has_any_function(expression) or has_function(expression, function_test)

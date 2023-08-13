@@ -8,7 +8,7 @@ from src.sample_tree_structure import (
     sample_tree_structure,
 )
 from util.priors import set_priors
-from util.type_check import is_numeric, is_known_constant
+from util.type_check import is_known_constant, is_numeric
 
 MAX_ITER = 1000
 
@@ -75,7 +75,10 @@ def check_node_validity(
     if node.kind == NodeKind.FUNCTION:
         if node.left is None or node.right is not None:
             return False
-        if node.attribute in log_representations and node.left.attribute in zero_representations:
+        if (
+            node.attribute in log_representations
+            and node.left.attribute in zero_representations
+        ):
             if verbose:
                 print("logarithm is applied to 0 which is results in not real number.")
             return False
@@ -206,7 +209,11 @@ def _from_prefix_recursion(
         kind = NodeKind.OPERATOR
     elif variable_test(attribute):
         kind = NodeKind.VARIABLE
-    elif constant_test(attribute) or is_numeric(attribute) or is_known_constant(attribute):
+    elif (
+        constant_test(attribute)
+        or is_numeric(attribute)
+        or is_known_constant(attribute)
+    ):
         kind = NodeKind.CONSTANT
     else:
         raise Exception(f"{attribute} has no defined type in any space")
