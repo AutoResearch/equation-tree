@@ -3,6 +3,7 @@ from typing import Callable, Dict, List, Union
 import itertools
 
 import numpy as np
+import pandas as pd
 from src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
 from sympy import I, simplify, symbols, sympify
 from util.conversions import (
@@ -139,7 +140,6 @@ class EquationTree:
             >>> equation_tree.expr == prefix_notation
             True
         """
-
 
         self.root: TreeNode = node
 
@@ -410,6 +410,27 @@ class EquationTree:
     def is_nan(self):
         return self.root is None
 
+    @property
+    def value_samples_as_df(self):
+        if self.evaluation is None:
+            warnings.warn(f'Tree not yet evaluated. Use method get_evaluation to evaluate the tree')
+            return None
+        data = {'observation': self.evaluation[:, 0]}
+        for idx, key in enumerate(self.expr):
+            if key in self.variables:
+                data[key] = self.evaluation[:, idx]
+            if key in self.non_numeric_constants:
+                data[key] = self.evaluation[:, idx]
+        return pd.DataFrame(data)
+
+    @property
+    def has_valid_value(self):
+        if self.evaluation is None:
+            warnings.warn(f'Tree not yet evaluated. Use method get_evaluation to evaluate the tree')
+            return False
+        ev = self.evaluation[0, :]
+        return np.any(np.isfinite(ev) & ~np.isnan(ev))
+
     def check_validity(
             self,
             zero_representations=["0"],
@@ -670,14 +691,13 @@ class EquationTree:
 
             def operator_test(x):
                 return tmp_o(x) or x in self.operators
-
         simplified_equation = simplify(self.sympy_expr)
         if not check_functions(simplified_equation, function_test):
             warnings.warn(f"{simplified_equation} has functions that are not in function_test type")
             self.root = None
             self._build()
             return
-        if I in simplified_equation.free_symbols:
+        if 'I' in str(simplified_equation) or 'accumbounds' in str(simplified_equation).lower():
             if verbose:
                 print(f"Simplify {str(self.sympy_expr)} results in complex values")
             self.root = None
@@ -685,14 +705,12 @@ class EquationTree:
             return
         if is_power_caret:
             simplified_equation = str(simplified_equation).replace("**", "^")
+        simplified_equation = simplified_equation.replace("re", "")
         if is_binary_minus_only:
             simplified_equation = unary_minus_to_binary(
                 simplified_equation, operator_test
             )
-
         simplified_equation = simplified_equation.replace(" ", "")
-        if is_power_caret:
-            simplified_equation = simplified_equation.replace("**", "^")
 
         prefix = infix_to_prefix(simplified_equation, function_test, operator_test)
         if verbose:
@@ -717,10 +735,15 @@ class EquationTree:
         )
         self._build()
 
-    def get_evaluation(self):
+    def get_evaluation(self, min_val: int = -1, max_val: int = 1, resolution: int = 100,
+                       num_samples: int = 100):
+        """
+        Evaluate the nodes with random samples for variables and constants.
+        """
 
-        crossings = self._create_crossing()
+        crossings = self._create_crossing(min_val, max_val, resolution, num_samples)
         evaluation = np.zeros((len(crossings), len(self.expr)))
+
 
         for i, crossing in enumerate(crossings):
             eqn_input = dict()
@@ -741,6 +764,7 @@ class EquationTree:
 
         self.evaluation = evaluation
         return evaluation
+
     def _evaluate(self, features: Dict):
         """
         Evaluate the equation tree with input value
@@ -803,30 +827,62 @@ class EquationTree:
                          num_samples: int = 100,
                          num_eval_samples: int = 100
                          ):
-        grids = []
-        for variable in range(self.n_variables_unique):
-            # Create an evenly spaced grid for each variable
-            grid = np.linspace(min_val, max_val, num_samples)
-            grids.append(grid)
+        crossings = []
 
-        for constant in range(self.n_non_numeric_constants_unique):
-            # Create an evenly spaced grid for each constant
-            grid = np.linspace(min_val, max_val, num_samples)
-            grids.append(grid)
+        total_unique = self.n_variables_unique + self.n_non_numeric_constants_unique
 
-            # Generate combinations of variables
-        crossings = np.array(list(itertools.product(*grids)))
+        for _ in range(num_eval_samples):
+            sample = []
+            for _ in range(total_unique):
+                value = np.random.uniform(min_val, max_val)
+                sample.append(value)
+            crossings.append(sample)
 
-        # Randomly sample M crossings if the total number of crossings is greater than M
-        if len(crossings) > num_eval_samples:
-            indices = np.random.choice(
-                len(crossings), num_eval_samples, replace=False
-            )
-            crossings = crossings[indices]
-
-        return crossings
-
-
+        return np.array(crossings)
+        # grids = []
+        # total_unique = self.n_variables_unique + self.n_non_numeric_constants_unique
+        #
+        # for _ in range(total_unique):
+        #     grid = np.linspace(min_val, max_val, num_samples)
+        #     grids.append(grid)
+        #
+        # crossings = np.vstack(np.meshgrid(*grids)).reshape(total_unique, -1).T
+        #
+        # if len(crossings) > num_eval_samples:
+        #     indices = np.random.choice(
+        #         len(crossings), num_eval_samples, replace=False
+        #     )
+        #     crossings = crossings[indices]
+        #
+        # return crossings
+        # grids = []
+        # for variable in range(self.n_variables_unique):
+        #     # Create an evenly spaced grid for each variable
+        #     grid = np.linspace(min_val, max_val, num_samples)
+        #     grids.append(grid)
+        #
+        # for constant in range(self.n_non_numeric_constants_unique):
+        #     # Create an evenly spaced grid for each constant
+        #     grid = np.linspace(min_val, max_val, num_samples)
+        #     grids.append(grid)
+        #
+        #     # Generate combinations of variables
+        #
+        #
+        #
+        # print('.')
+        # crossings = np.array(list(itertools.product(*grids)))
+        # print('..')
+        #
+        #
+        # # Randomly sample M crossings if the total number of crossings is greater than M
+        # if len(crossings) > num_eval_samples:
+        #     indices = np.random.choice(
+        #         len(crossings), num_eval_samples, replace=False
+        #     )
+        #     crossings = crossings[indices]
+        #
+        # return crossings
 
     def _build(self):
         self.structure: List[int] = []
@@ -946,15 +1002,19 @@ class EquationTree:
         node.evaluation = value
         return value
 
+#
+# expr = sympify('x_1 + I*pi')
+# print(expr.free_symbols)
 
-equation_tree = EquationTree.from_sympy(
-    expression=sympify('e + sin(x + e) * cos(x) + B'),
-    function_test=lambda x: x in ['cos', 'sin'],
-    operator_test=lambda x: x in ['*', '+'],
-    variable_test=lambda x: x in ['x'],
-    constant_test=lambda x: x in ['B', 'A']
-)
-print(equation_tree.expr)
-print(equation_tree.sympy_expr)
-print(equation_tree.get_evaluation())
-
+# equation_tree = EquationTree.from_sympy(
+#     expression=sympify('e + sin(x) + x + B'),
+#     function_test=lambda x: x in ['cos', 'sin'],
+#     operator_test=lambda x: x in ['*', '+'],
+#     variable_test=lambda x: x in ['x'],
+#     constant_test=lambda x: x in ['B', 'A']
+# )
+# print(equation_tree.expr)
+# print(equation_tree.sympy_expr)
+# print(equation_tree.get_evaluation())
+# print(equation_tree.value_samples_as_df)
+# print(equation_tree.has_valid_value)

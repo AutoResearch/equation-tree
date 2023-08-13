@@ -81,6 +81,7 @@ def sample_tree_raw(
         operator_test=lambda x: x in _operator_priors.keys()
     )
 
+
     # Check is nan
     if equation_tree.is_nan:
         return None
@@ -106,6 +107,9 @@ def sample_tree_raw(
                                         _structure_priors):
         return None
 
+    equation_tree.get_evaluation()
+    # if not equation_tree.has_valid_value:
+    #     return None
     return equation_tree
 
 
@@ -135,7 +139,6 @@ def sample_tree_iter(
             structure_priors
         )
         if equation_tree is not None:
-            print(_)
             return equation_tree
 
 
