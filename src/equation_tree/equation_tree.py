@@ -1,5 +1,6 @@
 import warnings
 from typing import Callable, Dict, List, Union
+import itertools
 
 import numpy as np
 from src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
@@ -15,7 +16,7 @@ from util.type_check import is_numeric, check_functions, is_known_constant
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
 
-operators: Dict[str, BinaryOperator] = {
+OPERATORS: Dict[str, BinaryOperator] = {
     "+": lambda a, b: a + b,
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
@@ -23,7 +24,7 @@ operators: Dict[str, BinaryOperator] = {
     "^": lambda a, b: a ** b,
 }
 
-functions: Dict[str, UnaryOperator] = {
+FUNCTIONS: Dict[str, UnaryOperator] = {
     "sin": lambda a: np.sin(a),
     "cos": lambda a: np.cos(a),
     "tan": lambda a: np.tan(a),
@@ -139,6 +140,7 @@ class EquationTree:
             True
         """
 
+
         self.root: TreeNode = node
 
         # make function to get tree structure here
@@ -151,6 +153,8 @@ class EquationTree:
         self.functions: List[str] = list()
         self.operators: List[str] = list()
         self.constants: List[str] = list()
+
+        self.evaluation = None
 
         self._build()
 
@@ -330,7 +334,7 @@ class EquationTree:
         standard = unary_minus_to_binary(standard, operator_test)
         prefix = infix_to_prefix(str(standard), function_test, operator_test)
         root = node_from_prefix(
-            prefix, function_test, operator_test, variable_test, constant_test
+            prefix, function_test, operator_test, lambda x: 'x_' in x, lambda x: 'c_' in x
         )
         return cls(root)
 
@@ -343,12 +347,36 @@ class EquationTree:
         return len(set(self.constants))
 
     @property
+    def constants_unique(self):
+        return list(set(self.constants))
+
+    @property
+    def non_numeric_constants(self):
+        return [c for c in self.constants if not is_numeric(c) and not is_known_constant(c)]
+
+    @property
+    def non_numeric_constants_unique(self):
+        return list(set(self.non_numeric_constants))
+
+    @property
+    def n_non_numeric_constants(self):
+        return len(self.non_numeric_constants)
+
+    @property
+    def n_non_numeric_constants_unique(self):
+        return len(self.non_numeric_constants_unique)
+
+    @property
     def n_variables(self):
         return len(self.variables)
 
     @property
     def n_variables_unique(self):
         return len(set(self.variables))
+
+    @property
+    def variables_unique(self):
+        return list(set(self.variables))
 
     @property
     def n_leafs(self):
@@ -470,7 +498,7 @@ class EquationTree:
                     return False
         if structure_priors != {}:
             if str(self.structure) not in structure_priors.keys() or \
-                structure_priors[str(self.structure)] <= 0:
+                    structure_priors[str(self.structure)] <= 0:
                 return False
         return True
 
@@ -618,7 +646,7 @@ class EquationTree:
             ...     function_test=is_function
             ... )
             >>> equation_tree.expr
-             ['^', '-', '0', '-', 'c_1', 'x_1', '2']
+            ['^', '-', '0', '-', 'c_1', 'x_1', '2']
         """
 
         if function_test is None:
@@ -658,16 +686,13 @@ class EquationTree:
         if is_power_caret:
             simplified_equation = str(simplified_equation).replace("**", "^")
         if is_binary_minus_only:
-            #print(simplified_equation)
             simplified_equation = unary_minus_to_binary(
                 simplified_equation, operator_test
             )
-            #print(simplified_equation)
 
         simplified_equation = simplified_equation.replace(" ", "")
         if is_power_caret:
             simplified_equation = simplified_equation.replace("**", "^")
-
 
         prefix = infix_to_prefix(simplified_equation, function_test, operator_test)
         if verbose:
@@ -692,6 +717,117 @@ class EquationTree:
         )
         self._build()
 
+    def get_evaluation(self):
+
+        crossings = self._create_crossing()
+        evaluation = np.zeros((len(crossings), len(self.expr)))
+
+        for i, crossing in enumerate(crossings):
+            eqn_input = dict()
+            k = 0
+            for c in self.constants_unique:
+                if is_numeric(c):
+                    eqn_input[c] = float(c)
+                elif c == "e":
+                    eqn_input[c] = 2.71828182846
+                elif c == "pi":
+                    eqn_input[c] = 3.14159265359
+                else:
+                    eqn_input[c] = crossing[self.n_variables_unique + k]
+                    k += 1
+            for idx, x in enumerate(self.variables_unique):
+                eqn_input[x] = crossing[idx]
+            evaluation[i, :] = self._evaluate(eqn_input)
+
+        self.evaluation = evaluation
+        return evaluation
+    def _evaluate(self, features: Dict):
+        """
+        Evaluate the equation tree with input value
+        """
+        eval: List[float] = list()
+
+        if self.root is not None:
+            self._evaluate_node(features, self.root)
+            eval = self._get_full_evaluation(self.root)
+
+        return eval
+
+    def _evaluate_node(self, features: Dict, node: TreeNode):
+        if node.kind == NodeKind.FUNCTION:
+            if node.left is None:
+                raise Exception("Invalid tree: %s" % self.expr)
+            value = FUNCTIONS[node.attribute](self._evaluate_node(features, node.left))
+
+        elif node.kind == NodeKind.OPERATOR:
+            if node.left is None or node.right is None:
+                raise Exception("Invalid tree: %s" % self.expr)
+            value = OPERATORS[node.attribute](
+                self._evaluate_node(features, node.left),
+                self._evaluate_node(features, node.right),
+            )
+
+        elif node.kind == NodeKind.CONSTANT or node.kind == NodeKind.VARIABLE:
+            value = features[node.attribute]
+        else:
+            raise Exception("Invalid attribute %s" % node.attribute)
+        node.evaluation = value
+        return value
+
+    def _get_full_evaluation(self, node: TreeNode):
+        eval = list()
+        eval.append(node.evaluation)
+
+        if node.kind == NodeKind.FUNCTION:
+            if node.left is None:
+                raise Exception("Invalid tree: %s" % self.expr)
+            eval_add = self._get_full_evaluation(node.left)
+            for eval_element in eval_add:
+                eval.append(eval_element)
+
+        if node.kind == NodeKind.OPERATOR:
+            if node.left is None or node.right is None:
+                raise Exception("Invalid tree: %s" % self.expr)
+            eval_add = self._get_full_evaluation(node.left)
+            for eval_element in eval_add:
+                eval.append(eval_element)
+            eval_add = self._get_full_evaluation(node.right)
+            for eval_element in eval_add:
+                eval.append(eval_element)
+
+        return eval
+
+    def _create_crossing(self,
+                         min_val: float = -1,
+                         max_val: float = 1,
+                         num_samples: int = 100,
+                         num_eval_samples: int = 100
+                         ):
+        grids = []
+        for variable in range(self.n_variables_unique):
+            # Create an evenly spaced grid for each variable
+            grid = np.linspace(min_val, max_val, num_samples)
+            grids.append(grid)
+
+        for constant in range(self.n_non_numeric_constants_unique):
+            # Create an evenly spaced grid for each constant
+            grid = np.linspace(min_val, max_val, num_samples)
+            grids.append(grid)
+
+            # Generate combinations of variables
+        crossings = np.array(list(itertools.product(*grids)))
+
+        # Randomly sample M crossings if the total number of crossings is greater than M
+        if len(crossings) > num_eval_samples:
+            indices = np.random.choice(
+                len(crossings), num_eval_samples, replace=False
+            )
+            crossings = crossings[indices]
+
+        return crossings
+
+
+
     def _build(self):
         self.structure: List[int] = []
 
@@ -702,6 +838,8 @@ class EquationTree:
         self.functions: List[str] = list()
         self.operators: List[str] = list()
         self.constants: List[str] = list()
+
+        self.evaluation = None
 
         self._collect_structure(self.structure, 0, self.root)
 
@@ -786,15 +924,15 @@ class EquationTree:
             else:
                 value = 0
 
-        if node.type == NodeKind.FUNCTION:
-            if node.left is None:
+        if node.kind == NodeKind.FUNCTION:
+            if node.kind is None:
                 raise Exception("Invalid tree: %s" % self.expr)
-            value = functions[node.attribute](self.evaluate_node(features, node.left))
+            value = FUNCTIONS[node.attribute](self.evaluate_node(features, node.left))
 
-        elif node.type == NodeKind.OPERATOR:
+        elif node.kind == NodeKind.OPERATOR:
             if node.left is None or node.right is None:
                 raise Exception("Invalid tree: %s" % self.expr)
-            value = operators[node.attribute](
+            value = OPERATORS[node.attribute](
                 self.evaluate_node(features, node.left),
                 self.evaluate_node(features, node.right),
             )
@@ -807,3 +945,16 @@ class EquationTree:
 
         node.evaluation = value
         return value
+
+
+equation_tree = EquationTree.from_sympy(
+    expression=sympify('e + sin(x + e) * cos(x) + B'),
+    function_test=lambda x: x in ['cos', 'sin'],
+    operator_test=lambda x: x in ['*', '+'],
+    variable_test=lambda x: x in ['x'],
+    constant_test=lambda x: x in ['B', 'A']
+)
+print(equation_tree.expr)
+print(equation_tree.sympy_expr)
+print(equation_tree.get_evaluation())
+

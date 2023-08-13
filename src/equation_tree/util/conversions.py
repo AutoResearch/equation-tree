@@ -207,8 +207,11 @@ def _infix_to_postfix(infix, function_test, operator_test):
         if infix[i].isdigit() and infix[i + 1] == "_":
             output.append(infix[i: i + 3][::-1])
             i += 2
-        elif infix[i].isdigit():
+        elif infix[i].isdigit() or infix[i] == 'e':
             output.append(infix[i])
+        elif infix[i] == 'i' and infix[i+1] == "p":
+            output.append(infix[i: i+2][::-1])
+            i += 1
 
         # If the character is '(' push it in the stack
         elif infix[i] == "(":

@@ -76,22 +76,17 @@ def sample_tree_raw(
     if not equation_tree.check_validity():
         return None
 
-    # print('')
-    # print(equation_tree.expr)
-    # simplify
     equation_tree.simplify(
         function_test=lambda x: x in _function_priors.keys(),
         operator_test=lambda x: x in _operator_priors.keys()
     )
-    # print(equation_tree.expr)
-    # print('')
 
     # Check is nan
     if equation_tree.is_nan:
         return None
 
     # Check if duplicate constants
-    if equation_tree.n_constants > equation_tree.n_constants_unique:
+    if equation_tree.n_non_numeric_constants > equation_tree.n_non_numeric_constants_unique:
         return None
 
     # Check if more constants than max:
