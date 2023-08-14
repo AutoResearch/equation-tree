@@ -3,10 +3,13 @@ from typing import Callable, Dict, List
 
 import numpy as np
 
+from equation_tree.src.sample_tree_structure import (
+    _count_children,
+    _get_children,
+    sample_tree_structure,
+)
 from equation_tree.util.priors import set_priors
 from equation_tree.util.type_check import is_known_constant, is_numeric
-
-from .sample_tree_structure import _count_children, _get_children, sample_tree_structure
 
 MAX_ITER = 1000
 
@@ -261,6 +264,17 @@ def sample_attribute(priors: Dict, parent_attribute=""):
     return attribute_list[sample_index]
 
 
+def sample_attribute_conditional(priors: Dict, conditional_prior: Dict):
+    _priors = priors
+    if conditional_prior is not None:
+        _priors = conditional_prior
+    attribute_list = list(_priors.keys())
+    _priors = set_priors(_priors, [str(structure) for structure in attribute_list])
+    probabilities = [_priors[key] for key in _priors.keys()]
+    sample_index = np.random.choice(len(attribute_list), p=probabilities)
+    return attribute_list[sample_index]
+
+
 def sample_attribute_from_tree(
     tree_structure,
     index,
@@ -276,6 +290,50 @@ def sample_attribute_from_tree(
         return sample_attribute(function_priors, parent_attribute)
     elif num_children == 2:
         return sample_attribute(operator_priors, parent_attribute)
+    else:
+        raise Exception("Invalid number of children: %s" % num_children)
+
+
+def sample_attribute_from_tree_with_conditionals(
+    tree_structure,
+    index,
+    feature_priors,
+    function_priors,
+    function_conditionals,
+    operator_priors,
+    operator_conditionals,
+    parent_attribute="",
+    parent_kind=NodeKind.NONE,
+):
+    conditional = None
+    cond_prior = None
+    if (
+        parent_kind == NodeKind.FUNCTION
+        and function_conditionals is not None
+        and parent_attribute in function_conditionals.keys()
+    ):
+        conditional = function_conditionals[parent_attribute]
+    if (
+        parent_kind == NodeKind.OPERATOR
+        and operator_conditionals is not None
+        and parent_attribute in operator_conditionals.keys()
+    ):
+        conditional = operator_conditionals[parent_attribute]
+
+    num_children = _count_children(tree_structure, index)
+
+    if num_children == 0:
+        if conditional and conditional["features"] != {}:
+            cond_prior = conditional["features"]
+        return sample_attribute_conditional(feature_priors, cond_prior)
+    elif num_children == 1:
+        if conditional and conditional["functions"] != {}:
+            cond_prior = conditional["functions"]
+        return sample_attribute_conditional(function_priors, cond_prior)
+    elif num_children == 2:
+        if conditional and conditional["operators"] != {}:
+            cond_prior = conditional["operators"]
+        return sample_attribute_conditional(operator_priors, cond_prior)
     else:
         raise Exception("Invalid number of children: %s" % num_children)
 
@@ -337,6 +395,74 @@ def sample_equation_tree_from_structure(
     return node
 
 
+def sample_equation_tree_from_structure_with_conditionals(
+    tree_structure,
+    index,
+    feature_priors,
+    function_priors,
+    function_conditionals,
+    operator_priors,
+    operator_conditionals,
+    parent_attribute="",
+    parent_kind=NodeKind.NONE,
+):
+    attribute = sample_attribute_from_tree_with_conditionals(
+        tree_structure,
+        index,
+        feature_priors,
+        function_priors,
+        function_conditionals,
+        operator_priors,
+        operator_conditionals,
+        parent_attribute,
+        parent_kind,
+    )
+
+    num_children = _count_children(tree_structure, index)
+    kind = NodeKind.NONE
+
+    if num_children == 1:
+        kind = NodeKind.FUNCTION
+    elif num_children == 2:
+        kind = NodeKind.OPERATOR
+    elif attribute is not None:
+        if "variable" in attribute:
+            kind = NodeKind.VARIABLE
+        elif "constant" in attribute:
+            kind = NodeKind.CONSTANT
+
+    node = TreeNode(attribute=attribute, kind=kind)
+
+    children = _get_children(tree_structure, index)
+
+    if len(children) >= 1:
+        node.left = sample_equation_tree_from_structure_with_conditionals(
+            tree_structure,
+            children[0],
+            feature_priors,
+            function_priors,
+            function_conditionals,
+            operator_priors,
+            operator_conditionals,
+            parent_attribute=attribute,
+            parent_kind=kind,
+        )
+
+    if len(children) == 2:
+        node.right = sample_equation_tree_from_structure_with_conditionals(
+            tree_structure,
+            children[1],
+            feature_priors,
+            function_priors,
+            function_conditionals,
+            operator_priors,
+            operator_conditionals,
+            parent_attribute=attribute,
+            parent_kind=kind,
+        )
+    return node
+
+
 def sample_tree(
     max_depth,
     feature_priors={},
@@ -349,3 +475,134 @@ def sample_tree(
         tree_structure, 0, feature_priors, function_priors, operator_priors
     )
     return tree
+
+
+def sample_tree_full(prior, max_var_unique):
+    """
+    Examples:
+        >>> np.random.seed(42)
+
+        # We can set priors for features, functions, operators
+        # and also conditionals based the parent
+        >>> p = {'max_depth': 8,
+        ...     'structure': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
+        ...     'features': {'constants': .2, 'variables': .8},
+        ...     'functions': {'sin': .5, 'cos': .5},
+        ...     'operators': {'+': 1., '-': .0},
+        ...     'function_conditionals': {
+        ...                             'sin': {
+        ...                                 'features': {'constants': 0., 'variables': 1.},
+        ...                                 'functions': {'sin': 0., 'cos': 1.},
+        ...                                 'operators': {'+': 0., '-': 1.}
+        ...                             },
+        ...                             'cos': {
+        ...                                 'features': {'constants': 0., 'variables': 1.},
+        ...                                 'functions': {'cos': 1., 'sin': 0.},
+        ...                                 'operators': {'+': 0., '-': 1.}
+        ...                             }
+        ...                         },
+        ...     'operator_conditionals': {
+        ...                             '+': {
+        ...                                 'features': {'constants': 0., 'variables': 1.},
+        ...                                 'functions': {'sin': 1., 'cos': 0.},
+        ...                                 'operators': {'+': 1., '-': 0.}
+        ...                             },
+        ...                             '-': {
+        ...                                 'features': {'constants': .3, 'variables': .7},
+        ...                                 'functions': {'cos': .5, 'sin': .5},
+        ...                                 'operators': {'+': .9, '-': .1}
+        ...                             }
+        ...                         },
+        ... }
+        >>> sample = sample_tree_full(p, 3)
+        >>> sample.attribute
+        '+'
+        >>> sample.kind == NodeKind.OPERATOR
+        True
+        >>> sample.left.attribute
+        'x_1'
+        >>> sample.left.kind == NodeKind.VARIABLE
+        True
+        >>> sample.right.attribute
+        'x_2'
+        >>> sample.right.kind == NodeKind.VARIABLE
+        True
+        >>> sample = sample_tree_full(p, 3)
+        >>> sample.attribute
+        'sin'
+        >>> sample.kind == NodeKind.FUNCTION
+        True
+        >>> sample.left.attribute
+        'cos'
+        >>> sample.kind == NodeKind.FUNCTION
+        True
+        >>> sample.left.left.attribute
+        'x_1'
+        >>> sample.left.left.kind == NodeKind.VARIABLE
+        True
+
+        # If we don't provide priors for the conditionals,
+        # the fallback is the unconditioned priors
+        >>> p = {'max_depth': 8,
+        ...     'structure': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
+        ...     'features': {'constants': .2, 'variables': .8},
+        ...     'functions': {'sin': .5, 'cos': .5},
+        ...     'operators': {'+': .5, '-': .5},
+        ... }
+        >>> sample = sample_tree_full(p, 3)
+        >>> sample.attribute
+        'cos'
+        >>> sample.kind == NodeKind.FUNCTION
+        True
+        >>> sample.right is None
+        True
+        >>> sample.left.attribute
+        'cos'
+        >>> sample.left.kind == NodeKind.FUNCTION
+        True
+
+    """
+    tree_structure = sample_tree_structure(prior["max_depth"], prior["structure"])
+    function_conditionals = None
+    operator_conditionals = None
+    if "function_conditionals" in prior.keys():
+        function_conditionals = prior["function_conditionals"]
+    if "operator_conditionals" in prior.keys():
+        operator_conditionals = prior["operator_conditionals"]
+
+    tree = sample_equation_tree_from_structure_with_conditionals(
+        tree_structure,
+        0,
+        prior["features"],
+        prior["functions"],
+        function_conditionals,
+        prior["operators"],
+        operator_conditionals,
+    )
+    post(tree, max_var_unique)
+    return tree
+
+
+def post(tree, max_var_unique):
+    var_names = [f"unique_{i}" for i in range(1, max_var_unique + 1)]
+    c = 1
+    v = 1
+    var_dict = {}
+
+    def name(node):
+        nonlocal c, v, var_dict
+        if node is None:
+            return
+        if node.kind == NodeKind.CONSTANT:
+            node.attribute = f"c_{c}"
+            c += 1
+        if node.kind == NodeKind.VARIABLE:
+            _var_name = np.random.choice(var_names)
+            if _var_name not in var_dict.keys():
+                var_dict[_var_name] = f"x_{v}"
+                v += 1
+            node.attribute = var_dict[_var_name]
+        name(node.left)
+        name(node.right)
+
+    name(tree)

@@ -4,15 +4,21 @@ from typing import Callable, Dict, List, Union
 import numpy as np
 import pandas as pd
 from sympy import simplify, symbols, sympify
+from util.type_check import check_functions, is_known_constant, is_numeric
 
-from .src.tree_node import NodeKind, TreeNode, node_from_prefix, sample_tree
-from .util.conversions import (
+from equation_tree.src.tree_node import (
+    NodeKind,
+    TreeNode,
+    node_from_prefix,
+    sample_tree,
+    sample_tree_full,
+)
+from equation_tree.util.conversions import (
     infix_to_prefix,
     prefix_to_infix,
     standardize_sympy,
     unary_minus_to_binary,
 )
-from .util.type_check import check_functions, is_known_constant, is_numeric
 
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
@@ -212,6 +218,97 @@ class EquationTree:
         root = node_from_prefix(
             prefix_notation, function_test, operator_test, variable_test, constant_test
         )
+        return cls(root)
+
+    @classmethod
+    def from_full_prior(cls, prior):
+        root = sample_tree_full(prior)
+        return cls(root)
+
+    @classmethod
+    def from_prior(cls, prior: Dict, max_variables_unique: int):
+        """
+        Initiate a tree from a prior
+
+        Args:
+            prior: The priors in dictionary form
+            max_variables_unique: The maximum number of unique variables (a tree can have less then
+                this number)
+
+        Examples:
+            >>> np.random.seed(42)
+
+            # We can set priors for features, functions, operators
+            # and also conditionals based the parent
+            >>> p = {'max_depth': 8,
+            ...     'structure': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
+            ...     'features': {'constants': .2, 'variables': .8},
+            ...     'functions': {'sin': .5, 'cos': .5},
+            ...     'operators': {'+': 1., '-': .0},
+            ...     'function_conditionals': {
+            ...                             'sin': {
+            ...                                 'features': {'constants': 0., 'variables': 1.},
+            ...                                 'functions': {'sin': 0., 'cos': 1.},
+            ...                                 'operators': {'+': 0., '-': 1.}
+            ...                             },
+            ...                             'cos': {
+            ...                                 'features': {'constants': 0., 'variables': 1.},
+            ...                                 'functions': {'cos': 1., 'sin': 0.},
+            ...                                 'operators': {'+': 0., '-': 1.}
+            ...                             }
+            ...                         },
+            ...     'operator_conditionals': {
+            ...                             '+': {
+            ...                                 'features': {'constants': .5, 'variables': .5},
+            ...                                 'functions': {'sin': 1., 'cos': 0.},
+            ...                                 'operators': {'+': 1., '-': 0.}
+            ...                             },
+            ...                             '-': {
+            ...                                 'features': {'constants': .3, 'variables': .7},
+            ...                                 'functions': {'cos': .5, 'sin': .5},
+            ...                                 'operators': {'+': .9, '-': .1}
+            ...                             }
+            ...                         },
+            ... }
+            >>> equation_tree = EquationTree.from_prior(p, 3)
+            >>> equation_tree.structure
+            [0, 1, 1]
+            >>> equation_tree.expr
+            ['+', 'x_1', 'x_2']
+            >>> equation_tree = EquationTree.from_prior(p, 3)
+            >>> equation_tree.structure
+            [0, 1, 2]
+            >>> equation_tree.expr
+            ['sin', 'cos', 'x_1']
+            >>> equation_tree = EquationTree.from_prior(p, 3)
+            >>> equation_tree.structure
+            [0, 1, 2]
+            >>> equation_tree = EquationTree.from_prior(p, 3)
+            >>> equation_tree.structure
+            [0, 1, 2, 3, 2, 3, 1]
+            >>> equation_tree.expr
+            ['+', '+', 'sin', 'x_1', 'sin', 'x_2', 'x_2']
+            >>> equation_tree.sympy_expr
+            x_2 + sin(x_1) + sin(x_2)
+
+            # Without conditionals, the unconditioned priors are the fallback option
+            >>> p = {'max_depth': 8,
+            ...     'structure': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
+            ...     'features': {'constants': .2, 'variables': .8},
+            ...     'functions': {'sin': .5, 'cos': .5},
+            ...     'operators': {'+': .5, '-': .5},
+            ... }
+            >>> equation_tree = EquationTree.from_prior(p, 3)
+            >>> equation_tree.structure
+            [0, 1, 2, 3, 2, 3, 1]
+            >>> equation_tree.expr
+            ['+', '-', 'cos', 'c_1', 'cos', 'c_2', 'c_3']
+            >>> equation_tree.sympy_expr
+            c_3 + cos(c_1) - cos(c_2)
+
+            # Note: this would be discarded in a future step as unnecesarry complex
+        """
+        root = sample_tree_full(prior, max_variables_unique)
         return cls(root)
 
     @classmethod
@@ -453,6 +550,7 @@ class EquationTree:
         Get al information as dictionary
         """
         info = {}
+        info["max_depth"] = len(self.structure)
         info["depth"] = max(self.structure)
         info["structure"] = self.structure
         info["features"] = {
@@ -573,6 +671,10 @@ class EquationTree:
                 or structure_priors[str(self.structure)] <= 0
             ):
                 return False
+        return True
+
+    # TODO: Make this as equivalent to check_possible (above function)
+    def check_possible_from_prior(self, prior: Dict):
         return True
 
     def standardize(self):

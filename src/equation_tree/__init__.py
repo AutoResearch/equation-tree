@@ -1,4 +1,4 @@
-from .equation_tree import EquationTree
+from .tree import EquationTree
 
 __all__ = [
     "EquationTree",

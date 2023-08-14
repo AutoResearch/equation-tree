@@ -1,9 +1,8 @@
 from typing import Dict, List, Optional, Union
 
+from .equation_tree import EquationTree
 from .util.priors import priors_from_space
 from .util.type_check import is_constant_formatted, is_variable_formatted
-
-from .equation_tree import EquationTree
 
 PriorType = Union[List, Dict]
 
@@ -135,6 +134,3 @@ def sample_tree_iter(
         )
         if equation_tree is not None:
             return equation_tree
-
-
-
