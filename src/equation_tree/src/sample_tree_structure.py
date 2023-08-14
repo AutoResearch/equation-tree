@@ -187,3 +187,19 @@ def sample_tree_structure(max_depth: int, priors: Dict = {}):
             continue
         return tree_structure
     raise Exception(f"Could not generate tree structure with max depth {max_depth}")
+
+
+def convert_to_standard_notation(tree):
+    """
+    Examples:
+        >>> convert_to_standard_notation([0, 1, 1])
+        [0, 1, 1]
+        >>> convert_to_standard_notation([0, 1, 2, 2, 3])
+        [0, 1, 2, 3, 2]
+        >>> convert_to_standard_notation([0, 1, 2, 1, 2, 2])
+        [0, 1, 2, 2, 1, 2]
+    """
+
+
+
+

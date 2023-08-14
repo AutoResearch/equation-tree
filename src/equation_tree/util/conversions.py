@@ -197,6 +197,8 @@ def _is_standard(s):
     return re.match(pattern_v, s) is not None or re.match(pattern_c, s) is not None
 
 
+# TODO: make this more robust. Preferable only using function_test and operator_test. The tests
+# for the constants and variables are still valid though (we standardize equations to use that)
 def _infix_to_postfix(infix, function_test, operator_test):
     infix = "(" + infix + ")"
     n = len(infix)
@@ -234,6 +236,12 @@ def _infix_to_postfix(infix, function_test, operator_test):
                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
                         output.append(char_stack.pop())
                     char_stack.append(infix[i])
+                elif infix[i] == '*' and i < n-1 and infix[i+1] == '*':
+                    op = '**'
+                    i += 1
+                    while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
+                        output.append(char_stack.pop())
+                    char_stack.append(op)
                 elif infix[i].isalpha():
                     fct = ""
                     while infix[i].isalpha() and i < n - 1:

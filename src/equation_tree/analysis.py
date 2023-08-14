@@ -1,6 +1,8 @@
-from typing import List
-from equation_tree.tree import EquationTree
+from typing import Dict, List
+
 from util.priors import normalized_dict
+
+from equation_tree.tree import EquationTree
 
 
 def get_frequencies(trees: List[EquationTree]):
@@ -121,77 +123,89 @@ def get_frequencies(trees: List[EquationTree]):
                         '[0, 1, 2, 3, 2, 3, 1]': 0.39,
                         '[0, 1, 2]': 0.32}}
     """
-    info = {}
-    max_depth = {}
-    depth = {}
-    structures = {}
-    features = {}
-    functions = {}
-    operators = {}
-    function_conditionals = {}
-    operator_conditionals = {}
+    info: Dict = {}
+    max_depth: Dict = {}
+    depth: Dict = {}
+    structures: Dict = {}
+    features: Dict = {}
+    functions: Dict = {}
+    operators: Dict = {}
+    function_conditionals: Dict = {}
+    operator_conditionals: Dict = {}
     for t in trees:
         _info = t.info
-        if 'max_depth' in _info.keys():
-            _update(max_depth, _info['max_depth'])
-        if 'depth' in _info.keys():
-            _update(depth, _info['depth'])
-        if 'structure' in _info.keys():
-            _update(structures, str(_info['structure']))
-        if 'features' in _info.keys():
-            for key, val in _info['features'].items():
+        if "max_depth" in _info.keys():
+            _update(max_depth, _info["max_depth"])
+        if "depth" in _info.keys():
+            _update(depth, _info["depth"])
+        if "structure" in _info.keys():
+            _update(structures, str(_info["structure"]))
+        if "features" in _info.keys():
+            for key, val in _info["features"].items():
                 _update(features, key, val)
-        if 'functions' in _info.keys():
-            for key, val in _info['functions'].items():
+        if "functions" in _info.keys():
+            for key, val in _info["functions"].items():
                 _update(functions, key, val)
-        if 'operators' in _info.keys():
-            for key, val in _info['operators'].items():
+        if "operators" in _info.keys():
+            for key, val in _info["operators"].items():
                 _update(operators, key, val)
-        if 'function_conditionals' in _info.keys():
-            fnc_con_dict = _info['function_conditionals']
+        if "function_conditionals" in _info.keys():
+            fnc_con_dict = _info["function_conditionals"]
             for k, fnc_dict in fnc_con_dict.items():
                 if k not in function_conditionals.keys():
-                    function_conditionals[k] = {'features': {}, 'functions': {}, 'operators': {}}
-                fnc_dct_features = fnc_dict['features']
-                fnc_fct_functions = fnc_dict['functions']
-                fnc_fct_operators = fnc_dict['operators']
+                    function_conditionals[k] = {
+                        "features": {},
+                        "functions": {},
+                        "operators": {},
+                    }
+                fnc_dct_features = fnc_dict["features"]
+                fnc_fct_functions = fnc_dict["functions"]
+                fnc_fct_operators = fnc_dict["operators"]
                 for key, val in fnc_dct_features.items():
-                    _update(function_conditionals[k]['features'], key, val)
+                    _update(function_conditionals[k]["features"], key, val)
                 for key, val in fnc_fct_functions.items():
-                    _update(function_conditionals[k]['functions'], key, val)
+                    _update(function_conditionals[k]["functions"], key, val)
                 for key, val in fnc_fct_operators.items():
-                    _update(function_conditionals[k]['operators'], key, val)
-        if 'operator_conditionals' in _info.keys():
-            op_con_dict = _info['operator_conditionals']
+                    _update(function_conditionals[k]["operators"], key, val)
+        if "operator_conditionals" in _info.keys():
+            op_con_dict = _info["operator_conditionals"]
             for k, op_dict in op_con_dict.items():
                 if k not in operator_conditionals.keys():
-                    operator_conditionals[k] = {'features': {}, 'functions': {}, 'operators': {}}
-                op_dct_features = op_dict['features']
-                op_fct_functions = op_dict['functions']
-                op_fct_operators = op_dict['operators']
+                    operator_conditionals[k] = {
+                        "features": {},
+                        "functions": {},
+                        "operators": {},
+                    }
+                op_dct_features = op_dict["features"]
+                op_fct_functions = op_dict["functions"]
+                op_fct_operators = op_dict["operators"]
                 for key, val in op_dct_features.items():
-                    _update(operator_conditionals[k]['features'], key, val)
+                    _update(operator_conditionals[k]["features"], key, val)
                 for key, val in op_fct_functions.items():
-                    _update(operator_conditionals[k]['functions'], key, val)
+                    _update(operator_conditionals[k]["functions"], key, val)
                 for key, val in op_fct_operators.items():
-                    _update(operator_conditionals[k]['operators'], key, val)
+                    _update(operator_conditionals[k]["operators"], key, val)
     for k_c in function_conditionals:
-        for k in ['features', 'functions', 'operators']:
+        for k in ["features", "functions", "operators"]:
             if k in function_conditionals[k_c]:
-                function_conditionals[k_c][k] = normalized_dict(function_conditionals[k_c][k])
+                function_conditionals[k_c][k] = normalized_dict(
+                    function_conditionals[k_c][k]
+                )
     for k_c in operator_conditionals:
-        for k in ['features', 'functions', 'operators']:
+        for k in ["features", "functions", "operators"]:
             if k in operator_conditionals[k_c]:
-                operator_conditionals[k_c][k] = normalized_dict(operator_conditionals[k_c][k])
+                operator_conditionals[k_c][k] = normalized_dict(
+                    operator_conditionals[k_c][k]
+                )
 
-    info['max_depth'] = normalized_dict(max_depth)
-    info['depth'] = normalized_dict(depth)
-    info['structures'] = normalized_dict(structures)
-    info['features'] = normalized_dict(features)
-    info['functions'] = normalized_dict(functions)
-    info['operators'] = normalized_dict(operators)
-    info['function_conditionals'] = function_conditionals
-    info['operator_conditionals'] = operator_conditionals
+    info["max_depth"] = normalized_dict(max_depth)
+    info["depth"] = normalized_dict(depth)
+    info["structures"] = normalized_dict(structures)
+    info["features"] = normalized_dict(features)
+    info["functions"] = normalized_dict(functions)
+    info["operators"] = normalized_dict(operators)
+    info["function_conditionals"] = function_conditionals
+    info["operator_conditionals"] = operator_conditionals
     return info
 
 
