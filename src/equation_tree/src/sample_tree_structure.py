@@ -189,7 +189,7 @@ def sample_tree_structure(max_depth: int, priors: Dict = {}):
     raise Exception(f"Could not generate tree structure with max depth {max_depth}")
 
 
-def convert_to_standard_notation(tree):
+def convert_to_standard_notation(list_notation):
     """
     Examples:
         >>> convert_to_standard_notation([0, 1, 1])
@@ -198,8 +198,136 @@ def convert_to_standard_notation(tree):
         [0, 1, 2, 3, 2]
         >>> convert_to_standard_notation([0, 1, 2, 1, 2, 2])
         [0, 1, 2, 2, 1, 2]
+        >>> convert_to_standard_notation([0, 1, 2, 2, 1, 2, 3])
+        [0, 1, 2, 3, 1, 2, 2]
+        >>> convert_to_standard_notation([0, 1, 2, 3, 1, 2, 2, 3])
+        [0, 1, 2, 3, 2, 1, 2, 3]
     """
+    tree = _get_tree(list_notation)
+    _standardize(tree)
+    return _get_list(tree)
 
 
+def _get_tree(list_notation):
+    """
+    Example:
+        >>> t = _get_tree([0])
+        >>> t.val
+        0
+        >>> t.parent
+
+        >>> t.children
+        []
+        >>> t = _get_tree([0, 1, 1])
+        >>> t.val
+        0
+        >>> t.parent
+
+        >>> t.children[0].val
+        1
+        >>> t.children[0].parent.val
+        0
+        >>> t.children[0].children
+        []
+        >>> t.children[1].val
+        1
+        >>> t.children[1].parent.val
+        0
+        >>> t.children[1].children
+        []
+
+        >>> t = _get_tree([0, 1, 2, 3, 2, 3])
+        >>> _get_depth(t)
+        3
+        >>> _get_width(t)
+        2
+
+        >>> t = _get_tree([0, 1, 1, 2, 2, 3])
+        >>> _get_depth(t)
+        3
+        >>> _get_width(t)
+        3
+
+    """
+    node = _StructureNode(0)
+    root = node
+    last_val = 0
+    for val in list_notation[1:]:
+        if val > last_val:
+            last_node = node
+            node.children.append(_StructureNode(val))
+            node = node.children[-1]
+            node.parent = last_node
+        if val <= last_val:
+            tmp = val
+            while tmp <= last_val:
+                node = node.parent
+                tmp += 1
+            last_node = node
+            node.children.append(_StructureNode(val))
+            node = node.children[-1]
+            node.parent = last_node
+        last_val = val
+    return root
 
 
+def _get_list(node):
+    lst = []
+
+    def _rec_list(n):
+        nonlocal lst
+        lst.append(n.val)
+        for c in n.children:
+            _rec_list(c)
+
+    _rec_list(node)
+    return lst
+
+
+def _standardize(node):
+    def _rec_standardize(n):
+        if len(n.children) > 1:
+            if _get_width(n.children[1]) > _get_width(n.children[0]):
+                n.children[0], n.children[1] = n.children[1], n.children[0]
+            if _get_depth(n.children[1]) > _get_depth(n.children[0]):
+                n.children[0], n.children[1] = n.children[1], n.children[0]
+        if n.children:
+            _rec_standardize(n.children[0])
+        if len(n.children) > 1:
+            _rec_standardize(n.children[1])
+
+    _rec_standardize(node)
+
+
+def _get_depth(node):
+    depth = 0
+
+    def _rec_depth(n):
+        nonlocal depth
+        if n.children:
+            if n.children[0].val > depth:
+                depth = n.children[0].val
+            _rec_depth(n.children[0])
+            if len(n.children) > 1:
+                if n.children[1].val > depth:
+                    depth = n.children[1].val
+                _rec_depth(n.children[1])
+
+    _rec_depth(node)
+    return depth
+
+
+def _get_width(node):
+    width = 0
+
+    def _rec_width(n):
+        nonlocal width
+        if n.children:
+            _rec_width(n.children[0])
+        if len(n.children) > 1:
+            _rec_width(n.children[1])
+        if not n.children:
+            width += 1
+
+    _rec_width(node)
+    return width
