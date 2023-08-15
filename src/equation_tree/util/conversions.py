@@ -236,8 +236,8 @@ def _infix_to_postfix(infix, function_test, operator_test):
                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
                         output.append(char_stack.pop())
                     char_stack.append(infix[i])
-                elif infix[i] == '*' and i < n-1 and infix[i+1] == '*':
-                    op = '**'
+                elif infix[i] == "*" and i < n - 1 and infix[i + 1] == "*":
+                    op = "**"
                     i += 1
                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
                         output.append(char_stack.pop())

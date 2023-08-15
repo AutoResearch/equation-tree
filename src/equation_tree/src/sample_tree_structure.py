@@ -8,11 +8,179 @@ from equation_tree.util.priors import set_priors
 MAX_ITER = 1000
 
 
+def sample_tree_structure(max_depth: int, priors: Dict = {}):
+    """
+    Sample a tree structure.
+
+    Args:
+        max_depth: the maximum depth of a tree
+        priors: priors in form of a dictionary. The keys are the tree structures as strings
+
+    Examples:
+        # Set seed for reproducibility
+        >>> np.random.seed(42)
+
+        # Sample a single structure
+        >>> sample_tree_structure(7)
+        [0, 1, 2, 3, 4, 5]
+
+        # Get a list of 4 samples with max_depth = 4
+        >>> [sample_tree_structure(5) for _ in range(4)]
+        [[0, 1, 2, 3, 1], [0, 1, 1, 2, 3], [0, 1, 2, 3, 4], [0, 1, 1]]
+
+        # Set a prior
+        >>> [sample_tree_structure(5, {'[0, 1, 1]': 1}) for _ in range(4)]
+        [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1]]
+
+        # Set a different prior
+        >>> [sample_tree_structure(5, {'[0, 1, 1]': .5, '[0, 1, 2]': .5}) for _ in range(4)]
+        [[0, 1, 1], [0, 1, 2], [0, 1, 1], [0, 1, 1]]
+
+        # We can also set a full prior( here the max_depth for the structure is 3 which only allows
+        # for two structures: [0, 1, 1] and [0, 1, 2]
+        >>> [sample_tree_structure(3, {'[0, 1, 1]': .3, '[0, 1, 2]': .7}) for _ in range(4)]
+        [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
+
+        # If we set an invalid prior, an Exeption is raised  # doctest: +ELLIPSIS
+        >>> [sample_tree_structure(3, {'[0, 1, 3]': .5}) for _ in range(4)]
+        Traceback (most recent call last):
+        ...
+        Exception: Priors {'[0, 1, 3]': 0.5} are not subset of space ['[0, 1, 2]', '[0, 1, 1]']
+
+    """
+    tree_structures = _gen_all_tree_structures(max_depth)
+
+    priors = set_priors(priors, [str(structure) for structure in tree_structures])
+    probabilities = [priors[key] for key in priors.keys()]
+
+    for _ in range(MAX_ITER):
+        sample_index = np.random.choice(len(tree_structures), p=probabilities)
+        tree_structure = tree_structures[sample_index]
+        if not _is_binary_tree(tree_structure):
+            warnings.warn(
+                "Found a non binary tree structure, "
+                "this might lead to discrepancies between set priors and sample frequencies."
+            )
+            continue
+        return tree_structure
+    raise Exception(f"Could not generate tree structure with max depth {max_depth}")
+
+
+def sample_tree_structure_non_iso(max_depth: int, priors: Dict = {}):
+    """
+    Sample a tree structure.
+
+    Args:
+        max_depth: the maximum depth of a tree
+        priors: priors in form of a dictionary. The keys are the tree structures as strings
+
+    Examples:
+        # Set seed for reproducibility
+        >>> np.random.seed(42)
+
+        # Sample a single structure
+        >>> sample_tree_structure_non_iso(7)
+        [0, 1, 2, 3, 3, 2]
+
+        # Get a list of 4 samples with max_depth = 4
+        >>> [sample_tree_structure_non_iso(5) for _ in range(4)]
+        [[0, 1, 2, 1, 2], [0, 1, 2, 3, 1], [0, 1, 2, 3, 3], [0, 1, 1]]
+
+        # Set a prior
+        >>> [sample_tree_structure_non_iso(5, {'[0, 1, 1]': 1}) for _ in range(4)]
+        [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1]]
+
+        # Set a different prior
+        >>> [sample_tree_structure_non_iso(5, {'[0, 1, 1]': .5, '[0, 1, 2]': .5}) for _ in range(4)]
+        [[0, 1, 1], [0, 1, 2], [0, 1, 1], [0, 1, 1]]
+
+        # We can also set a full prior( here the max_depth for the structure is 3 which only allows
+        # for two structures: [0, 1, 1] and [0, 1, 2]
+        >>> [sample_tree_structure_non_iso(3, {'[0, 1, 1]': .3, '[0, 1, 2]': .7}) for _ in range(4)]
+        [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
+
+        # If we set an invalid prior, an Exeption is raised  # doctest: +ELLIPSIS
+        >>> [sample_tree_structure_non_iso(3, {'[0, 1, 3]': .5}) for _ in range(4)]
+        Traceback (most recent call last):
+        ...
+        Exception: Priors {'[0, 1, 3]': 0.5} are not subset of space ['[0, 1, 2]', '[0, 1, 1]']
+
+    """
+    tree_structures = _gen_all_tree_structures_non_iso(max_depth)
+
+    priors = set_priors(priors, [str(structure) for structure in tree_structures])
+    probabilities = [priors[key] for key in priors.keys()]
+
+    for _ in range(MAX_ITER):
+        sample_index = np.random.choice(len(tree_structures), p=probabilities)
+        tree_structure = tree_structures[sample_index]
+        if not _is_binary_tree(tree_structure):
+            warnings.warn(
+                "Found a non binary tree structure, "
+                "this might lead to discrepancies between set priors and sample frequencies."
+            )
+            continue
+        return tree_structure
+    raise Exception(f"Could not generate tree structure with max depth {max_depth}")
+
+
 class _StructureNode:
     def __init__(self, val=0):
         self.val = val
         self.parent = None
         self.children = []
+
+
+def _gen_all_tree_structures(max_depth):
+    """
+    Generate all tree structures
+
+    Examples:
+        >>> _gen_all_tree_structures(3)
+        [[0, 1, 2], [0, 1, 1]]
+        >>> _gen_all_tree_structures(4)
+        [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 1, 2], [0, 1, 2, 1]]
+        >>> _gen_all_tree_structures(5)
+        [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 1, 2], [0, 1, 2, 1], \
+[0, 1, 2, 3, 4], [0, 1, 1, 2, 3], [0, 1, 2, 1, 2], [0, 1, 2, 3, 1]]
+        >>> _gen_all_tree_structures(6)
+        [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 1, 2], [0, 1, 2, 1], \
+[0, 1, 2, 3, 4], [0, 1, 1, 2, 3], [0, 1, 2, 1, 2], [0, 1, 2, 3, 1], [0, 1, 2, 3, 4, 5], \
+[0, 1, 1, 2, 3, 4], [0, 1, 2, 1, 2, 3], [0, 1, 2, 1, 2, 2], [0, 1, 2, 3, 1, 2], \
+[0, 1, 2, 2, 1, 2], [0, 1, 2, 3, 4, 1]]
+    """
+    assert max_depth >= 3
+    lst = []
+    for i in range(3, max_depth + 1):
+        tree_structures = [_get_list(t) for t in _gen_trees(i, 0)]
+        lst += tree_structures
+
+    unique_sublists = []
+    for sublist in lst:
+        if sublist not in unique_sublists:
+            unique_sublists.append(sublist)
+    return unique_sublists
+
+
+def _gen_trees(depth, level):
+    """
+    Generate trees with exact depth and starting level
+    """
+    if depth == 1:
+        return [_StructureNode(level)]
+    if depth == 0:
+        return [None]
+
+    lst = []
+    possibilities = [(i, depth - 1 - i) for i in range(depth)]
+    for el in possibilities:
+        left = _gen_trees(el[0], level + 1)
+        right = _gen_trees(el[1], level + 1)
+        for l_t, r_t in zip(left, right):
+            tree = _StructureNode(level)
+            tree.children = [l_t, r_t]
+            lst.append(tree)
+    return lst
 
 
 def _generate_parent_pointers(levels, values):
@@ -122,7 +290,17 @@ def _count_children(tree_structure, index):
     return children
 
 
-def _gen_all_tree_structures(max_depth):
+def _gen_all_tree_structures_non_iso(max_depth):
+    """
+    Generate all non-isomorphic tree structures
+
+    Examples:
+         >>> _gen_all_tree_structures_non_iso(3)
+         [[0, 1, 2], [0, 1, 1]]
+         >>> _gen_all_tree_structures_non_iso(4)
+         [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 2, 2], [0, 1, 2, 1]]
+
+    """
     tree_structures = [
         tree.copy()
         for depth in range(3, max_depth + 1)
@@ -131,102 +309,18 @@ def _gen_all_tree_structures(max_depth):
     return tree_structures
 
 
-def _gen_all_tree_structures_full(max_depth):
+def _convert_to_standard_notation(list_notation):
     """
     Examples:
-        >>> trees = _gen_all_tree_structures_full(3)
-        >>> [_get_list(t) for t in trees]
-
-    """
-    if max_depth == 0:
-        return [None]
-
-    result = []
-    for left_count in range(max_depth):
-        right_count = max_depth - 1 - left_count
-        left_trees = _gen_all_tree_structures_full(left_count)
-        right_trees = _gen_all_tree_structures_full(right_count)
-
-        for left_tree in left_trees:
-            for right_tree in right_trees:
-                root = _StructureNode()
-                root.children.append(left_tree)
-                root.children.append(right_tree)
-                result.append(root)
-
-    return result
-
-
-def sample_tree_structure(max_depth: int, priors: Dict = {}):
-    """
-    Sample a tree structure.
-
-    Args:
-        max_depth: the maximum depth of a tree
-        priors: priors in form of a dictionary. The keys are the tree structures as strings
-
-    Examples:
-        # Set seed for reproducibility
-        >>> np.random.seed(42)
-
-        # Sample a single structure
-        >>> sample_tree_structure(7)
-        [0, 1, 2, 3, 3, 2]
-
-        # Get a list of 4 samples with max_depth = 4
-        >>> [sample_tree_structure(5) for _ in range(4)]
-        [[0, 1, 2, 1, 2], [0, 1, 2, 3, 1], [0, 1, 2, 3, 3], [0, 1, 1]]
-
-        # Set a prior
-        >>> [sample_tree_structure(5, {'[0, 1, 1]': 1}) for _ in range(4)]
-        [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1]]
-
-        # Set a different prior
-        >>> [sample_tree_structure(5, {'[0, 1, 1]': .5, '[0, 1, 2]': .5}) for _ in range(4)]
-        [[0, 1, 1], [0, 1, 2], [0, 1, 1], [0, 1, 1]]
-
-        # We can also set a full prior( here the max_depth for the structure is 3 which only allows
-        # for two structures: [0, 1, 1] and [0, 1, 2]
-        >>> [sample_tree_structure(3, {'[0, 1, 1]': .3, '[0, 1, 2]': .7}) for _ in range(4)]
-        [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
-
-        # If we set an invalid prior, an Exeption is raised  # doctest: +ELLIPSIS
-        >>> [sample_tree_structure(3, {'[0, 1, 3]': .5}) for _ in range(4)]
-        Traceback (most recent call last):
-        ...
-        Exception: Priors {'[0, 1, 3]': 0.5} are not subset of space ['[0, 1, 2]', '[0, 1, 1]']
-
-    """
-    tree_structures = _gen_all_tree_structures(max_depth)
-
-    priors = set_priors(priors, [str(structure) for structure in tree_structures])
-    probabilities = [priors[key] for key in priors.keys()]
-
-    for _ in range(MAX_ITER):
-        sample_index = np.random.choice(len(tree_structures), p=probabilities)
-        tree_structure = tree_structures[sample_index]
-        if not _is_binary_tree(tree_structure):
-            warnings.warn(
-                "Found a non binary tree structure, "
-                "this might lead to discrepancies between set priors and sample frequencies."
-            )
-            continue
-        return tree_structure
-    raise Exception(f"Could not generate tree structure with max depth {max_depth}")
-
-
-def convert_to_standard_notation(list_notation):
-    """
-    Examples:
-        >>> convert_to_standard_notation([0, 1, 1])
+        >>> _convert_to_standard_notation([0, 1, 1])
         [0, 1, 1]
-        >>> convert_to_standard_notation([0, 1, 2, 2, 3])
+        >>> _convert_to_standard_notation([0, 1, 2, 2, 3])
         [0, 1, 2, 3, 2]
-        >>> convert_to_standard_notation([0, 1, 2, 1, 2, 2])
+        >>> _convert_to_standard_notation([0, 1, 2, 1, 2, 2])
         [0, 1, 2, 2, 1, 2]
-        >>> convert_to_standard_notation([0, 1, 2, 2, 1, 2, 3])
+        >>> _convert_to_standard_notation([0, 1, 2, 2, 1, 2, 3])
         [0, 1, 2, 3, 1, 2, 2]
-        >>> convert_to_standard_notation([0, 1, 2, 3, 1, 2, 2, 3])
+        >>> _convert_to_standard_notation([0, 1, 2, 3, 1, 2, 2, 3])
         [0, 1, 2, 3, 2, 1, 2, 3]
     """
     tree = _get_tree(list_notation)
@@ -302,9 +396,10 @@ def _get_list(node):
 
     def _rec_list(n):
         nonlocal lst
-        lst.append(n.val)
-        for c in n.children:
-            _rec_list(c)
+        if n:
+            lst.append(n.val)
+            for c in n.children:
+                _rec_list(c)
 
     _rec_list(node)
     return lst
