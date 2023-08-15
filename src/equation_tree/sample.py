@@ -5,6 +5,8 @@ from equation_tree.prior import get_defined_functions, get_defined_operators
 from equation_tree.util.priors import priors_from_space
 from equation_tree.util.type_check import is_constant_formatted, is_variable_formatted
 
+from util.io import load
+
 PriorType = Union[List, Dict]
 
 DEFAULT_FUNCTION_SPACE = ["sin", "cos", "tan", "exp", "log", "sqrt", "abs"]
@@ -13,7 +15,17 @@ DEFAULT_OPERATOR_SPACE = ["+", "-", "*", "/", "^"]
 MAX_ITER = 10_000
 
 
-def sample_tree_raw(
+
+def sample_trees(
+        n,
+        prior,
+        max_num_variables
+):
+
+    return [_sample_tree_iter(prior, max_num_variables) for _ in range(n)]
+
+
+def __sample_tree_raw(
         prior,
         max_num_variables,
 ):
@@ -56,24 +68,14 @@ def sample_tree_raw(
     return equation_tree
 
 
-def sample_tree_iter(
-        max_depth: int = 3,
-        max_num_constants: int = 0,
-        max_num_variables: int = 1,
-        feature_priors: Optional[Dict] = None,
-        function_priors: PriorType = DEFAULT_FUNCTION_SPACE,
-        operator_priors: PriorType = DEFAULT_OPERATOR_SPACE,
-        structure_priors: PriorType = {},
+def _sample_tree_iter(
+        prior,
+        max_num_variables,
 ):
     for _ in range(MAX_ITER):
-        equation_tree = sample_tree_raw(
-            max_depth,
-            max_num_constants,
+        equation_tree = __sample_tree_raw(
+            prior,
             max_num_variables,
-            feature_priors,
-            function_priors,
-            operator_priors,
-            structure_priors,
         )
         if equation_tree is not None:
             return equation_tree

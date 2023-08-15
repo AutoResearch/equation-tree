@@ -12,17 +12,23 @@ PACKAGE_NAME = "equation_tree"
 HASH_FILE = "_hashed_probabilities.json"
 
 
-def load(hash_id, hash_fall_back, file):
+def load(prior, file):
+    pass
+
+def _load(hash_id, hash_fall_back, file):
     """
     Loads the hashed probabilities from the file with fall back options.
     """
-    data = _load(hash_id, file)
+    data = None
+    if file:
+        data = __load(hash_id, file)
     if data is None:
         data = _load_default(hash_id)
     if data is not None:
         return data
 
-    data = _load(hash_fall_back, file)
+    if file:
+        data = __load(hash_fall_back, file)
     if data is None:
         data = _load_default(hash_fall_back)
     if data is not None:
@@ -55,7 +61,7 @@ def store(hash_id, data, file):
         json.dump(_data, f)
 
 
-def _load(hash_id, file):
+def __load(hash_id, file):
     if not os.path.isfile(file):
         return None
     with open(file, "r") as file:
