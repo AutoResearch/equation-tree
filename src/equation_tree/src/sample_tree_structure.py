@@ -131,6 +131,32 @@ def _gen_all_tree_structures(max_depth):
     return tree_structures
 
 
+def _gen_all_tree_structures_full(max_depth):
+    """
+    Examples:
+        >>> trees = _gen_all_tree_structures_full(3)
+        >>> [_get_list(t) for t in trees]
+
+    """
+    if max_depth == 0:
+        return [None]
+
+    result = []
+    for left_count in range(max_depth):
+        right_count = max_depth - 1 - left_count
+        left_trees = _gen_all_tree_structures_full(left_count)
+        right_trees = _gen_all_tree_structures_full(right_count)
+
+        for left_tree in left_trees:
+            for right_tree in right_trees:
+                root = _StructureNode()
+                root.children.append(left_tree)
+                root.children.append(right_tree)
+                result.append(root)
+
+    return result
+
+
 def sample_tree_structure(max_depth: int, priors: Dict = {}):
     """
     Sample a tree structure.

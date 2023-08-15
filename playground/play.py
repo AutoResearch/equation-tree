@@ -1,12 +1,5 @@
-from equation_tree.sample import sample_tree_iter
 from equation_tree.tree import EquationTree
 from sympy import sympify
-
-# sample = sample_tree_iter(8, 3, 3)
-#
-# print(sample.expr)
-#
-# print(sample.info)
 
 expr = sympify('B*x_1**2')
 print(expr)
