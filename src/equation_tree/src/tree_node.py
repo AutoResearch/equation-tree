@@ -24,11 +24,11 @@ class NodeKind(Enum):
 
 class TreeNode:
     def __init__(
-        self,
-        left=None,
-        right=None,
-        kind=NodeKind.NONE,
-        attribute="",
+            self,
+            left=None,
+            right=None,
+            kind=NodeKind.NONE,
+            attribute="",
     ):
 
         self.attribute = attribute
@@ -48,11 +48,11 @@ class TreeNode:
         self.is_leaf = self.children == []
 
     def check_validity(
-        self,
-        zero_representations=["0"],
-        log_representations=["log", "Log"],
-        division_representations=["/", ":"],
-        verbose=False,
+            self,
+            zero_representations=["0"],
+            log_representations=["log", "Log"],
+            division_representations=["/", ":"],
+            verbose=False,
     ):
         return check_node_validity(
             self,
@@ -64,11 +64,11 @@ class TreeNode:
 
 
 def check_node_validity(
-    node=None,
-    zero_representations=["0"],
-    log_representations=["log", "Log"],
-    division_representations=["/", ":"],
-    verbose=False,
+        node=None,
+        zero_representations=["0"],
+        log_representations=["log", "Log"],
+        division_representations=["/", ":"],
+        verbose=False,
 ):
     if node is None:
         return True
@@ -77,8 +77,8 @@ def check_node_validity(
         if node.left is None or node.right is not None:
             return False
         if (
-            node.attribute in log_representations
-            and node.left.attribute in zero_representations
+                node.attribute in log_representations
+                and node.left.attribute in zero_representations
         ):
             if verbose:
                 print("logarithm is applied to 0 which is results in not real number.")
@@ -96,8 +96,8 @@ def check_node_validity(
         if node.left is None or node.right is None:
             return False
         if (
-            node.attribute in division_representations
-            and node.right.attribute in zero_representations
+                node.attribute in division_representations
+                and node.right.attribute in zero_representations
         ):
             if verbose:
                 print("division by 0 is not allowed.")
@@ -117,11 +117,11 @@ def check_node_validity(
 
 
 def node_from_prefix(
-    prefix_notation: List[str],
-    function_test: Callable = lambda _: False,
-    operator_test: Callable = lambda _: False,
-    variable_test: Callable = lambda _: False,
-    constant_test: Callable = lambda _: False,
+        prefix_notation: List[str],
+        function_test: Callable = lambda _: False,
+        operator_test: Callable = lambda _: False,
+        variable_test: Callable = lambda _: False,
+        constant_test: Callable = lambda _: False,
 ):
     """
     Create a tree from a prefix notation
@@ -200,7 +200,7 @@ def node_from_prefix(
 
 
 def _from_prefix_recursion(
-    prefix_notation, function_test, operator_test, variable_test, constant_test, index=0
+        prefix_notation, function_test, operator_test, variable_test, constant_test, index=0
 ):
     attribute = prefix_notation[index]
 
@@ -211,9 +211,9 @@ def _from_prefix_recursion(
     elif variable_test(attribute):
         kind = NodeKind.VARIABLE
     elif (
-        constant_test(attribute)
-        or is_numeric(attribute)
-        or is_known_constant(attribute)
+            constant_test(attribute)
+            or is_numeric(attribute)
+            or is_known_constant(attribute)
     ):
         kind = NodeKind.CONSTANT
     else:
@@ -276,12 +276,12 @@ def sample_attribute_conditional(priors: Dict, conditional_prior: Dict):
 
 
 def sample_attribute_from_tree(
-    tree_structure,
-    index,
-    feature_priors,
-    function_priors,
-    operator_priors,
-    parent_attribute="",
+        tree_structure,
+        index,
+        feature_priors,
+        function_priors,
+        operator_priors,
+        parent_attribute="",
 ):
     num_children = _count_children(tree_structure, index)
     if num_children == 0:
@@ -295,28 +295,28 @@ def sample_attribute_from_tree(
 
 
 def sample_attribute_from_tree_with_conditionals(
-    tree_structure,
-    index,
-    feature_priors,
-    function_priors,
-    function_conditionals,
-    operator_priors,
-    operator_conditionals,
-    parent_attribute="",
-    parent_kind=NodeKind.NONE,
+        tree_structure,
+        index,
+        feature_priors,
+        function_priors,
+        function_conditionals,
+        operator_priors,
+        operator_conditionals,
+        parent_attribute="",
+        parent_kind=NodeKind.NONE,
 ):
     conditional = None
     cond_prior = None
     if (
-        parent_kind == NodeKind.FUNCTION
-        and function_conditionals is not None
-        and parent_attribute in function_conditionals.keys()
+            parent_kind == NodeKind.FUNCTION
+            and function_conditionals is not None
+            and parent_attribute in function_conditionals.keys()
     ):
         conditional = function_conditionals[parent_attribute]
     if (
-        parent_kind == NodeKind.OPERATOR
-        and operator_conditionals is not None
-        and parent_attribute in operator_conditionals.keys()
+            parent_kind == NodeKind.OPERATOR
+            and operator_conditionals is not None
+            and parent_attribute in operator_conditionals.keys()
     ):
         conditional = operator_conditionals[parent_attribute]
 
@@ -339,12 +339,12 @@ def sample_attribute_from_tree_with_conditionals(
 
 
 def sample_equation_tree_from_structure(
-    tree_structure,
-    index,
-    feature_priors,
-    function_priors,
-    operator_priors,
-    parent_attribute="",
+        tree_structure,
+        index,
+        feature_priors,
+        function_priors,
+        operator_priors,
+        parent_attribute="",
 ):
     attribute = sample_attribute_from_tree(
         tree_structure,
@@ -396,15 +396,15 @@ def sample_equation_tree_from_structure(
 
 
 def sample_equation_tree_from_structure_with_conditionals(
-    tree_structure,
-    index,
-    feature_priors,
-    function_priors,
-    function_conditionals,
-    operator_priors,
-    operator_conditionals,
-    parent_attribute="",
-    parent_kind=NodeKind.NONE,
+        tree_structure,
+        index,
+        feature_priors,
+        function_priors,
+        function_conditionals,
+        operator_priors,
+        operator_conditionals,
+        parent_attribute="",
+        parent_kind=NodeKind.NONE,
 ):
     attribute = sample_attribute_from_tree_with_conditionals(
         tree_structure,
@@ -464,11 +464,11 @@ def sample_equation_tree_from_structure_with_conditionals(
 
 
 def sample_tree(
-    max_depth,
-    feature_priors={},
-    function_priors={},
-    operator_priors={},
-    structure_priors={},
+        max_depth,
+        feature_priors={},
+        function_priors={},
+        operator_priors={},
+        structure_priors={},
 ):
     tree_structure = sample_tree_structure(max_depth=max_depth, priors=structure_priors)
     tree = sample_equation_tree_from_structure(

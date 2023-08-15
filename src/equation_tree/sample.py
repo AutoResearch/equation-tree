@@ -1,8 +1,9 @@
 from typing import Dict, List, Optional, Union
 
-from .tree import EquationTree
-from .util.priors import priors_from_space
-from .util.type_check import is_constant_formatted, is_variable_formatted
+from equation_tree.tree import EquationTree
+from equation_tree.prior import get_defined_functions, get_defined_operators
+from equation_tree.util.priors import priors_from_space
+from equation_tree.util.type_check import is_constant_formatted, is_variable_formatted
 
 PriorType = Union[List, Dict]
 
@@ -13,13 +14,79 @@ MAX_ITER = 10_000
 
 
 def sample_tree_raw(
-    max_depth: int = 3,
-    max_num_constants: int = 0,
-    max_num_variables: int = 1,
-    feature_priors: Optional[Dict] = None,
-    function_priors: PriorType = DEFAULT_FUNCTION_SPACE,
-    operator_priors: PriorType = DEFAULT_OPERATOR_SPACE,
-    structure_priors: PriorType = {},
+        prior,
+        max_num_variables,
+):
+    equation_tree = EquationTree.from_prior(prior, max_num_variables)
+
+    # Check if tree is valid
+    if not equation_tree.check_validity():
+        return None
+
+    equation_tree.simplify(
+        function_test=lambda x: x in get_defined_functions(prior),
+        operator_test=lambda x: x in get_defined_operators(prior),
+    )
+
+    # Check is nan
+    if equation_tree.is_nan:
+        return None
+
+    # Check if duplicate constants
+    if (
+            equation_tree.n_non_numeric_constants
+            > equation_tree.n_non_numeric_constants_unique
+    ):
+        return None
+
+    # Check if more variables than max:
+    if equation_tree.n_variables > max_num_variables:
+        return None
+
+    if not equation_tree.check_validity():
+        return None
+
+    if not equation_tree.check_possible_from_prior(prior):
+        return None
+
+    equation_tree.get_evaluation()
+    if not equation_tree.has_valid_value:
+        return None
+
+    return equation_tree
+
+
+def sample_tree_iter(
+        max_depth: int = 3,
+        max_num_constants: int = 0,
+        max_num_variables: int = 1,
+        feature_priors: Optional[Dict] = None,
+        function_priors: PriorType = DEFAULT_FUNCTION_SPACE,
+        operator_priors: PriorType = DEFAULT_OPERATOR_SPACE,
+        structure_priors: PriorType = {},
+):
+    for _ in range(MAX_ITER):
+        equation_tree = sample_tree_raw(
+            max_depth,
+            max_num_constants,
+            max_num_variables,
+            feature_priors,
+            function_priors,
+            operator_priors,
+            structure_priors,
+        )
+        if equation_tree is not None:
+            return equation_tree
+
+
+def sample_tree_raw_from_priors(
+        max_depth: int = 3,
+        max_num_constants: int = 0,
+        max_num_variables: int = 1,
+        feature_priors: Optional[Dict] = None,
+        function_priors: PriorType = DEFAULT_FUNCTION_SPACE,
+        operator_priors: PriorType = DEFAULT_OPERATOR_SPACE,
+        structure_priors: PriorType = {},
 ):
     """
     Sample a tree from priors, simplify and check if valid tree
@@ -85,8 +152,8 @@ def sample_tree_raw(
 
     # Check if duplicate constants
     if (
-        equation_tree.n_non_numeric_constants
-        > equation_tree.n_non_numeric_constants_unique
+            equation_tree.n_non_numeric_constants
+            > equation_tree.n_non_numeric_constants_unique
     ):
         return None
 
@@ -102,7 +169,7 @@ def sample_tree_raw(
         return None
 
     if not equation_tree.check_possible(
-        _feature_priors, _function_priors, _operator_priors, _structure_priors
+            _feature_priors, _function_priors, _operator_priors, _structure_priors
     ):
         return None
 
@@ -113,17 +180,17 @@ def sample_tree_raw(
     return equation_tree
 
 
-def sample_tree_iter(
-    max_depth: int = 3,
-    max_num_constants: int = 0,
-    max_num_variables: int = 1,
-    feature_priors: Optional[Dict] = None,
-    function_priors: PriorType = DEFAULT_FUNCTION_SPACE,
-    operator_priors: PriorType = DEFAULT_OPERATOR_SPACE,
-    structure_priors: PriorType = {},
+def sample_tree_from_priors_iter(
+        max_depth: int = 3,
+        max_num_constants: int = 0,
+        max_num_variables: int = 1,
+        feature_priors: Optional[Dict] = None,
+        function_priors: PriorType = DEFAULT_FUNCTION_SPACE,
+        operator_priors: PriorType = DEFAULT_OPERATOR_SPACE,
+        structure_priors: PriorType = {},
 ):
     for _ in range(MAX_ITER):
-        equation_tree = sample_tree_raw(
+        equation_tree = sample_tree_raw_from_priors(
             max_depth,
             max_num_constants,
             max_num_variables,

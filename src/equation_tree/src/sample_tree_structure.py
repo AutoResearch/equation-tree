@@ -166,8 +166,8 @@ def _gen_trees(depth, level):
     """
     Generate trees with exact depth and starting level
     """
-    if depth == 1:
-        return [_StructureNode(level)]
+    # if depth == 1:
+    #     return [_StructureNode(level)]
     if depth == 0:
         return [None]
 
