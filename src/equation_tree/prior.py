@@ -9,7 +9,6 @@ def scalar_multiply(scalar, prior):
         >>> s = 2
         >>> pprint.pprint(scalar_multiply(s, m))
         {'a': {'a_1': 6, 'a_2': 4}, 'b': {'b_1': 0.2, 'b_2': 0.6}}
-
     """
     tmp_p = prior.copy()
 

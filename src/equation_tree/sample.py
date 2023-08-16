@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Union
 
+from equation_tree.analysis import get_frequencies
 from equation_tree.tree import EquationTree
-from equation_tree.prior import get_defined_functions, get_defined_operators
+from equation_tree.prior import get_defined_functions, get_defined_operators, \
+    subtract, scalar_multiply, add
 from equation_tree.util.priors import priors_from_space
 from equation_tree.util.type_check import is_constant_formatted, is_variable_formatted
-
-from util.io import load
+from equation_tree.util.io import load, store
 
 PriorType = Union[List, Dict]
 
@@ -15,13 +16,37 @@ DEFAULT_OPERATOR_SPACE = ["+", "-", "*", "/", "^"]
 MAX_ITER = 10_000
 
 
+def sample(
+        n,
+        prior,
+        max_num_variables,
+        file=None
+):
+    adjusted_prior = load(prior, max_num_variables, file)
+    return sample_trees(n, adjusted_prior, max_num_variables)
+
+
+def burn(
+        prior,
+        max_num_variables,
+        file,
+        n=100_000,
+        alpha=1,
+):
+    adjusted_prior = load(prior, max_num_variables, file)
+    sample_ = sample(n, adjusted_prior, max_num_variables)
+    freq = get_frequencies(sample_)
+    difference = subtract(prior, freq)
+    adjustment = scalar_multiply(alpha, difference)
+    new_adjusted_prior = add(adjusted_prior, adjustment)
+    store(prior, max_num_variables, new_adjusted_prior, file)
+
 
 def sample_trees(
         n,
         prior,
         max_num_variables
 ):
-
     return [_sample_tree_iter(prior, max_num_variables) for _ in range(n)]
 
 

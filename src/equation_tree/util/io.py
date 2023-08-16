@@ -3,6 +3,8 @@ import os
 import sys
 import warnings
 
+from equation_tree.prior import default, multiply
+
 if sys.version_info < (3, 9):
     import importlib_resources
 else:
@@ -12,8 +14,35 @@ PACKAGE_NAME = "equation_tree"
 HASH_FILE = "_hashed_probabilities.json"
 
 
-def load(prior, file):
-    pass
+def load(prior, max_num_variables, file):
+    _prior = prior.copy()
+    _prior['max_num_variables'] = max_num_variables
+    hash_id = str(_prior)
+    default_prior = default(_prior)
+    default_id = str(default_prior)
+    _tmp = __load(hash_id, file)
+    if _tmp is None:
+        _tmp = __load_default(hash_id)
+    if _tmp is None:
+        warnings.warn('No hashed prior found. Sample frequencies may diverge from the prior. '
+                      'Consider burning this prior first.')
+        _tmp = __load(default_id, file)
+        if _tmp is not None:
+            return multiply(prior, _tmp)
+    if _tmp is None:
+        _tmp = __load_default(hash_id)
+        if _tmp is not None:
+            return multiply(prior, _tmp)
+    if _tmp is None:
+        return prior
+
+
+def store(prior, max_num_variables, adjusted_prior, file):
+    _prior = prior.copy()
+    _prior['max_num_variables'] = max_num_variables
+    hash_id = str(_prior)
+    _store(hash_id, adjusted_prior, file)
+
 
 def _load(hash_id, hash_fall_back, file):
     """
@@ -23,14 +52,14 @@ def _load(hash_id, hash_fall_back, file):
     if file:
         data = __load(hash_id, file)
     if data is None:
-        data = _load_default(hash_id)
+        data = __load_default(hash_id)
     if data is not None:
         return data
 
     if file:
         data = __load(hash_fall_back, file)
     if data is None:
-        data = _load_default(hash_fall_back)
+        data = __load_default(hash_fall_back)
     if data is not None:
         warnings.warn(
             "WARNING: No hashed probabilities found for this setting. "
@@ -46,7 +75,7 @@ def _load(hash_id, hash_fall_back, file):
     return None
 
 
-def store(hash_id, data, file):
+def _store(hash_id, data, file):
     """
     Store hashed probabilities to a file.
     """
@@ -71,7 +100,7 @@ def __load(hash_id, file):
     return None
 
 
-def _load_default(hash_id):
+def __load_default(hash_id):
     pkg = importlib_resources.files(PACKAGE_NAME)
     hash_file = pkg / "data" / HASH_FILE
-    return _load(hash_id, hash_file)
+    return __load(hash_id, hash_file)

@@ -8,11 +8,11 @@ if sys.version_info < (3, 9):
 else:
     import importlib.resources as importlib_resources
 
-from equation_tree.util.io import HASH_FILE, PACKAGE_NAME, _load_default, store
+from equation_tree.util.io import HASH_FILE, PACKAGE_NAME, load, store
 
 
 def hash_load(hash_id):
-    return _load_default(hash_id)
+    return load(hash_id)
 
 
 def hash_store(hash_id, data):

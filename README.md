@@ -12,5 +12,5 @@ pip install -U equation-tree
 
 Check your installation by running:
 ```shell
-python -c "from equation_tree import equation_tree"
+python -c "from equation_tree import EquationTree"
 ```
