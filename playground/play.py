@@ -1,8 +1,8 @@
-from sympy import sympify
+# from sympy import sympify
 
-from equation_tree.tree import EquationTree
+from equation_tree.sample import burn  # , sample
 
-from equation_tree.sample import sample_tree_raw
+# from equation_tree.tree import EquationTree
 
 # expr = sympify("B*x_1**2")
 # print(expr)
@@ -21,23 +21,14 @@ from equation_tree.sample import sample_tree_raw
 # print(equation_tree.sympy_expr)
 
 prior = {
-    'max_depth': 10,
-    'structure': {'[0, 1, 2, 1, 2]': .5, '[0, 1, 2, 1]': .5},
-    'functions': {'sin': .5, 'cos': .5},
-    'operators': {'+': .1, '*': .1, '^': .1, '/': .7},
-    'features': {'variables': .1, 'constants': .9},
-    'function_conditionals':
-        {'cos':
-             {'features': {'variables': 1.},
-              'functions': {'sin': 1.}},
-         'sin':
-             {'features': {'variables': 1.},
-              'functions': {'cos': 1.}},
-         }
-
+    "structures": {},
+    "functions": {"sin": 0.45, "cos": 0.45, "tan": 0.1},
+    "operators": {"+": 0.1, "*": 0.1, "^": 0.1, "/": 0.7, "-": 0.0},
+    "features": {"variables": 0.1, "constants": 0.9},
+    "function_conditionals": {
+        "cos": {"features": {"variables": 1.0}, "functions": {"sin": 1.0}},
+        "sin": {"features": {"variables": 1.0}, "functions": {"cos": 1.0}},
+    },
 }
 
-t = sample_tree_raw(prior, 2)
-while t is None:
-    t = sample_tree_raw(prior, 2)
-
+burn(prior, 3, "temp.json", 1000)

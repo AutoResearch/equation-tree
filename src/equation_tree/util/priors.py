@@ -2,9 +2,6 @@ import warnings
 from typing import List
 
 
-
-
-
 def priors_from_space(space: List):
     _lst = list(set(space))
     res = {}
@@ -18,15 +15,15 @@ def set_priors(priors=None, space=None):
     Utility function to set priors without setting all probabilities of the space
 
     Examples:
-        >>> default_priors = _set_priors(space=['a', 'b', 'c', 'd'])
+        >>> default_priors = set_priors(space=['a', 'b', 'c', 'd'])
         >>> default_priors
         {'a': 0.25, 'b': 0.25, 'c': 0.25, 'd': 0.25}
 
-        >>> custom_priors_full = _set_priors({'a' : .3, 'b': .7}, ['a', 'b'])
+        >>> custom_priors_full = set_priors({'a' : .3, 'b': .7}, ['a', 'b'])
         >>> custom_priors_full
         {'a': 0.3, 'b': 0.7}
 
-        >>> custom_priors_partial = _set_priors({'a' : .5}, ['a', 'b', 'c'])
+        >>> custom_priors_partial = set_priors({'a' : .5}, ['a', 'b', 'c'])
         >>> custom_priors_partial
         {'a': 0.5, 'b': 0.25, 'c': 0.25}
     """

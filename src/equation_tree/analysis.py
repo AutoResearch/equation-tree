@@ -1,8 +1,7 @@
 from typing import Dict, List
 
-from util.priors import normalized_dict
-
 from equation_tree.tree import EquationTree
+from equation_tree.util.priors import normalized_dict
 
 
 def get_frequencies(trees: List[EquationTree]):
@@ -11,8 +10,8 @@ def get_frequencies(trees: List[EquationTree]):
         >>> import numpy as np
         >>> import pprint
         >>> np.random.seed(42)
-        >>> p = {'max_depth': 8,
-        ...     'structure': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
+        >>> p = {
+        ...     'structures': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
         ...     'features': {'constants': .5, 'variables': .5},
         ...     'functions': {'sin': .5, 'cos': .5},
         ...     'operators': {'+': .5, '-': .5},
@@ -52,7 +51,6 @@ def get_frequencies(trees: List[EquationTree]):
                                            'functions': {'cos': 0.5, 'sin': 0.5},
                                            'operators': {'+': 0.5, '-': 0.5}}},
          'functions': {'cos': 0.5, 'sin': 0.5},
-         'max_depth': 8,
          'operator_conditionals': {'+': {'features': {'constants': 0.5,
                                                       'variables': 0.5},
                                          'functions': {'cos': 0.5, 'sin': 0.5},
@@ -62,9 +60,9 @@ def get_frequencies(trees: List[EquationTree]):
                                          'functions': {'cos': 0.5, 'sin': 0.5},
                                          'operators': {'+': 0.5, '-': 0.5}}},
          'operators': {'+': 0.5, '-': 0.5},
-         'structure': {'[0, 1, 1]': 0.3,
-                       '[0, 1, 2, 3, 2, 3, 1]': 0.4,
-                       '[0, 1, 2]': 0.3}}
+         'structures': {'[0, 1, 1]': 0.3,
+                        '[0, 1, 2, 3, 2, 3, 1]': 0.4,
+                        '[0, 1, 2]': 0.3}}
 
 
         >>> tree_list = [EquationTree.from_prior(p, 4) for _ in range(100)]
@@ -72,56 +70,59 @@ def get_frequencies(trees: List[EquationTree]):
         100
         >>> example_tree = tree_list[2]
         >>> example_tree.expr
-        ['+', '-', 'sin', 'x_1', 'sin', 'x_2', 'x_1']
+        ['+', '-', 'sin', 'x_1', 'cos', 'x_2', 'c_1']
         >>> example_tree.sympy_expr
-        x_1 + sin(x_1) - sin(x_2)
+        c_1 + sin(x_1) - cos(x_2)
         >>> pprint.pprint(example_tree.info)
         {'depth': 3,
-         'features': {'constants': 0, 'variables': 3},
-         'function_conditionals': {'sin': {'features': {'constants': 0, 'variables': 2},
+         'features': {'constants': 1, 'variables': 2},
+         'function_conditionals': {'cos': {'features': {'constants': 0, 'variables': 1},
+                                           'functions': {},
+                                           'operators': {}},
+                                   'sin': {'features': {'constants': 0, 'variables': 1},
                                            'functions': {},
                                            'operators': {}}},
-         'functions': {'sin': 2},
+         'functions': {'cos': 1, 'sin': 1},
          'max_depth': 7,
-         'operator_conditionals': {'+': {'features': {'constants': 0, 'variables': 1},
+         'operator_conditionals': {'+': {'features': {'constants': 1, 'variables': 0},
                                          'functions': {},
                                          'operators': {'-': 1}},
                                    '-': {'features': {'constants': 0, 'variables': 0},
-                                         'functions': {'sin': 2},
+                                         'functions': {'cos': 1, 'sin': 1},
                                          'operators': {}}},
          'operators': {'+': 1, '-': 1},
-         'structure': [0, 1, 2, 3, 2, 3, 1]}
+         'structures': [0, 1, 2, 3, 2, 3, 1]}
 
         >>> frequencies = get_frequencies(tree_list)
         >>> pprint.pprint(frequencies)
-        {'depth': {1: 0.29, 2: 0.32, 3: 0.39},
-         'features': {'constants': 0.2318840579710145, 'variables': 0.7681159420289855},
+        {'depth': {1: 0.32, 2: 0.27, 3: 0.41},
+         'features': {'constants': 0.205607476635514, 'variables': 0.794392523364486},
          'function_conditionals': {'cos': {'features': {'constants': 0.0,
                                                         'variables': 1.0},
-                                           'functions': {'cos': 0.5, 'sin': 0.5},
+                                           'functions': {'cos': 0.5384615384615384,
+                                                         'sin': 0.46153846153846156},
                                            'operators': {}},
                                    'sin': {'features': {'constants': 0.0,
                                                         'variables': 1.0},
-                                           'functions': {'cos': 0.375, 'sin': 0.625},
+                                           'functions': {'cos': 0.5, 'sin': 0.5},
                                            'operators': {}}},
-         'functions': {'cos': 0.4154929577464789, 'sin': 0.5845070422535211},
-         'max_depth': {3: 0.61, 7: 0.39},
-         'operator_conditionals': {'+': {'features': {'constants': 0.46153846153846156,
-                                                      'variables': 0.5384615384615384},
-                                         'functions': {'cos': 0.3333333333333333,
-                                                       'sin': 0.6666666666666666},
-                                         'operators': {'+': 0.45454545454545453,
-                                                       '-': 0.5454545454545454}},
-                                   '-': {'features': {'constants': 0.5333333333333333,
-                                                      'variables': 0.4666666666666667},
-                                         'functions': {'cos': 0.40476190476190477,
-                                                       'sin': 0.5952380952380952},
-                                         'operators': {'+': 0.47058823529411764,
-                                                       '-': 0.5294117647058824}}},
-         'operators': {'+': 0.514018691588785, '-': 0.48598130841121495},
-         'structures': {'[0, 1, 1]': 0.29,
-                        '[0, 1, 2, 3, 2, 3, 1]': 0.39,
-                        '[0, 1, 2]': 0.32}}
+         'functions': {'cos': 0.49264705882352944, 'sin': 0.5073529411764706},
+         'max_depth': {3: 0.59, 7: 0.41},
+         'operator_conditionals': {'+': {'features': {'constants': 0.4528301886792453,
+                                                      'variables': 0.5471698113207547},
+                                         'functions': {'cos': 0.5625, 'sin': 0.4375},
+                                         'operators': {'+': 0.6086956521739131,
+                                                       '-': 0.391304347826087}},
+                                   '-': {'features': {'constants': 0.38461538461538464,
+                                                      'variables': 0.6153846153846154},
+                                         'functions': {'cos': 0.38235294117647056,
+                                                       'sin': 0.6176470588235294},
+                                         'operators': {'+': 0.5555555555555556,
+                                                       '-': 0.4444444444444444}}},
+         'operators': {'+': 0.543859649122807, '-': 0.45614035087719296},
+         'structures': {'[0, 1, 1]': 0.32,
+                        '[0, 1, 2, 3, 2, 3, 1]': 0.41,
+                        '[0, 1, 2]': 0.27}}
     """
     info: Dict = {}
     max_depth: Dict = {}
@@ -138,8 +139,8 @@ def get_frequencies(trees: List[EquationTree]):
             _update(max_depth, _info["max_depth"])
         if "depth" in _info.keys():
             _update(depth, _info["depth"])
-        if "structure" in _info.keys():
-            _update(structures, str(_info["structure"]))
+        if "structures" in _info.keys():
+            _update(structures, str(_info["structures"]))
         if "features" in _info.keys():
             for key, val in _info["features"].items():
                 _update(features, key, val)

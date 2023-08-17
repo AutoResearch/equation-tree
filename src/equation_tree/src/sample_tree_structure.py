@@ -1,57 +1,38 @@
+import copy
 import warnings
 from typing import Dict
 
 import numpy as np
 
 from equation_tree.util.priors import set_priors
+from equation_tree.util.type_check import parse_string_list_int
 
 MAX_ITER = 1000
 
 
-def sample_tree_structure(max_depth: int, priors: Dict = {}):
+def sample_tree_structure(prior: Dict = {}):
     """
     Sample a tree structure.
 
     Args:
-        max_depth: the maximum depth of a tree
-        priors: priors in form of a dictionary. The keys are the tree structures as strings
+        prior: priors in form of a dictionary. The keys are the tree structures as strings
 
     Examples:
         # Set seed for reproducibility
         >>> np.random.seed(42)
 
-        # Sample a single structure
-        >>> sample_tree_structure(7)
-        [0, 1, 2, 3, 4, 5]
-
-        # Get a list of 4 samples with max_depth = 4
-        >>> [sample_tree_structure(5) for _ in range(4)]
-        [[0, 1, 2, 3, 1], [0, 1, 1, 2, 3], [0, 1, 2, 3, 4], [0, 1, 1]]
-
-        # Set a prior
-        >>> [sample_tree_structure(5, {'[0, 1, 1]': 1}) for _ in range(4)]
+        >>> [sample_tree_structure({'[0, 1, 1]': 1}) for _ in range(4)]
         [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1]]
 
-        # Set a different prior
-        >>> [sample_tree_structure(5, {'[0, 1, 1]': .5, '[0, 1, 2]': .5}) for _ in range(4)]
-        [[0, 1, 1], [0, 1, 2], [0, 1, 1], [0, 1, 1]]
+        >>> [sample_tree_structure({'[0, 1, 1]': .5, '[0, 1, 2]': .5}) for _ in range(4)]
+        [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 2]]
 
-        # We can also set a full prior( here the max_depth for the structure is 3 which only allows
-        # for two structures: [0, 1, 1] and [0, 1, 2]
-        >>> [sample_tree_structure(3, {'[0, 1, 1]': .3, '[0, 1, 2]': .7}) for _ in range(4)]
-        [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
-
-        # If we set an invalid prior, an Exeption is raised  # doctest: +ELLIPSIS
-        >>> [sample_tree_structure(3, {'[0, 1, 3]': .5}) for _ in range(4)]
-        Traceback (most recent call last):
-        ...
-        Exception: Priors {'[0, 1, 3]': 0.5} are not subset of space ['[0, 1, 2]', '[0, 1, 1]']
+        >>> sample_tree_structure({'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 1, 2': .4})
+        [0, 1, 2, 3, 1]
 
     """
-    tree_structures = _gen_all_tree_structures(max_depth)
-
-    priors = set_priors(priors, [str(structure) for structure in tree_structures])
-    probabilities = [priors[key] for key in priors.keys()]
+    tree_structures = [parse_string_list_int(str(key)) for key in prior.keys()]
+    probabilities = [prior[key] for key in prior.keys()]
 
     for _ in range(MAX_ITER):
         sample_index = np.random.choice(len(tree_structures), p=probabilities)
@@ -63,7 +44,7 @@ def sample_tree_structure(max_depth: int, priors: Dict = {}):
             )
             continue
         return tree_structure
-    raise Exception(f"Could not generate tree structure with max depth {max_depth}")
+    raise Exception(f"Could not generate tree structure with prior: {prior}")
 
 
 def sample_tree_structure_non_iso(max_depth: int, priors: Dict = {}):
@@ -131,56 +112,73 @@ class _StructureNode:
         self.children = []
 
 
-def _gen_all_tree_structures(max_depth):
+def _gen_tree_structures(max_nodes):
     """
-    Generate all tree structures
-
     Examples:
-        >>> _gen_all_tree_structures(3)
-        [[0, 1, 2], [0, 1, 1]]
-        >>> _gen_all_tree_structures(4)
-        [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 1, 2], [0, 1, 2, 1]]
-        >>> _gen_all_tree_structures(5)
-        [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 1, 2], [0, 1, 2, 1], \
-[0, 1, 2, 3, 4], [0, 1, 1, 2, 3], [0, 1, 2, 1, 2], [0, 1, 2, 3, 1]]
-        >>> _gen_all_tree_structures(6)
-        [[0, 1, 2], [0, 1, 1], [0, 1, 2, 3], [0, 1, 1, 2], [0, 1, 2, 1], \
-[0, 1, 2, 3, 4], [0, 1, 1, 2, 3], [0, 1, 2, 1, 2], [0, 1, 2, 3, 1], [0, 1, 2, 3, 4, 5], \
-[0, 1, 1, 2, 3, 4], [0, 1, 2, 1, 2, 3], [0, 1, 2, 1, 2, 2], [0, 1, 2, 3, 1, 2], \
-[0, 1, 2, 2, 1, 2], [0, 1, 2, 3, 4, 1]]
+        >>> _gen_tree_structures(3)
+        [[0, 1, 1], [0, 1, 2]]
+        >>> _gen_tree_structures(4)
+        [[0, 1, 1], [0, 1, 2], [0, 1, 2, 1], [0, 1, 1, 2], [0, 1, 2, 2], [0, 1, 2, 3]]
     """
-    assert max_depth >= 3
-    lst = []
-    for i in range(3, max_depth + 1):
-        tree_structures = [_get_list(t) for t in _gen_trees(i, 0)]
-        lst += tree_structures
+    lst = [_StructureNode(0)]
 
+    d = 0
+    while d < max_nodes - 1:
+        d += 1
+        _lst = copy.deepcopy(lst)
+        for t in _lst:
+            new_tree = copy.deepcopy(t)
+            leafs = get_possible_parents(new_tree)
+            for leaf in leafs:
+                leaf.children.append(_StructureNode(leaf.val + 1))
+                lst.append(copy.deepcopy(new_tree))
+                leaf.children = leaf.children[:-1]
+    _lst = [_get_list(el) for el in lst if len(_get_list(el)) >= 3]
     unique_sublists = []
-    for sublist in lst:
+    for sublist in _lst:
         if sublist not in unique_sublists:
             unique_sublists.append(sublist)
     return unique_sublists
 
 
-def _gen_trees(depth, level):
-    """
-    Generate trees with exact depth and starting level
-    """
-    # if depth == 1:
-    #     return [_StructureNode(level)]
-    if depth == 0:
-        return [None]
-
+def get_possible_parents(tree):
     lst = []
-    possibilities = [(i, depth - 1 - i) for i in range(depth)]
-    for el in possibilities:
-        left = _gen_trees(el[0], level + 1)
-        right = _gen_trees(el[1], level + 1)
-        for l_t, r_t in zip(left, right):
-            tree = _StructureNode(level)
-            tree.children = [l_t, r_t]
-            lst.append(tree)
+
+    def _rec_get_possible_parents(node):
+        nonlocal lst
+        if node is None:
+            return
+        if len(node.children) < 2:
+            lst.append(node)
+        for c in node.children:
+            _rec_get_possible_parents(c)
+
+    _rec_get_possible_parents(tree)
+
     return lst
+
+
+# def _gen_trees(depth, level):
+#     """
+#     Generate trees with exact depth and starting level
+#     """
+#
+#     if depth == 0:
+#         return [None]
+#
+#     lst = []
+#     possibilities = []
+#     d = depth
+#     possibilities = [(i, d - 1 - i) for i in range(d)]
+#
+#     for el in possibilities:
+#         left = _gen_trees(el[0], level + 1)
+#         right = _gen_trees(el[1], level + 1)
+#         for l_t, r_t in zip(left, right):
+#             tree = _StructureNode(level)
+#             tree.children = [l_t, r_t]
+#             lst.append(tree)
+#     return lst
 
 
 def _generate_parent_pointers(levels, values):

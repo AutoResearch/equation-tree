@@ -16,7 +16,7 @@ HASH_FILE = "_hashed_probabilities.json"
 
 def load(prior, max_num_variables, file):
     _prior = prior.copy()
-    _prior['max_num_variables'] = max_num_variables
+    _prior["max_num_variables"] = max_num_variables
     hash_id = str(_prior)
     default_prior = default(_prior)
     default_id = str(default_prior)
@@ -24,8 +24,10 @@ def load(prior, max_num_variables, file):
     if _tmp is None:
         _tmp = __load_default(hash_id)
     if _tmp is None:
-        warnings.warn('No hashed prior found. Sample frequencies may diverge from the prior. '
-                      'Consider burning this prior first.')
+        warnings.warn(
+            "No hashed prior found. Sample frequencies may diverge from the prior. "
+            "Consider burning this prior first."
+        )
         _tmp = __load(default_id, file)
         if _tmp is not None:
             return multiply(prior, _tmp)
@@ -39,7 +41,7 @@ def load(prior, max_num_variables, file):
 
 def store(prior, max_num_variables, adjusted_prior, file):
     _prior = prior.copy()
-    _prior['max_num_variables'] = max_num_variables
+    _prior["max_num_variables"] = max_num_variables
     hash_id = str(_prior)
     _store(hash_id, adjusted_prior, file)
 
@@ -91,6 +93,8 @@ def _store(hash_id, data, file):
 
 
 def __load(hash_id, file):
+    if file is None:
+        return None
     if not os.path.isfile(file):
         return None
     with open(file, "r") as file:

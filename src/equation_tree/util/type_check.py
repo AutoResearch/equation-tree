@@ -73,18 +73,18 @@ def check_functions(expression, function_test):
     Example:
         >>> from sympy import sympify
         >>> expr = sympify('sin(x)')
-        >>> contains_function(expr, lambda x: x in ['sin'])
+        >>> check_functions(expr, lambda x: x in ['sin'])
         True
 
         >>> expr = sympify('x + y')
-        >>> contains_function(expr, lambda x: x in ['sin'])
+        >>> check_functions(expr, lambda x: x in ['sin'])
         True
 
         >>> expr = sympify('sin(x) + cos(y)')
-        >>> contains_function(expr, lambda x: x in ['sin', 'cos'])
+        >>> check_functions(expr, lambda x: x in ['sin', 'cos'])
         True
 
-        >>> contains_function(expr, lambda x: x in ['sin'])
+        >>> check_functions(expr, lambda x: x in ['sin'])
         False
 
     """
@@ -97,3 +97,28 @@ def check_functions(expression, function_test):
         return True
 
     return apply_test(expression)
+
+
+def parse_string_list_int(lst):
+    """
+    Example:
+        >>> a = '[1, 2, 3, 4]'
+        >>> parse_string_list_int(a)
+        [1, 2, 3, 4]
+        >>> b = '[10, 2, 3]'
+        >>> parse_string_list_int(b)
+        [10, 2, 3]
+    """
+    res = []
+    i = 0
+    while i < len(lst) - 1:
+        start = i
+        end = i
+        while is_numeric(lst[i]):
+            end += 1
+            i += 1
+        if start != end:
+            i = end
+            res.append(int(lst[start:end]))
+        i += 1
+    return res
