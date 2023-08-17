@@ -1,3 +1,4 @@
+import copy
 import warnings
 from typing import Callable, Dict, List, Union
 
@@ -1213,3 +1214,16 @@ class EquationTree:
         get_child(self.root)
 
         return functions, operators, features
+
+
+def instantiate_constants(tree, fct: Callable):
+    root = copy.deepcopy(tree.root)
+
+    def _rec_apply(node):
+        if node.kind == NodeKind.CONSTANT:
+            node.attribute = str(fct())
+        for c in node.children:
+            _rec_apply(c)
+
+    _rec_apply(root)
+    return EquationTree(root)

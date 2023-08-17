@@ -1,6 +1,10 @@
 # from sympy import sympify
+import random
 
-from equation_tree.sample import burn  # , sample
+import numpy as np
+
+from equation_tree.sample import sample
+from equation_tree.tree import instantiate_constants
 
 # from equation_tree.tree import EquationTree
 
@@ -21,7 +25,7 @@ from equation_tree.sample import burn  # , sample
 # print(equation_tree.sympy_expr)
 
 prior = {
-    "structures": {},
+    "structures": {"[0, 1, 1]": 1.0},
     "functions": {"sin": 0.45, "cos": 0.45, "tan": 0.1},
     "operators": {"+": 0.1, "*": 0.1, "^": 0.1, "/": 0.7, "-": 0.0},
     "features": {"variables": 0.1, "constants": 0.9},
@@ -31,4 +35,9 @@ prior = {
     },
 }
 
-burn(prior, 3, "temp.json", 1000)
+np.random.seed(42)
+t = sample(5, prior, 1000)[0]
+
+print(t.sympy_expr)
+t_instantiated = instantiate_constants(t, lambda: random.random())
+print(t_instantiated.sympy_expr)
