@@ -66,7 +66,7 @@ def _normalize(priors):
         warnings.warn(
             f"Sum of priors {priors} is less then 0. Falling back to default priors."
         )
-        n = len(priors.keys)
+        n = len(priors.keys())
         default_prior = 1 / n
         return {el: default_prior for el in priors.keys()}
     return {el: priors[el] / total for el in priors.keys()}
