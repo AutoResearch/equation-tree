@@ -5,6 +5,7 @@ from typing import Callable, Dict, List, Union
 import numpy as np
 import pandas as pd
 from sympy import simplify, symbols, sympify
+import sympy
 
 from equation_tree.src.tree_node import (
     NodeKind,
@@ -29,8 +30,8 @@ OPERATORS: Dict[str, BinaryOperator] = {
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
     "/": lambda a, b: a / b,
-    "^": lambda a, b: a**b,
-    "**": lambda a, b: a**b,
+    "^": lambda a, b: a ** b,
+    "**": lambda a, b: a ** b,
 }
 
 FUNCTIONS: Dict[str, UnaryOperator] = {
@@ -41,6 +42,7 @@ FUNCTIONS: Dict[str, UnaryOperator] = {
     "log": lambda a: np.log(a),
     "sqrt": lambda a: np.sqrt(a),
     "abs": lambda a: np.abs(a),
+    "arg": lambda a: np.pi * a / 180
 }
 
 
@@ -168,12 +170,12 @@ class EquationTree:
 
     @classmethod
     def from_prefix(
-        cls,
-        prefix_notation: List[str],
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+            cls,
+            prefix_notation: List[str],
+            function_test: Callable = lambda _: False,
+            operator_test: Callable = lambda _: False,
+            variable_test: Callable = lambda _: False,
+            constant_test: Callable = lambda _: False,
     ):
         """
         Instantiate a tree from prefix notation
@@ -317,11 +319,11 @@ class EquationTree:
 
     @classmethod
     def from_priors(
-        cls,
-        feature_priors={},
-        function_priors={},
-        operator_priors={},
-        structure_priors={},
+            cls,
+            feature_priors={},
+            function_priors={},
+            operator_priors={},
+            structure_priors={},
     ):
         """
         Instantiate a tree from priors
@@ -379,12 +381,12 @@ class EquationTree:
 
     @classmethod
     def from_sympy(
-        cls,
-        expression,
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+            cls,
+            expression,
+            function_test: Callable = lambda _: False,
+            operator_test: Callable = lambda _: False,
+            variable_test: Callable = lambda _: False,
+            constant_test: Callable = lambda _: False,
     ):
         """
         Instantiate a tree from a sympy function
@@ -524,7 +526,7 @@ class EquationTree:
             symbol_names = [str(symbol) for symbol in sympy_expr.free_symbols]
             real_symbols = symbols(" ".join(symbol_names), real=True)
             if not isinstance(real_symbols, list) and not isinstance(
-                real_symbols, tuple
+                    real_symbols, tuple
             ):
                 real_symbols = [real_symbols]
             subs_dict = {old: new for old, new in zip(symbol_names, real_symbols)}
@@ -595,12 +597,56 @@ class EquationTree:
         info["operator_conditionals"] = operator_conditionals
         return info
 
+    def evaluate(self, variables: Union[dict, pd.DataFrame]):
+        """
+        >>> expr = sympify('x_a + 3 * y')
+            >>> is_operator = lambda x : x in ['+', '*']
+            >>> is_variable = lambda x : '_' in x or x in ['y']
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     operator_test=is_operator,
+            ...     variable_test=is_variable,
+            ... )
+            >>> equation_tree.sympy_expr
+            x_1 + 3*x_2
+
+            # We can use dicts:
+            >>> equation_tree.evaluate({'x_1': np.array([2, 3]), 'x_2': np.array([1, 1])})
+            0    5
+            1    6
+            dtype: int64
+
+            # Or pandas dataframe:
+            >>> dataFrame = pd.DataFrame({'x_1': np.array([2, 3]), 'x_2': np.array([1, 1])})
+            >>> dataFrame
+               x_1  x_2
+            0    2    1
+            1    3    1
+            >>> equation_tree.evaluate({'x_1': np.array([2, 3]), 'x_2': np.array([1, 1])})
+            0    5
+            1    6
+            dtype: int64
+        """
+
+        df = pd.DataFrame(variables)
+        symbol_list = list(self.sympy_expr.free_symbols)
+
+        if set(list(df.columns)).issubset(set(symbol_list)):
+            raise Exception(f"Variables in expression {self.sympy_expr} "
+                            f"do not match the given ones: {df.columns}")
+
+        symbol_names = [str(s) for s in symbol_list]
+
+        # Step 3: Convert the expression to a function
+        f = sympy.lambdify(symbol_list, self.sympy_expr, "numpy")
+        return f(*[df[name] for name in symbol_names])
+
     def check_validity(
-        self,
-        zero_representations=["0"],
-        log_representations=["log", "Log"],
-        division_representations=["/", ":"],
-        verbose=False,
+            self,
+            zero_representations=["0"],
+            log_representations=["log", "Log"],
+            division_representations=["/", ":"],
+            verbose=False,
     ):
         """
         Check if the tree is valid:
@@ -655,11 +701,11 @@ class EquationTree:
         )
 
     def check_possible(
-        self,
-        feature_priors: Dict,
-        function_priors: Dict,
-        operator_priors: Dict,
-        structure_priors: Dict,
+            self,
+            feature_priors: Dict,
+            function_priors: Dict,
+            operator_priors: Dict,
+            structure_priors: Dict,
     ):
         """
         Check weather a tree is a possible tree given the priors
@@ -683,8 +729,8 @@ class EquationTree:
                     return False
         if structure_priors != {}:
             if (
-                str(self.structure) not in structure_priors.keys()
-                or structure_priors[str(self.structure)] <= 0
+                    str(self.structure) not in structure_priors.keys()
+                    or structure_priors[str(self.structure)] <= 0
             ):
                 return False
         return True
@@ -706,23 +752,23 @@ class EquationTree:
         )
         if structure_priors:
             if (
-                str(self.structure) not in structure_priors.keys()
-                or structure_priors[str(self.structure)] <= 0
+                    str(self.structure) not in structure_priors.keys()
+                    or structure_priors[str(self.structure)] <= 0
             ):
                 return False
         if feature_priors:
             if (
-                self.n_variables > 0
-                and (
-                    "variables" not in feature_priors.keys()
-                    or feature_priors["variables"] <= 0
-                )
+                    self.n_variables > 0
+                    and (
+                            "variables" not in feature_priors.keys()
+                            or feature_priors["variables"] <= 0
+                    )
             ) or (
-                self.n_constants > 0
-                and (
-                    "constants" not in feature_priors.keys()
-                    or feature_priors["constants"] <= 0
-                )
+                    self.n_constants > 0
+                    and (
+                            "constants" not in feature_priors.keys()
+                            or feature_priors["constants"] <= 0
+                    )
             ):
                 return False
         if function_priors:
@@ -745,45 +791,45 @@ class EquationTree:
             node = child.parent
             _prior = {}
             if (
-                node.kind == NodeKind.FUNCTION
-                and node.attribute in function_conditionals.keys()
+                    node.kind == NodeKind.FUNCTION
+                    and node.attribute in function_conditionals.keys()
             ):
                 _prior = function_conditionals[node.attribute]
             elif (
-                node.kind == NodeKind.OPERATOR
-                and node.attribute in operator_conditionals.keys()
+                    node.kind == NodeKind.OPERATOR
+                    and node.attribute in operator_conditionals.keys()
             ):
                 _prior = operator_conditionals[node.attribute]
             if child.kind == NodeKind.FUNCTION:
                 _p = _prior[node.attribute]["functions"]
                 if (
-                    _p != {}
-                    and node.attribute not in _p.keys()
-                    or _p[node.attribute] <= 0
+                        _p != {}
+                        and node.attribute not in _p.keys()
+                        or _p[node.attribute] <= 0
                 ):
                     test_lst.append(False)
             elif child.kind == NodeKind.OPERATOR:
                 _p = _prior[node.attribute]["operators"]
                 if (
-                    _p != {}
-                    and node.attribute not in _p.keys()
-                    or _p[node.attribute] <= 0
+                        _p != {}
+                        and node.attribute not in _p.keys()
+                        or _p[node.attribute] <= 0
                 ):
                     test_lst.append(False)
             else:
                 _p = _prior["features"] if "features" in _prior else {}
                 if child.kind == NodeKind.VARIABLE:
                     if (
-                        _p != {}
-                        and "variables" not in _p.keys()
-                        or _p["variables"] <= 0
+                            _p != {}
+                            and "variables" not in _p.keys()
+                            or _p["variables"] <= 0
                     ):
                         test_lst.append(False)
                 if child.kind == NodeKind.CONSTANT:
                     if (
-                        _p != {}
-                        and "constants" not in _p.keys()
-                        or _p["constants"] <= 0
+                            _p != {}
+                            and "constants" not in _p.keys()
+                            or _p["constants"] <= 0
                     ):
                         test_lst.append(False)
             for c in child.children:
@@ -851,12 +897,12 @@ class EquationTree:
         self._build()
 
     def simplify(
-        self,
-        function_test: Union[Callable, None] = None,
-        operator_test: Union[Callable, None] = None,
-        is_binary_minus_only: bool = True,
-        is_power_caret: bool = True,
-        verbose: bool = False,
+            self,
+            function_test: Union[Callable, None] = None,
+            operator_test: Union[Callable, None] = None,
+            is_binary_minus_only: bool = True,
+            is_power_caret: bool = True,
+            verbose: bool = False,
     ):
         """
         Simplify equation if the simplified equation has a shorter prefix
@@ -972,8 +1018,8 @@ class EquationTree:
             self._build()
             return
         if (
-            "I" in str(simplified_equation)
-            or "accumbounds" in str(simplified_equation).lower()
+                "I" in str(simplified_equation)
+                or "accumbounds" in str(simplified_equation).lower()
         ):
             if verbose:
                 print(f"Simplify {str(self.sympy_expr)} results in complex values")
@@ -1013,7 +1059,7 @@ class EquationTree:
         self._build()
 
     def get_evaluation(
-        self, min_val: int = -1, max_val: int = 1, num_samples: int = 100
+            self, min_val: int = -1, max_val: int = 1, num_samples: int = 100
     ):
         """
         Evaluate the nodes with random samples for variables and constants.
@@ -1096,7 +1142,7 @@ class EquationTree:
         return values
 
     def _create_crossing(
-        self, min_val: float = -1, max_val: float = 1, num_samples: int = 100
+            self, min_val: float = -1, max_val: float = 1, num_samples: int = 100
     ):
         crossings = []
 
@@ -1156,7 +1202,7 @@ class EquationTree:
         self._collect_expr(expression, node.right)
 
     def _collect_attributes(
-        self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
+            self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
     ):
         if node is None:
             return list()
