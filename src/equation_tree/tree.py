@@ -1,6 +1,8 @@
 import copy
 import warnings
 from typing import Callable, Dict, List, Union, Optional
+import yaml
+import os
 
 import numpy as np
 import pandas as pd
@@ -623,7 +625,18 @@ class EquationTree:
                x_1  x_2
             0    2    1
             1    3    1
-            >>> equation_tree.evaluate({'x_1': np.array([2, 3]), 'x_2': np.array([1, 1])})
+            >>> equation_tree.evaluate(dataFrame)
+            0    5
+            1    6
+            dtype: int64
+
+            # Or pandas dataframe:
+            >>> dataFrame = pd.DataFrame({'x_1': [2, 3], 'x_2': [1, 1]})
+            >>> dataFrame
+               x_1  x_2
+            0    2    1
+            1    3    1
+            >>> equation_tree.evaluate(dataFrame)
             0    5
             1    6
             dtype: int64
@@ -640,7 +653,7 @@ class EquationTree:
 
         # Step 3: Convert the expression to a function
         f = sympy.lambdify(symbol_list, self.sympy_expr, "numpy")
-        return f(*[df[name] for name in symbol_names])
+        return np.array(f(*[df[name] for name in symbol_names]))
 
     def save_samples(self,
                      path,
@@ -695,16 +708,50 @@ class EquationTree:
         conditions_.to_csv(path, compression=compression, index=False)
 
     def save_samples_srbench(self,
-                     path,
-                     num_samples,
-                     ranges: Optional[Dict] = None,
-                     default_range: float = 10,
-                     random_state: Optional[int] = None,
-                     ):
+                             path,
+                             num_samples,
+                             ranges: Optional[Dict] = None,
+                             default_range: float = 10,
+                             random_state: Optional[int] = None,
+                             ):
         self.save_samples(path, num_samples, ranges, default_range, 'target', random_state)
 
+    def save_meta_srbench(self,
+                          path,
+                          name_dataset,
+                          name_target="y"):
+        info = {}
+        info["dataset"] = name_dataset
+        info["description"] = name_target + " = " + str(self.sympy_expr)
+        info["source"] = "https://github.com/AutoResearch/equation-tree"
+        info["publication"] = "Not yet implemented"
+        info["task"] = "regression"
+        info["keywords"] = ["abstract", "math", "symbolic regression"]
+        info["target"] = {"type": "continuous", "description": "abstract dependent variable"}
+        info["features"] = [
+            {"name": v, "type": "continuous", "description": "abstract independent variable"}
+            for v in self.variables_unique]
 
+        with open(path, "w") as f:
+            yaml.dump(info, f, sort_keys=False)
 
+    def export_to_srbench(self,
+                          folder: str,
+                          num_samples: int = 1000,
+                          name_target: str = "y",
+                          ranges: Optional[Dict] = None,
+                          default_range: float = 10,
+                          random_state: Optional[int] = None,
+                          ):
+        """
+        Creates a folder and adds data and metadata to the folder that can be used with sr bench:
+        https://cavalab.org/srbench/
+        """
+        os.mkdir(folder)
+        path_data = f"{folder}/data.csv.gz"
+        path_meta = f"{folder}/metadata.yaml"
+        self.save_samples_srbench(path_data, num_samples, ranges, default_range, random_state)
+        self.save_meta_srbench(path_meta, "data", name_target)
 
     def check_validity(
             self,
