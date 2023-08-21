@@ -1,6 +1,6 @@
 import copy
 import warnings
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Union, Optional
 
 import numpy as np
 import pandas as pd
@@ -599,7 +599,8 @@ class EquationTree:
 
     def evaluate(self, variables: Union[dict, pd.DataFrame]):
         """
-        >>> expr = sympify('x_a + 3 * y')
+        Examples:
+            >>> expr = sympify('x_a + 3 * y')
             >>> is_operator = lambda x : x in ['+', '*']
             >>> is_variable = lambda x : '_' in x or x in ['y']
             >>> equation_tree = EquationTree.from_sympy(
@@ -640,6 +641,70 @@ class EquationTree:
         # Step 3: Convert the expression to a function
         f = sympy.lambdify(symbol_list, self.sympy_expr, "numpy")
         return f(*[df[name] for name in symbol_names])
+
+    def save_samples(self,
+                     path,
+                     num_samples,
+                     ranges: Optional[Dict] = None,
+                     default_range: float = 10,
+                     dv_name: str = 'y',
+                     random_state: Optional[int] = None,
+                     compression: str = 'gzip',
+                     ):
+        """
+        Creates a file with samples of ivs and dvs
+        Args:
+            path: The path were to store the file
+            num_samples: The number of samples
+            ranges: A dictionary with the ranges for the variables in form of a dict
+            default_range: Default range to fall back to if no range for a
+                specific variable is given
+            dv_name: The name to give to the observation
+            random_state: The random seed to be used
+            compression: Compression method
+        """
+        if not path.endswith('gz') and compression == 'gzip':
+            warnings.warn(f'Compression is gzip but file {path} does not have the ending .gz')
+        _ranges = {key: (-default_range, default_range) for key in self.variables_unique}
+        if ranges is not None:
+            for key in ranges.keys():
+                if key in _ranges.keys():
+                    _ranges[key] = ranges[key]
+
+        rng = np.random.default_rng(random_state)
+
+        def _get_conditions_once():
+            raw_conditions = {}
+            for key in _ranges.keys():
+                raw_conditions[key] = rng.uniform(*_ranges[key], size=num_samples)
+            return pd.DataFrame(raw_conditions)
+
+        conditions_ = pd.DataFrame(columns=self.variables_unique + [dv_name])
+        i = 0
+        while i < 1_000_000 and len(conditions_.index) < num_samples:
+            _sample = _get_conditions_once()
+            evaluation = self.evaluate(_sample)
+            _sample[dv_name] = evaluation
+            bad_indices = np.where(np.isnan(evaluation) | np.isinf(evaluation))[0]
+            _sample = _sample.drop(bad_indices)
+            conditions_ = pd.concat([conditions_, _sample], ignore_index=True)
+            i += 1
+            if i >= 1_000_000:
+                break
+        conditions_ = conditions_.head(num_samples)
+        conditions_.to_csv(path, compression=compression, index=False)
+
+    def save_samples_srbench(self,
+                     path,
+                     num_samples,
+                     ranges: Optional[Dict] = None,
+                     default_range: float = 10,
+                     random_state: Optional[int] = None,
+                     ):
+        self.save_samples(path, num_samples, ranges, default_range, 'target', random_state)
+
+
+
 
     def check_validity(
             self,
@@ -1263,10 +1328,41 @@ class EquationTree:
 
 
 def instantiate_constants(tree, fct: Callable):
+    """
+    Examples:
+        >>> expr = sympify('e ** (- e **( x + y))')
+        >>> is_operator = lambda x : x in ['+', '*', '**', '-']
+        >>> is_variable = lambda x : x in ['x', 'y']
+        >>> is_constant = lambda x : x in ['e']
+        >>> equation_tree = EquationTree.from_sympy(
+        ...     expr,
+        ...     operator_test=is_operator,
+        ...     variable_test=is_variable,
+        ... )
+        >>> equation_tree.sympy_expr
+        e**((-e)**(x_1 + x_2))
+        >>> instantiated = instantiate_constants(equation_tree, lambda: 2)
+        >>> instantiated.sympy_expr
+        e**((-e)**(x_1 + x_2))
+        >>> expr_2 = sympify('c_1 ** (- e **( x + y))')
+        >>> equation_tree_2 = EquationTree.from_sympy(
+        ...     expr_2,
+        ...     operator_test=is_operator,
+        ...     variable_test=is_variable,
+        ... )
+        >>> instantiated = instantiate_constants(equation_tree_2, lambda: 2)
+        >>> instantiated.sympy_expr
+        2**((-e)**(x_1 + x_2))
+
+
+
+    """
     root = copy.deepcopy(tree.root)
 
     def _rec_apply(node):
-        if node.kind == NodeKind.CONSTANT:
+        if (node.kind == NodeKind.CONSTANT
+                and not is_known_constant(node.attribute)
+                and not is_numeric(node.attribute)):
             node.attribute = str(fct())
         for c in node.children:
             _rec_apply(c)
