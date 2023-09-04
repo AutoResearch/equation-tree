@@ -705,7 +705,7 @@ class EquationTree:
             if i >= 1_000_000:
                 break
         conditions_ = conditions_.head(num_samples)
-        conditions_.to_csv(path, compression=compression, index=False)
+        conditions_.to_csv(path, compression=compression, index=False, sep="\t")
 
     def save_samples_srbench(self,
                              path,
