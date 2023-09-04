@@ -748,7 +748,7 @@ class EquationTree:
         https://cavalab.org/srbench/
         """
         os.mkdir(folder)
-        path_data = f"{folder}/data.csv.gz"
+        path_data = f"{folder}/data.tsv.gz"
         path_meta = f"{folder}/metadata.yaml"
         self.save_samples_srbench(path_data, num_samples, ranges, default_range, random_state)
         self.save_meta_srbench(path_meta, "data", name_target)
