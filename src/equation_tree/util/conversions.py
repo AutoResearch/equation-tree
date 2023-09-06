@@ -1,8 +1,24 @@
 import re
 
+import sympy
 from sympy import symbols
 
-from .type_check import is_numeric
+from equation_tree.util.type_check import is_numeric
+
+SYMPY_TO_ARITHMETIC = {
+    "Add": "+",
+    "Mul": "*",
+    "Pow": "^",
+}
+
+
+def _sympy_fun_to_aritmethic(fun, opertor_test):
+    if fun in SYMPY_TO_ARITHMETIC.keys():
+        tmp = SYMPY_TO_ARITHMETIC[fun]
+        if opertor_test("**") and tmp == "^":
+            return "**"
+        return tmp.lower()
+    return fun.lower()
 
 
 def prefix_to_infix(
@@ -47,27 +63,94 @@ def infix_to_prefix(infix, function_test, operator_test):
         >>> infix_to_prefix('x_1-x_2', is_function, is_operator)
         ['-', 'x_1', 'x_2']
 
-
-        >>> infix_to_prefix(
-        ...     'x_1*cos(c_1+x_2)', is_function, is_operator)
+        >>> infix_to_prefix('x_1*cos(c_1+x_2)', is_function, is_operator)
         ['*', 'x_1', 'cos', '+', 'c_1', 'x_2']
 
+        >>> is_function = lambda x: x in ['sin', 'cos', 'e']
+        >>> is_operator = lambda x: x in ['+', '-', 'max']
+        >>> infix_to_prefix('x_1 + max(x_2, x_3)', is_function, is_operator)
+        ['+', 'x_1', 'Max', 'x_2', 'x_3']
+
     """
-    n = len(infix)
+    _infix = sympy.sympify(infix)
 
-    infix = list(infix[::-1].lower())
+    def to_polish_notation(expr):
+        if expr.is_Symbol:
+            return str(expr)
+        if expr.is_Number:
+            return str(expr)
+        # For other types of expressions
+        return [_sympy_fun_to_aritmethic(expr.func.__name__, operator_test)] + [
+            to_polish_notation(arg) for arg in expr.args
+        ]
 
-    for i in range(n):
-        if infix[i] == "(":
-            infix[i] = ")"
-        elif infix[i] == ")":
-            infix[i] = "("
+    def flatten(lst):
+        result = []
+        for el in lst:
+            if isinstance(el, list):
+                result.extend(flatten(el))
+            else:
+                result.append(el)
+        return result
 
-    infix = "".join(infix)
-    postfix = _infix_to_postfix(infix, function_test, operator_test)
-    prefix = postfix[::-1]
+    def to_binary_minus(expr_list):
+        i = 0
+        while i < len(expr_list):
+            # Detect the pattern ['+', x, '*', '-1', y]
+            if expr_list[i : i + 2] == ["*", "-1"]:
+                j = i
+                p_s = 0
+                while j >= 0:
+                    if expr_list[j] == ")":
+                        p_s += 1
+                    if expr_list[j] == "(":
+                        p_s += 1
+                    if expr_list[j] == "+" and p_s == 0:
+                        expr_list[j] = "-"
+                        expr_list = expr_list[:i] + expr_list[i + 2 :]
+                        i = 0
+                        break
+                    j -= 1
+            i += 1
+        return expr_list
 
-    return prefix
+    def to_binary_division(expr_list):
+        i = 0
+        while i < len(expr_list):
+            # Detect the pattern ['+', x, '*', '-1', y]
+            if expr_list[i : i + 1] == ["^", "-1"]:
+                j = i
+                p_s = 0
+                while j >= 0:
+                    if expr_list[j] == ")":
+                        p_s += 1
+                    if expr_list[j] == "(":
+                        p_s += 1
+                    if expr_list[j] == "*" and p_s == 0:
+                        expr_list[j] = "/"
+                        expr_list = expr_list[:i] + expr_list[i + 2 :]
+                        break
+                    j -= 1
+            i += 1
+        return expr_list
+
+    return to_binary_division(to_binary_minus(flatten(to_polish_notation(_infix))))
+
+    # n = len(infix)
+    #
+    # infix = list(infix[::-1].lower())
+    #
+    # for i in range(n):
+    #     if infix[i] == "(":
+    #         infix[i] = ")"
+    #     elif infix[i] == ")":
+    #         infix[i] = "("
+    #
+    # infix = "".join(infix)
+    # postfix = _infix_to_postfix(infix, function_test, operator_test)
+    # prefix = postfix[::-1]
+
+    # return prefix
 
 
 def standardize_sympy(
