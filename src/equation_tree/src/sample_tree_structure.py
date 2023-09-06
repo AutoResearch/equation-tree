@@ -158,29 +158,6 @@ def get_possible_parents(tree):
     return lst
 
 
-# def _gen_trees(depth, level):
-#     """
-#     Generate trees with exact depth and starting level
-#     """
-#
-#     if depth == 0:
-#         return [None]
-#
-#     lst = []
-#     possibilities = []
-#     d = depth
-#     possibilities = [(i, d - 1 - i) for i in range(d)]
-#
-#     for el in possibilities:
-#         left = _gen_trees(el[0], level + 1)
-#         right = _gen_trees(el[1], level + 1)
-#         for l_t, r_t in zip(left, right):
-#             tree = _StructureNode(level)
-#             tree.children = [l_t, r_t]
-#             lst.append(tree)
-#     return lst
-
-
 def _generate_parent_pointers(levels, values):
     n = len(levels)
     if n == 0:
