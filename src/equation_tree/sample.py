@@ -4,6 +4,8 @@ from tqdm import tqdm
 
 from equation_tree.analysis import get_frequencies
 from equation_tree.prior import (
+    DEFAULT_FUNCTION_SPACE,
+    DEFAULT_OPERATOR_SPACE,
     add,
     filter_keys,
     get_defined_functions,
@@ -18,9 +20,6 @@ from equation_tree.util.priors import priors_from_space
 from equation_tree.util.type_check import is_constant_formatted, is_variable_formatted
 
 PriorType = Union[List, Dict]
-
-DEFAULT_FUNCTION_SPACE = ["sin", "cos", "tan", "exp", "log", "sqrt", "abs"]
-DEFAULT_OPERATOR_SPACE = ["+", "-", "*", "/", "^"]
 
 MAX_ITER = 10_000
 
