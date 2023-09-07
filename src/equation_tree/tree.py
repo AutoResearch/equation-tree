@@ -15,6 +15,7 @@ from equation_tree.src.tree_node import (
     node_from_prefix,
     sample_tree,
     sample_tree_full,
+    sample_tree_full_fast
 )
 from equation_tree.util.conversions import (
     infix_to_prefix,
@@ -237,6 +238,21 @@ class EquationTree:
     @classmethod
     def from_full_prior(cls, prior):
         root = sample_tree_full(prior)
+        return cls(root)
+
+    @classmethod
+    def from_prior_fast(cls, prior: Dict, tree_depth, max_variables_unique: int):
+        """
+        Initiate a tree from a prior with fast sampling
+        Attention: structure prior is not supported
+
+        Args:
+            prior: The priors in dictionary form (structure priors are not needed)
+            tree_depth: depth of the tree
+            max_variables_unique: The maximum number of unique variables (a tree can have less then
+                this number)
+        """
+        root = sample_tree_full_fast(prior, tree_depth, max_variables_unique)
         return cls(root)
 
     @classmethod

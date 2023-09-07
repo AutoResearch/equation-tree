@@ -1,4 +1,4 @@
-from prior import (
+from equation_tree.prior import (
     DEFAULT_FUNCTION_SPACE,
     DEFAULT_OPERATOR_SPACE,
     DEFAULT_PRIOR_FUNCTIONS,
