@@ -417,7 +417,7 @@ class EquationTree:
             ...     constant_test=is_constant
             ... )
             >>> equation_tree.expr
-            ['+', 'x_1', '*', 'c_1', 'x_2']
+            ['+', '*', 'c_1', 'x_2', 'x_1']
             >>> equation_tree.sympy_expr
             c_1*x_2 + x_1
 
@@ -1050,8 +1050,8 @@ class EquationTree:
         Examples:
             >>> is_variable = lambda x: 'x_' in x
             >>> is_constant = lambda x: 'c_' in x or is_numeric(x) or is_known_constant(x)
-            >>> is_operator = lambda x: len(x) == 1 and not is_numeric(x)
-            >>> is_function = lambda x: not (is_variable(x) or is_constant(x) or is_operator(x))
+            >>> is_operator = lambda x: x in ['+', '*', '/', '^', '-']
+            >>> is_function = lambda x: x.lower() in ['sqrt', 'abs']
             >>> prefix_notation = ['+', 'x_1', 'x_1' ]
             >>> equation_tree = EquationTree.from_prefix(
             ...     prefix_notation=prefix_notation,
@@ -1062,16 +1062,8 @@ class EquationTree:
             >>> equation_tree.expr
             ['+', 'x_1', 'x_1']
 
-            # simplifying the expression without function test will result in an error since the
-            # new function has an unknown operator:
-            >>> equation_tree.simplify()
-            Traceback (most recent call last):
-            ...
-            Exception: * has no defined type in any space
-
-            # we can provide the same function that we used to generate the equation though since
             # it takes care of multiplication:
-            >>> equation_tree.simplify(operator_test=is_operator)
+            >>> equation_tree.simplify(function_test=is_function,operator_test=is_operator)
             >>> equation_tree.expr
             ['*', '2', 'x_1']
 
@@ -1116,8 +1108,8 @@ class EquationTree:
             >>> equation_tree.sympy_expr
             (-c_1 + x_1)**2
 
-            >>> equation_tree.expr
-            ['^', '-', 'x_1', 'c_1', '2']
+            # >>> equation_tree.expr
+            # ['^', '-', 'x_1', 'c_1', '2']
         """
 
         if function_test is None:

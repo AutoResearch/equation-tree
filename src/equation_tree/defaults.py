@@ -16,8 +16,8 @@ structure_prior_from_leaves = structure_prior_from_max_depth
 
 
 def is_operator(a):
-    return a in operator_space
+    return a.lower() in operator_space
 
 
 def is_function(a):
-    return a in function_space
+    return a.lower() in function_space

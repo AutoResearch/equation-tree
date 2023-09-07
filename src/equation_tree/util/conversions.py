@@ -1,6 +1,5 @@
 import re
 
-import sympy
 from sympy import symbols
 
 from equation_tree.util.type_check import is_numeric
@@ -43,7 +42,7 @@ def prefix_to_infix(
         if function_test(prefix[i]):
             # symbol in unary operator
             stack.append(prefix[i] + "(" + stack.pop() + ")")
-        elif operator_test(prefix[i]):
+        elif operator_test(prefix[i]) or prefix[i] == "**":
             # symbol is binary operator
             str = "(" + stack.pop() + prefix[i] + stack.pop() + ")"
             stack.append(str)
@@ -59,85 +58,33 @@ def infix_to_prefix(infix, function_test, operator_test):
 
     Example:
         >>> is_function = lambda x: x in ['sin', 'cos']
-        >>> is_operator = lambda x : x in ['+', '-', '*']
-        >>> infix_to_prefix('x_1-x_2', is_function, is_operator)
-        ['-', 'x_1', 'x_2']
+        >>> is_operator = lambda x : x in ['+', '-', '*', '/']
+        >>> infix_to_prefix('x_2-x_1', is_function, is_operator)
+        ['-', 'x_2', 'x_1']
+
+        >>> infix_to_prefix('x_1-(x_2+x_4)', is_function, is_operator)
+        ['-', 'x_1', '+', 'x_2', 'x_4']
 
         >>> infix_to_prefix('x_1*cos(c_1+x_2)', is_function, is_operator)
         ['*', 'x_1', 'cos', '+', 'c_1', 'x_2']
 
         >>> is_function = lambda x: x in ['sin', 'cos', 'e']
-        >>> is_operator = lambda x: x in ['+', '-', 'max']
+        >>> is_operator = lambda x: x in ['+', '-', '*', '^', 'max', '**', '/']
         >>> infix_to_prefix('x_1 + max(x_2, x_3)', is_function, is_operator)
-        ['+', 'x_1', 'Max', 'x_2', 'x_3']
+        ['+', 'x_1', 'max', 'x_2', 'x_3']
 
+        >>> infix_to_prefix('x_1-(x_2/(x_3-x_4))',is_function, is_operator)
+        ['-', 'x_1', '/', 'x_2', '-', 'x_3', 'x_4']
+
+        >>> infix_to_prefix('x_1^(sin(x_2)/x_3)', is_function, is_operator)
+        ['^', 'x_1', '/', 'sin', 'x_2', 'x_3']
+
+        >>> infix_to_prefix('sin(x_1)-x_2', is_function, is_operator)
+        ['-', 'sin', 'x_1', 'x_2']
     """
-    _infix = sympy.sympify(infix)
-
-    def to_polish_notation(expr):
-        if expr.is_Symbol:
-            return str(expr)
-        if expr.is_Number:
-            return str(expr)
-        # For other types of expressions
-        return [_sympy_fun_to_aritmethic(expr.func.__name__, operator_test)] + [
-            to_polish_notation(arg) for arg in expr.args
-        ]
-
-    def flatten(lst):
-        result = []
-        for el in lst:
-            if isinstance(el, list):
-                result.extend(flatten(el))
-            else:
-                result.append(el)
-        return result
-
-    def to_binary_minus(expr_list):
-        i = 0
-        while i < len(expr_list):
-            # Detect the pattern ['+', x, '*', '-1', y]
-            if expr_list[i : i + 2] == ["*", "-1"]:
-                j = i
-                p_s = 0
-                while j >= 0:
-                    if expr_list[j] == ")":
-                        p_s += 1
-                    if expr_list[j] == "(":
-                        p_s += 1
-                    if expr_list[j] == "+" and p_s == 0:
-                        expr_list[j] = "-"
-                        expr_list = expr_list[:i] + expr_list[i + 2 :]
-                        i = 0
-                        break
-                    j -= 1
-            i += 1
-        return expr_list
-
-    def to_binary_division(expr_list):
-        i = 0
-        while i < len(expr_list):
-            # Detect the pattern ['+', x, '*', '-1', y]
-            if expr_list[i : i + 1] == ["^", "-1"]:
-                j = i
-                p_s = 0
-                while j >= 0:
-                    if expr_list[j] == ")":
-                        p_s += 1
-                    if expr_list[j] == "(":
-                        p_s += 1
-                    if expr_list[j] == "*" and p_s == 0:
-                        expr_list[j] = "/"
-                        expr_list = expr_list[:i] + expr_list[i + 2 :]
-                        break
-                    j -= 1
-            i += 1
-        return expr_list
-
-    return to_binary_division(to_binary_minus(flatten(to_polish_notation(_infix))))
 
     # n = len(infix)
-    #
+
     # infix = list(infix[::-1].lower())
     #
     # for i in range(n):
@@ -147,10 +94,10 @@ def infix_to_prefix(infix, function_test, operator_test):
     #         infix[i] = "("
     #
     # infix = "".join(infix)
-    # postfix = _infix_to_postfix(infix, function_test, operator_test)
-    # prefix = postfix[::-1]
+    postfix = _infix_to_postfix(infix, function_test, operator_test)
+    prefix = postfix[::-1]
 
-    # return prefix
+    return prefix
 
 
 def standardize_sympy(
@@ -280,70 +227,215 @@ def _is_standard(s):
     return re.match(pattern_v, s) is not None or re.match(pattern_c, s) is not None
 
 
-# TODO: make this more robust. Preferable only using function_test and operator_test. The tests
-# for the constants and variables are still valid though (we standardize equations to use that)
+def _is_symbol(chars):
+    """
+    Examples:
+        >>> _is_symbol('(')
+        False
+        >>> _is_symbol(')')
+        False
+    """
+    return (
+        (len(chars) == 3 and chars[-1].isdigit() and chars[-2] == "_")
+        or (chars.isdigit() or chars == "e")
+        or (chars == "pi")
+    )
+
+
+def _is_token(chars, function_test, operator_test):
+    return (
+        _is_symbol(chars)
+        or (chars == "(" or chars == ")" or chars == ",")
+        or (function_test(chars))
+        or (operator_test(chars) or chars == "**" or chars == "^")
+    )
+
+
+def _tokenize_infix(infix, function_test, operator_test):
+    """
+    Examples:
+        >>> is_function = lambda a : a in ['sin', 'asin', 'abs']
+        >>> is_operator = lambda a : a in ['+', '-', 'max', '*']
+        >>> _tokenize_infix('x_1+asin(x_2)', is_function, is_operator)
+        ['x_1', '+', 'asin', '(', 'x_2', ')']
+
+        >>> _tokenize_infix('x_1-asin(max(x_2, sin(x_3)))', is_function, is_operator)
+        ['x_1', '-', 'asin', '(', 'max', '(', 'x_2', ',', 'sin', '(', 'x_3', ')', ')', ')']
+
+        >>> _tokenize_infix('2*x_1', is_function, is_operator)
+        ['2', '*', 'x_1']
+
+
+    """
+
+    res = [""] * len(infix)
+    for lng in reversed(range(len(infix))):
+        start = 0
+
+        while start + lng < len(infix):
+            token = infix[start : start + lng + 1]
+            if _is_token(token, function_test, operator_test):
+                res[start] = token
+                infix = infix[:start] + " " * len(token) + infix[start + lng + 1 :]
+            start += 1
+    res = [r for r in res if r != ""]
+    return res
+
+
 def _infix_to_postfix(infix, function_test, operator_test):
-    infix = "(" + infix + ")"
+    """
+    Example:
+        >>> is_function = lambda x: x in ['sin', 'cos']
+        >>> is_operator = lambda x : x in ['+', '-', '*', '/']
+        >>> _infix_to_postfix('x_2-x_1', is_function, is_operator)[::-1]
+        ['-', 'x_2', 'x_1']
+
+        >>> _infix_to_postfix('x_1-(x_2+x_4)', is_function, is_operator)[::-1]
+        ['-', 'x_1', '+', 'x_2', 'x_4']
+
+        >>> _infix_to_postfix('x_1*cos(c_1+x_2)', is_function, is_operator)[::-1]
+        ['*', 'x_1', 'cos', '+', 'c_1', 'x_2']
+
+        >>> is_function = lambda x: x in ['sin', 'cos', 'e']
+        >>> is_operator = lambda x: x in ['+', '-', '*', '^', 'min', 'max', '**', '/']
+        >>> _infix_to_postfix('x_1 + max(x_2, x_3)', is_function, is_operator)[::-1]
+        ['+', 'x_1', 'max', 'x_2', 'x_3']
+
+        >>> _infix_to_postfix('x_1 + max(min(x_2 + x_4, x_5), x_3)', is_function, is_operator)[::-1]
+        ['+', 'x_1', 'max', 'min', '+', 'x_2', 'x_4', 'x_5', 'x_3']
+
+        >>> _infix_to_postfix('x_1-(x_2/(x_3-x_4))',is_function, is_operator)[::-1]
+        ['-', 'x_1', '/', 'x_2', '-', 'x_3', 'x_4']
+
+        >>> _infix_to_postfix('x_1^(sin(x_2)/x_3)', is_function, is_operator)[::-1]
+        ['^', 'x_1', '/', 'sin', 'x_2', 'x_3']
+
+        >>> _infix_to_postfix('sin(x_1)-x_2', is_function, is_operator)[::-1]
+        ['-', 'sin', 'x_1', 'x_2']
+    """
+    infix = _tokenize_infix(infix, function_test, operator_test)
+    infix = [el.lower() for el in infix]
+    infix = infix[::-1]
+    for i in range(len(infix)):
+        if infix[i] == "(":
+            infix[i] = ")"
+        elif infix[i] == ")":
+            infix[i] = "("
+    infix = ["("] + infix + [")"]
+
     n = len(infix)
     char_stack = []
     output = []
     i = 0
+
     while i < n:
-        # Check if the character is alphabet or digit
-        if infix[i].isdigit() and infix[i + 1] == "_":
-            output.append(infix[i : i + 3][::-1])
-            i += 2
-        elif infix[i].isdigit() or infix[i] == "e":
-            output.append(infix[i])
-        elif infix[i] == "i" and infix[i + 1] == "p":
-            output.append(infix[i : i + 2][::-1])
-            i += 1
-
-        # If the character is '(' push it in the stack
-        elif infix[i] == "(":
-            char_stack.append(infix[i])
-
-        # If the character is ')' pop from the stack
-        elif infix[i] == ")":
+        token = infix[i]
+        if _is_symbol(token):
+            output.append(token)
+        elif token == "(":
+            char_stack.append(token)
+        elif token == ")":
             while char_stack[-1] != "(":
                 output.append(char_stack.pop())
             char_stack.pop()
-        # Found an operator
         else:
-            if (
-                function_test(char_stack[-1])
-                or operator_test(char_stack[-1])
-                or char_stack[-1] in [")", "("]
-            ):
-                if infix[i] == "^":
-                    while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
-                        output.append(char_stack.pop())
-                    char_stack.append(infix[i])
-                elif infix[i] == "*" and i < n - 1 and infix[i + 1] == "*":
-                    op = "**"
-                    i += 1
-                    while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
-                        output.append(char_stack.pop())
-                    char_stack.append(op)
-                elif infix[i].isalpha():
-                    fct = ""
-                    while infix[i].isalpha() and i < n - 1:
-                        fct += infix[i]
-                        i += 1
-                    i -= 1
-                    while _get_priority(fct) < _get_priority(char_stack[-1]):
-                        output.append(char_stack.pop())
-                    char_stack.append(fct[::-1])
-                else:  # + - * / ( )
-                    while _get_priority(infix[i]) < _get_priority(char_stack[-1]):
-                        output.append(char_stack.pop())
-                    char_stack.append(infix[i])
-
+            if token == "^" or token == "**":
+                while _get_priority(token) <= _get_priority(char_stack[-1]):
+                    output.append(char_stack.pop())
+                char_stack.append(token)
+            elif function_test(token):
+                while _get_priority(token) < _get_priority(char_stack[-1]):
+                    output.append(char_stack.pop())
+                char_stack.append(token)
+            elif operator_test(token) and token not in ["+", "-", "*", "/", "^", "**"]:
+                output.append(token)
+            elif token != ",":
+                while _get_priority(token) < _get_priority(char_stack[-1]):
+                    output.append(char_stack.pop())
+                char_stack.append(token)
         i += 1
 
     while len(char_stack) != 0:
         output.append(char_stack.pop())
     return output
+
+
+#
+# # TODO: make this more robust. Preferable only using function_test and operator_test. The tests
+# # for the constants and variables are still valid though (we standardize equations to use that)
+# def _infix_to_postfix(infix, function_test, operator_test):
+#     """
+#     """
+#     # infix = list(infix[::-1].lower())
+#     #
+#     # for i in range(n):
+#     #     if infix[i] == "(":
+#     #         infix[i] = ")"
+#     #     elif infix[i] == ")":
+#     #         infix[i] = "("
+#     #
+#     # infix = "".join(infix)
+#     infix = "(" + infix + ")"
+#     n = len(infix)
+#     char_stack = []
+#     output = []
+#     i = 0
+#     while i < n:
+#         # Check if the character is alphabet or digit
+#         if infix[i].isdigit() and infix[i + 1] == "_":
+#             output.append(infix[i: i + 3][::-1])
+#             i += 2
+#         elif infix[i].isdigit() or infix[i] == "e":
+#             output.append(infix[i])
+#         elif infix[i] == "i" and infix[i + 1] == "p":
+#             output.append(infix[i: i + 2][::-1])
+#             i += 1
+#
+#         # If the character is '(' push it in the stack
+#         elif infix[i] == "(":
+#             char_stack.append(infix[i])
+#
+#         # If the character is ')' pop from the stack
+#         elif infix[i] == ")":
+#             while char_stack[-1] != "(":
+#                 output.append(char_stack.pop())
+#             char_stack.pop()
+#         # Found an operator
+#         else:
+#             if (
+#                     function_test(char_stack[-1])
+#                     or operator_test(char_stack[-1])
+#                     or char_stack[-1] in [")", "("]
+#             ):
+#                 if infix[i] == "^":
+#                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
+#                         output.append(char_stack.pop())
+#                     char_stack.append(infix[i])
+#                 elif infix[i] == "*" and i < n - 1 and infix[i + 1] == "*":
+#                     op = "**"
+#                     i += 1
+#                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
+#                         output.append(char_stack.pop())
+#                     char_stack.append(op)
+#                 elif infix[i].isalpha():
+#                     fct = ""
+#                     while infix[i].isalpha() and i < n - 1:
+#                         fct += infix[i]
+#                         i += 1
+#                     i -= 1
+#                     while _get_priority(fct) < _get_priority(char_stack[-1]):
+#                         output.append(char_stack.pop())
+#                     char_stack.append(fct[::-1])
+#                 else:  # + - * / ( )
+#                     while _get_priority(infix[i]) < _get_priority(char_stack[-1]):
+#                         output.append(char_stack.pop())
+#                     char_stack.append(infix[i])
+#
+#         i += 1
+#
+#     while len(char_stack) != 0:
+#         output.append(char_stack.pop())
+#     return output
 
 
 def _get_priority(c):
