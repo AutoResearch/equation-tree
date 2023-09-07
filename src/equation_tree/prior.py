@@ -6,10 +6,21 @@ from equation_tree.util.type_check import is_numeric
 
 MIN = 0.001
 
-DEFAULT_PRIOR_FUNCTIONS = priors_from_space(
-    ["sin", "cos", "tan", "exp", "log", "sqrt", "abs"]
-)
-DEFAULT_PRIOR_OPERATORS = priors_from_space(["+", "-", "*", "/", "^"])
+DEFAULT_FUNCTION_SPACE = [
+    "sin",
+    "cos",
+    "tan",
+    "exp",
+    "log",
+    "sqrt",
+    "abs",
+    "acos",
+    "asin",
+]
+DEFAULT_OPERATOR_SPACE = ["+", "-", "*", "/", "^", "max", "min"]
+
+DEFAULT_PRIOR_FUNCTIONS = priors_from_space(DEFAULT_FUNCTION_SPACE)
+DEFAULT_PRIOR_OPERATORS = priors_from_space(DEFAULT_OPERATOR_SPACE)
 
 
 def prior_from_space(space):

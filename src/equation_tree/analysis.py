@@ -385,7 +385,6 @@ def get_counts(trees: List[EquationTree]):
                 for key, val in op_fct_operators.items():
                     _update(operator_conditionals[k]["operators"], key, val)
 
-
     info["max_depth"] = max_depth
     info["depth"] = depth
     info["structures"] = structures

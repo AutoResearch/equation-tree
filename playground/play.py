@@ -1,12 +1,15 @@
-# from sympy import sympify
-import random
+# import numpy as np
+# import pandas as pd
+from sympy import sympify
 
-import numpy as np
+# from equation_tree.sample import sample
+from equation_tree.tree import EquationTree
 
-from equation_tree.sample import sample
-from equation_tree.tree import instantiate_constants
+# import random
 
-# from equation_tree.tree import EquationTree
+
+# from equation_tree.tree import instantiate_constants
+
 
 # expr = sympify("B*x_1**2")
 # print(expr)
@@ -24,20 +27,19 @@ from equation_tree.tree import instantiate_constants
 #
 # print(equation_tree.sympy_expr)
 
-prior = {
-    "structures": {"[0, 1, 1]": 1.0},
-    "functions": {"sin": 0.45, "cos": 0.45, "tan": 0.1},
-    "operators": {"+": 0.1, "*": 0.1, "^": 0.1, "/": 0.7, "-": 0.0},
-    "features": {"variables": 0.1, "constants": 0.9},
-    "function_conditionals": {
-        "cos": {"features": {"variables": 1.0}, "functions": {"sin": 1.0}},
-        "sin": {"features": {"variables": 1.0}, "functions": {"cos": 1.0}},
-    },
-}
 
-np.random.seed(42)
-t = sample(5, prior, 1000)[0]
+expr = sympify("x_a + 3 * y")
 
-print(t.sympy_expr)
-t_instantiated = instantiate_constants(t, lambda: random.random())
-print(t_instantiated.sympy_expr)
+
+def is_operator(x):
+    return x in ["+", "*"]
+
+
+def is_variable(x):
+    return "_" in x or x in ["y"]
+
+
+equation_tree = EquationTree.from_sympy(
+    expr, operator_test=is_operator, variable_test=is_variable
+)
+equation_tree.export_to_srbench("test")
