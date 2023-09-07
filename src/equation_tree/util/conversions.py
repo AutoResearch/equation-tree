@@ -28,7 +28,7 @@ def prefix_to_infix(
 
     Example:
         >>> is_function = lambda x: x in ['sin', 'cos']
-        >>> is_operator = lambda x : x in ['+', '-', '*']
+        >>> is_operator = lambda x : x in ['+', '-', '*', 'max']
         >>> prefix_to_infix(['-', 'x_1', 'x_2'], is_function, is_operator)
         '(x_1-x_2)'
 
@@ -36,15 +36,21 @@ def prefix_to_infix(
         ...     ['*', 'x', 'cos', '+', 'y', 'z'], is_function, is_operator)
         '(x*cos((y+z)))'
 
+        >>> prefix_to_infix(['max', 'x_1', 'x_2'], is_function, is_operator)
+        'max(x_1,x_2)'
+
     """
     stack = []
     for i in range(len(prefix) - 1, -1, -1):
         if function_test(prefix[i]):
             # symbol in unary operator
             stack.append(prefix[i] + "(" + stack.pop() + ")")
-        elif operator_test(prefix[i]) or prefix[i] == "**":
+        elif (operator_test(prefix[i]) or prefix[i] == "**") and prefix[i] in ["+", '-', '/', '^', '*']:
             # symbol is binary operator
             str = "(" + stack.pop() + prefix[i] + stack.pop() + ")"
+            stack.append(str)
+        elif operator_test(prefix[i]):
+            str = prefix[i] + '(' + stack.pop() + ',' + stack.pop() + ')'
             stack.append(str)
         else:
             # symbol is operand

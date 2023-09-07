@@ -10,6 +10,10 @@ from equation_tree.util.type_check import parse_string_list_int
 MAX_ITER = 1000
 
 
+def sample_tree_structure_fast(depth):
+    return _gen_tree_structure_random(depth)
+
+
 def sample_tree_structure(prior: Dict = {}):
     """
     Sample a tree structure.
@@ -110,6 +114,44 @@ class _StructureNode:
         self.val = val
         self.parent = None
         self.children = []
+
+
+def _gen_tree_structure_random(max_nodes):
+    """
+
+    Examples:
+        >>> np.random.seed(42)
+        >>> _gen_tree_structure_random(3)
+        [0, 1, 2]
+        >>> _gen_tree_structure_random(3)
+        [0, 1, 1]
+        >>> _gen_tree_structure_random(4)
+        [0, 1, 2, 3]
+        >>> _gen_tree_structure_random(4)
+        [0, 1, 2, 1]
+        >>> _gen_tree_structure_random(5)
+        [0, 1, 2, 2, 3]
+        >>> _gen_tree_structure_random(20)
+        [0, 1, 2, 3, 4, 4, 5, 3, 4, 5, 4, 5, 2, 3, 4, 5, 5, 4, 3, 1]
+        >>> _gen_tree_structure_random(30)
+        [0, 1, 2, 3, 4, 5, 6, 5, 6, 6, 4, 5, 6, 7, 8, 5, 6, 7, 8, 9, 8, 6, 7, 3, 4, 4, 5, 5, 2, 3]
+    """
+    tree = _StructureNode(0)
+    d = 0
+    while d < max_nodes - 1:
+        d += 1
+        possible_parents = []
+
+        def get_all_possible_parents(root):
+            nonlocal possible_parents
+            possible_parents += get_possible_parents(root)
+            for child in root.children:
+                possible_parents += get_possible_parents(child)
+
+        get_all_possible_parents(tree)
+        choice = np.random.choice(possible_parents)
+        choice.children.append(_StructureNode(choice.val + 1))
+    return _get_list(tree)
 
 
 def _gen_tree_structures(max_nodes):

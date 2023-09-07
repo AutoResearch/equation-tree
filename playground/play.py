@@ -2,9 +2,9 @@
 # import pandas as pd
 from sympy import sympify
 
-# from equation_tree.sample import sample
+from equation_tree.sample import sample_fast
 from equation_tree.tree import EquationTree
-
+from equation_tree.defaults import operators_prior, functions_prior
 # import random
 
 
@@ -27,19 +27,21 @@ from equation_tree.tree import EquationTree
 #
 # print(equation_tree.sympy_expr)
 
+res = sample_fast(1, {'functions': functions_prior, 'operators': operators_prior, 'features': {'constants': .5, 'variables': .5}}, 50, 5)
+print(res[0].sympy_expr)
 
-expr = sympify("x_a + 3 * y")
-
-
-def is_operator(x):
-    return x in ["+", "*"]
-
-
-def is_variable(x):
-    return "_" in x or x in ["y"]
-
-
-equation_tree = EquationTree.from_sympy(
-    expr, operator_test=is_operator, variable_test=is_variable
-)
-equation_tree.export_to_srbench("test")
+# expr = sympify("x_a + 3 * y")
+#
+#
+# def is_operator(x):
+#     return x in ["+", "*"]
+#
+#
+# def is_variable(x):
+#     return "_" in x or x in ["y"]
+#
+#
+# equation_tree = EquationTree.from_sympy(
+#     expr, operator_test=is_operator, variable_test=is_variable
+# )
+# equation_tree.export_to_srbench("test")

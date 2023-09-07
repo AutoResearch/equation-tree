@@ -7,6 +7,7 @@ from equation_tree.src.sample_tree_structure import (
     _count_children,
     _get_children,
     sample_tree_structure,
+    sample_tree_structure_fast
 )
 from equation_tree.util.priors import set_priors
 from equation_tree.util.type_check import is_known_constant, is_numeric
@@ -578,6 +579,110 @@ def sample_tree_full(prior, max_var_unique):
     )
     post(tree, max_var_unique)
     return tree
+
+
+def sample_tree_full_fast(prior, tree_depth, max_var_unique):
+    """
+    Examples:
+        >>> np.random.seed(42)
+
+        # We can set priors for features, functions, operators
+        # and also conditionals based the parent
+        >>> p = {
+        ...     'features': {'constants': .2, 'variables': .8},
+        ...     'functions': {'sin': .5, 'cos': .5},
+        ...     'operators': {'+': 1., '-': .0},
+        ...     'function_conditionals': {
+        ...                             'sin': {
+        ...                                 'features': {'constants': 0., 'variables': 1.},
+        ...                                 'functions': {'sin': 0., 'cos': 1.},
+        ...                                 'operators': {'+': 0., '-': 1.}
+        ...                             },
+        ...                             'cos': {
+        ...                                 'features': {'constants': 0., 'variables': 1.},
+        ...                                 'functions': {'cos': 1., 'sin': 0.},
+        ...                                 'operators': {'+': 0., '-': 1.}
+        ...                             }
+        ...                         },
+        ...     'operator_conditionals': {
+        ...                             '+': {
+        ...                                 'features': {'constants': 0., 'variables': 1.},
+        ...                                 'functions': {'sin': 1., 'cos': 0.},
+        ...                                 'operators': {'+': 1., '-': 0.}
+        ...                             },
+        ...                             '-': {
+        ...                                 'features': {'constants': .3, 'variables': .7},
+        ...                                 'functions': {'cos': .5, 'sin': .5},
+        ...                                 'operators': {'+': .9, '-': .1}
+        ...                             }
+        ...                         },
+        ... }
+        >>> sample = sample_tree_full_fast(p, 3, 2)
+        >>> sample.attribute
+        'cos'
+        >>> sample.kind == NodeKind.FUNCTION
+        True
+        >>> sample.left.attribute
+        'cos'
+        >>> sample.left.kind == NodeKind.FUNCTION
+        True
+        >>> sample.right is None
+        True
+        >>> sample = sample_tree_full_fast(p, 4, 3)
+        >>> sample.attribute
+        'sin'
+        >>> sample.kind == NodeKind.FUNCTION
+        True
+        >>> sample.left.attribute
+        '-'
+        >>> sample.kind == NodeKind.FUNCTION
+        True
+        >>> sample.left.left.attribute
+        'x_1'
+        >>> sample.left.left.kind == NodeKind.VARIABLE
+        True
+
+        # If we don't provide priors for the conditionals,
+        # the fallback is the unconditioned priors
+        >>> p = {'max_depth': 8,
+        ...     'structures': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
+        ...     'features': {'constants': .2, 'variables': .8},
+        ...     'functions': {'sin': .5, 'cos': .5},
+        ...     'operators': {'+': .5, '-': .5},
+        ... }
+        >>> sample = sample_tree_full_fast(p, 5, 3)
+        >>> sample.attribute
+        '-'
+        >>> sample.kind == NodeKind.OPERATOR
+        True
+        >>> sample.right.attribute
+        'cos'
+        >>> sample.left.attribute
+        'sin'
+        >>> sample.left.kind == NodeKind.FUNCTION
+        True
+
+    """
+    tree_structure = sample_tree_structure_fast(tree_depth)
+    function_conditionals = None
+    operator_conditionals = None
+    if "function_conditionals" in prior.keys():
+        function_conditionals = prior["function_conditionals"]
+    if "operator_conditionals" in prior.keys():
+        operator_conditionals = prior["operator_conditionals"]
+
+    tree = sample_equation_tree_from_structure_with_conditionals(
+        tree_structure,
+        0,
+        prior["features"],
+        prior["functions"],
+        function_conditionals,
+        prior["operators"],
+        operator_conditionals,
+    )
+    post(tree, max_var_unique)
+    return tree
+
 
 
 def post(tree, max_var_unique):
