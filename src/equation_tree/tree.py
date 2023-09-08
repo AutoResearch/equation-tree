@@ -35,8 +35,8 @@ OPERATORS: Dict[str, BinaryOperator] = {
     "/": lambda a, b: a / b,
     "^": lambda a, b: a**b,
     "**": lambda a, b: a**b,
-    "max": lambda a, b: np.max(a, b),
-    "min": lambda a, b: np.min(a, b),
+    "max": lambda a, b: np.max([a, b]),
+    "min": lambda a, b: np.min([a, b]),
 }
 
 FUNCTIONS: Dict[str, UnaryOperator] = {
