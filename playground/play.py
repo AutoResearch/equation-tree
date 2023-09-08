@@ -1,10 +1,12 @@
 # import numpy as np
 # import pandas as pd
-from sympy import sympify
+# from sympy import sympify
 
+from equation_tree.defaults import functions_prior, operators_prior
 from equation_tree.sample import sample_fast
-from equation_tree.tree import EquationTree
-from equation_tree.defaults import operators_prior, functions_prior
+
+# from equation_tree.tree import EquationTree
+
 # import random
 
 
@@ -27,7 +29,16 @@ from equation_tree.defaults import operators_prior, functions_prior
 #
 # print(equation_tree.sympy_expr)
 
-res = sample_fast(1, {'functions': functions_prior, 'operators': operators_prior, 'features': {'constants': .5, 'variables': .5}}, 50, 5)
+res = sample_fast(
+    1,
+    {
+        "functions": functions_prior,
+        "operators": operators_prior,
+        "features": {"constants": 0.5, "variables": 0.5},
+    },
+    50,
+    5,
+)
 print(res[0].sympy_expr)
 
 # expr = sympify("x_a + 3 * y")

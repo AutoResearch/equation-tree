@@ -3,7 +3,6 @@ import warnings
 from typing import List
 
 
-
 def priors_from_space(space: List):
     _lst = list(set(space))
     res = {}

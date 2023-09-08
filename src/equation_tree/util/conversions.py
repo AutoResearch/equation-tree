@@ -45,12 +45,18 @@ def prefix_to_infix(
         if function_test(prefix[i]):
             # symbol in unary operator
             stack.append(prefix[i] + "(" + stack.pop() + ")")
-        elif (operator_test(prefix[i]) or prefix[i] == "**") and prefix[i] in ["+", '-', '/', '^', '*']:
+        elif (operator_test(prefix[i]) or prefix[i] == "**") and prefix[i] in [
+            "+",
+            "-",
+            "/",
+            "^",
+            "*",
+        ]:
             # symbol is binary operator
             str = "(" + stack.pop() + prefix[i] + stack.pop() + ")"
             stack.append(str)
         elif operator_test(prefix[i]):
-            str = prefix[i] + '(' + stack.pop() + ',' + stack.pop() + ')'
+            str = prefix[i] + "(" + stack.pop() + "," + stack.pop() + ")"
             stack.append(str)
         else:
             # symbol is operand
@@ -252,8 +258,8 @@ def _is_token(chars, function_test, operator_test):
     return (
         _is_symbol(chars)
         or (chars == "(" or chars == ")" or chars == ",")
-        or (function_test(chars))
-        or (operator_test(chars) or chars == "**" or chars == "^")
+        or (function_test(chars.lower()))
+        or (operator_test(chars.lower()) or chars == "**" or chars == "^")
     )
 
 
