@@ -52,6 +52,10 @@ FUNCTIONS: Dict[str, UnaryOperator] = {
     "asin": lambda a: np.arcsin(a),
     "sinh": lambda a: np.sinh(a),
     "cosh": lambda a: np.cosh(a),
+    "**2": lambda a: a**2,
+    "**3": lambda a: a**2,
+    "^2": lambda a: a**2,
+    "^3": lambda a: a**3,
 }
 
 
