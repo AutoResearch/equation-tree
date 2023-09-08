@@ -28,7 +28,7 @@ def prefix_to_infix(
 
     Example:
         >>> is_function = lambda x: x in ['sin', 'cos']
-        >>> is_operator = lambda x : x in ['+', '-', '*', 'max']
+        >>> is_operator = lambda x : x in ['+', '-', '*', 'max', '**']
         >>> prefix_to_infix(['-', 'x_1', 'x_2'], is_function, is_operator)
         '(x_1-x_2)'
 
@@ -38,6 +38,9 @@ def prefix_to_infix(
 
         >>> prefix_to_infix(['max', 'x_1', 'x_2'], is_function, is_operator)
         'max(x_1,x_2)'
+
+        >>> prefix_to_infix(['**', 'x_1', 'x_2'], is_function, is_operator)
+        '(x_1**x_2)'
 
     """
     stack = []
@@ -51,6 +54,7 @@ def prefix_to_infix(
             "/",
             "^",
             "*",
+            '**'
         ]:
             # symbol is binary operator
             str = "(" + stack.pop() + prefix[i] + stack.pop() + ")"
@@ -324,6 +328,8 @@ def _infix_to_postfix(infix, function_test, operator_test):
 
         >>> _infix_to_postfix('sin(x_1)-x_2', is_function, is_operator)[::-1]
         ['-', 'sin', 'x_1', 'x_2']
+
+        >>> _infix_to_postfix('x_1**x_2', is_function, is_operator)[::-1]
     """
     infix = _tokenize_infix(infix, function_test, operator_test)
     infix = [el.lower() for el in infix]
