@@ -7,7 +7,7 @@ from equation_tree.src.sample_tree_structure import (
     _count_children,
     _get_children,
     sample_tree_structure,
-    sample_tree_structure_fast
+    sample_tree_structure_fast,
 )
 from equation_tree.util.priors import set_priors
 from equation_tree.util.type_check import is_known_constant, is_numeric
@@ -682,7 +682,6 @@ def sample_tree_full_fast(prior, tree_depth, max_var_unique):
     )
     post(tree, max_var_unique)
     return tree
-
 
 
 def post(tree, max_var_unique):

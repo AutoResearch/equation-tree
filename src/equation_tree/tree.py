@@ -15,7 +15,7 @@ from equation_tree.src.tree_node import (
     node_from_prefix,
     sample_tree,
     sample_tree_full,
-    sample_tree_full_fast
+    sample_tree_full_fast,
 )
 from equation_tree.util.conversions import (
     infix_to_prefix,
@@ -461,6 +461,19 @@ class EquationTree:
             ...     constant_test=is_constant
             ... )
 
+            >>> expr = sympify('min(x_1, x_2)')
+            >>> expr
+            Min(x_1, x_2)
+            >>> is_operator = lambda x : x in ['min']
+            >>> is_variable = lambda x : x in ['x_1', 'x_2']
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     operator_test=is_operator,
+            ...     variable_test=is_variable,
+            ... )
+            >>> equation_tree.expr
+            ['min', 'x_1', 'x_2']
+
         """
         standard = standardize_sympy(expression, variable_test, constant_test)
         standard = unary_minus_to_binary(standard, operator_test)
@@ -656,6 +669,22 @@ class EquationTree:
             1    3    1
             >>> equation_tree.evaluate(dataFrame)
             array([5, 6])
+
+            >>> expr = sympify('min(x_1,x_2)')
+            >>> is_operator = lambda x : x in ['+', '*', 'min']
+            >>> is_variable = lambda x : '_' in x or x in ['x_1', 'x_2']
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     operator_test=is_operator,
+            ...     variable_test=is_variable,
+            ... )
+            >>> equation_tree.sympy_expr
+            Min(x_1, x_2)
+
+            >>> dataFrame = pd.DataFrame({'x_1': [1, 2, 3, 4], 'x_2': [2, 1, 4, 3]})
+            >>> equation_tree.evaluate(dataFrame)
+            array([1, 1, 3, 3])
+
         """
 
         df = pd.DataFrame(variables)
