@@ -685,6 +685,21 @@ class EquationTree:
             >>> equation_tree.evaluate(dataFrame)
             array([1, 1, 3, 3])
 
+            >>> expr = sympify('max(3, x_1)')
+            >>> is_operator = lambda x : x in ['+', '*', 'min', 'max']
+            >>> is_function = lambda x : x in ['sqrt', 'log', 'abs']
+            >>> is_variable = lambda x : '_' in x or x in ['x_1', 'x_2']
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     function_test=is_function,
+            ...     operator_test=is_operator,
+            ...     variable_test=is_variable)
+            >>> equation_tree.sympy_expr
+            Max(3, x_1)
+            >>> dataFrame = pd.DataFrame({'x_1': [1, 2, 3, 4]})
+            >>> equation_tree.evaluate(dataFrame)
+            array([3, 3, 3, 4])
+
         """
 
         df = pd.DataFrame(variables)
@@ -698,9 +713,18 @@ class EquationTree:
 
         symbol_names = [str(s) for s in symbol_list]
 
-        # Step 3: Convert the expression to a function
         f = sympy.lambdify(symbol_list, self.sympy_expr, "numpy")
-        return np.array(f(*[df[name] for name in symbol_names]))
+        try:
+            res = np.array(f(*[df[name] for name in symbol_names]))
+        except ValueError:  # Workaround till sympy gets updated
+            lst = [df[name] for name in symbol_names]
+            res = []
+            for i in range(len(lst[0])):
+                args = []
+                for j in range(len(lst)):
+                    args.append(lst[j].iloc[i])
+                res.append(f(*args))
+        return np.array(res)
 
     def save_samples(
         self,
