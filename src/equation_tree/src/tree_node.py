@@ -203,7 +203,7 @@ def node_from_prefix(
 def _from_prefix_recursion(
     prefix_notation, function_test, operator_test, variable_test, constant_test, index=0
 ):
-    if index >= len(prefix_notation):
+    if index is None or index >= len(prefix_notation):
         return None, None
 
     attribute = prefix_notation[index]
