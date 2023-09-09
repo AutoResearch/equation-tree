@@ -43,7 +43,7 @@ def set_priors(priors=None, space=None):
     if priors:
         if not set(priors.keys()).issubset(set(space)):
             raise Exception(f"Priors {priors} are not subset of space {space}")
-        total_custom_prior = sum(math.floor(p*100)/100 for p in (priors.values()))
+        total_custom_prior = sum(math.floor(p * 100) / 100 for p in (priors.values()))
         if total_custom_prior > 1:
             raise ValueError(f"Sum of custom priors {priors} is greater than 1")
 
