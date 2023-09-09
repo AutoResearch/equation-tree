@@ -54,7 +54,7 @@ def prefix_to_infix(
             "/",
             "^",
             "*",
-            '**'
+            "**",
         ]:
             # symbol is binary operator
             str = "(" + stack.pop() + prefix[i] + stack.pop() + ")"
