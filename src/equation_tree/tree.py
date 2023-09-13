@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import sympy
 import yaml
-from sympy import simplify, symbols, sympify
+from sympy import simplify, symbols, sympify, dotprint
 
 from equation_tree.src.tree_node import (
     NodeKind,
@@ -822,6 +822,7 @@ class EquationTree:
     def export_to_srbench(
         self,
         folder: str,
+        data_file_name: Optional[str] = None,
         num_samples: int = 1000,
         name_target: str = "y",
         ranges: Optional[Dict] = None,
@@ -831,9 +832,20 @@ class EquationTree:
         """
         Creates a folder and adds data and metadata to the folder that can be used with sr bench:
         https://cavalab.org/srbench/
+        Args:
+            folder: Name of the folder
+            data_file_name: Name of the datafile (if none same as folder name)
+            num_samples: Number of samples
+            name_target: Name of the tartget
+            ranges: A dictionary with the ranges for the variables in form of a dict
+            default_range: Default range to fall back to if no range for a
+                specific variable is given
+            random_state: The random seed to be used
         """
+        if data_file_name is None:
+            data_file_name = folder
         os.mkdir(folder)
-        path_data = f"{folder}/data.tsv.gz"
+        path_data = f"{folder}/{data_file_name}.tsv.gz"
         path_meta = f"{folder}/metadata.yaml"
         self.save_samples_srbench(
             path_data, num_samples, ranges, default_range, random_state
@@ -898,6 +910,14 @@ class EquationTree:
         return self.root.check_validity(
             zero_representations, log_representations, division_representations, verbose
         )
+
+    def draw_tree(self, out):
+        try:
+            from graphviz import Source
+        except ImportError:
+            print('drawing uses requires `graphviz` to be installed: `pip install graphviz`')
+        src = Source(dotprint(self.sympy_expr))
+        src.render(out, view=False)
 
     def check_possible(
         self,
