@@ -17,7 +17,7 @@ HASH_FILE = "_hashed_probabilities.json"
 def load(prior, max_num_variables, file):
     _prior = prior.copy()
     _prior["max_num_variables"] = max_num_variables
-    hash_id = str(_prior)
+    hash_id = str(_recursive_sort_dict(_prior))
     default_prior = default(_prior)
     default_id = str(default_prior)
     _tmp = __load(hash_id, file)
@@ -37,12 +37,13 @@ def load(prior, max_num_variables, file):
             return multiply(prior, _tmp)
     if _tmp is None:
         return prior
+    return _tmp
 
 
 def store(prior, max_num_variables, adjusted_prior, file):
     _prior = prior.copy()
     _prior["max_num_variables"] = max_num_variables
-    hash_id = str(_prior)
+    hash_id = str(_recursive_sort_dict(_prior))
     _store(hash_id, adjusted_prior, file)
 
 
@@ -108,3 +109,16 @@ def __load_default(hash_id):
     pkg = importlib_resources.files(PACKAGE_NAME)
     hash_file = pkg / "data" / HASH_FILE
     return __load(hash_id, hash_file)
+
+
+def _recursive_sort_dict(input_dict):
+    if not isinstance(input_dict, dict):
+        return input_dict
+
+    # Sort the dictionary items recursively
+    sorted_items = sorted([(key, _recursive_sort_dict(value)) for key, value in input_dict.items()])
+
+    # Create a new sorted dictionary from the sorted items
+    sorted_dict = dict(sorted_items)
+
+    return sorted_dict
