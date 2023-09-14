@@ -326,8 +326,9 @@ def normalize(prior):
     for k, val in prior.items():
         if not isinstance(val, dict):
             d = sum(prior.values())
-            for key in prior.keys():
-                prior[key] /= d
+            if d != 0:
+                for key in prior.keys():
+                    prior[key] /= d
         else:
             normalize(prior[k])
 
