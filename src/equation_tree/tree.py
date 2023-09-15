@@ -50,8 +50,14 @@ FUNCTIONS: Dict[str, UnaryOperator] = {
     "arg": lambda a: np.pi * a / 180,
     "acos": lambda a: np.arccos(a),
     "asin": lambda a: np.arcsin(a),
+    "atan": lambda a: np.arctan(a),
     "sinh": lambda a: np.sinh(a),
     "cosh": lambda a: np.cosh(a),
+    "tanh": lambda a: np.tanh(a),
+    "**2": lambda a: a**2,
+    "**3": lambda a: a**2,
+    "^2": lambda a: a**2,
+    "^3": lambda a: a**3,
 }
 
 
