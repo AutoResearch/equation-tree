@@ -16,7 +16,14 @@ def is_numeric(s):
         True
         >>> is_numeric('hallo')
         False
+        >>> is_numeric('.1')
+        True
+        >>> is_numeric('+.1')
+        False
+
     """
+    if isinstance(s, str) and (not s[0].isnumeric() and s[0] != "."):
+        return False
     try:
         float(s)
         return True

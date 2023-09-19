@@ -31,6 +31,21 @@ class TreeNode:
         kind=NodeKind.NONE,
         attribute="",
     ):
+        """
+        Examples:
+            >>> gc_1 = TreeNode(attribute='grand_child_1')
+            >>> gc_1.size
+            1
+            >>> child_1 = TreeNode(attribute='child_1', left=gc_1)
+            >>> child_1.size
+            2
+            >>> child_2 = TreeNode(attribute='child_2')
+            >>> child_2.size
+            1
+            >>> root = TreeNode(left=child_1,right=child_2,attribute='root')
+            >>> root.size
+            4
+        """
 
         self.attribute = attribute
         self.kind = kind
@@ -62,6 +77,208 @@ class TreeNode:
             division_representations,
             verbose,
         )
+
+    @property
+    def size(self):
+        s_ = 1
+        for c in self.children:
+            s_ += c.size
+        return s_
+
+
+class _HelperTree:
+    def __init__(self, root):
+        self.root = root
+        self.nodes = []
+        self.ids = []
+        self.lmds = []
+        self.keyroots = None
+
+        # Initialize stacks for traversal
+        stack = [(root, [])]
+        pstack = []
+
+        j = 0  # Node counter
+
+        while stack:
+            node, ancestors = stack.pop()
+            node_id = j
+
+            # Traverse child nodes
+            for child in node.children:
+                child_ancestors = ancestors.copy()
+                child_ancestors.insert(0, node_id)  # Prepend the current node_id
+                stack.append((child, child_ancestors))
+
+            pstack.append(((node, node_id), ancestors))
+            j += 1
+
+        lmds = {}
+        keyroots = {}
+        i = 0
+
+        while pstack:
+            (node, node_id), ancestors = pstack.pop()
+            self.nodes.append(node)
+            self.ids.append(node_id)
+
+            if not node.children:
+                lmd = i
+                for ancestor_id in ancestors:
+                    if ancestor_id not in lmds:
+                        lmds[ancestor_id] = i
+                    else:
+                        break
+            else:
+                lmd = lmds.get(node_id, None)
+
+            self.lmds.append(lmd)
+            keyroots[lmd] = i
+            i += 1
+
+        self.keyroots = sorted(keyroots.values())
+
+
+def edit_distance(tree_a: TreeNode, tree_b: TreeNode):
+    """
+    Computes the tree edit distance between trees A and B
+
+    Implements the algorithm described here:
+        `Zhang, K., & Shasha, D. (1989).
+        Simple fast algorithms for the editing distance between trees and related problems.
+        SIAM journal on computing, 18(6), 1245-1262.`
+    Inspired and adjusted(simplified) for the purpose of this repository from:
+        `https://github.com/timtadh/zhang-shasha`
+
+    Args:
+        tree_a: Root of tree A
+        tree_b: Root of tree B
+
+    Return:
+        An integer distance [0, inf+)
+    Examples:
+        >>> gc_1_a = TreeNode(attribute='grand_child_1')
+        >>> gc_1_b = TreeNode(attribute='grand_child_1')
+        >>> edit_distance(gc_1_a, gc_1_b)
+        0
+        >>> child_1_a = TreeNode(attribute='child_1', left=gc_1_a)
+        >>> child_1_b = TreeNode(attribute='child_1_', left=gc_1_b)
+        >>> edit_distance(child_1_a, child_1_b)
+        1
+        >>> child_2_a = TreeNode(attribute='child_2')
+        >>> child_2_b = TreeNode(attribute='child_2')
+        >>> edit_distance(child_2_a, child_2_b)
+        0
+        >>> root_a = TreeNode(attribute='root', left=child_1_a, right=child_2_a)
+        >>> root_b = TreeNode(attribute='root', left=child_1_b, right=child_2_b)
+        >>> edit_distance(root_a, root_b)
+        1
+        >>> root_a_ = TreeNode(attribute='root', left=child_2_a, right=child_1_a)
+        >>> edit_distance(root_a, root_a_)
+        2
+        >>> edit_distance(root_a_, root_b)
+        3
+
+    """
+    tree_a_helper = _HelperTree(tree_a)
+    tree_b_helper = _HelperTree(tree_b)
+
+    treedists = np.zeros((tree_a.size, tree_b.size), float)
+
+    def update_cost(node_a, node_b):
+        return int(node_a.attribute != node_b.attribute)
+
+    def treedist(i, j):
+        al = tree_a_helper.lmds
+        bl = tree_b_helper.lmds
+
+        an = tree_a_helper.nodes
+        bn = tree_b_helper.nodes
+
+        m = i - al[i] + 2
+        n = j - bl[j] + 2
+
+        ioff = al[i] - 1
+        joff = bl[j] - 1
+
+        # Initialize the fd array
+        fd = np.zeros((m, n), float)
+        fd[1:, 0] = np.arange(1, m)
+        fd[0, 1:] = np.arange(1, n)
+
+        partial_ops = [[([1] if x == 0 else []) for x in range(n)] for _ in range(m)]
+
+        for x in range(1, m):
+            for y in range(1, n):
+                if al[i] == al[x + ioff] and bl[j] == bl[y + joff]:
+                    costs = [
+                        fd[x - 1][y] + 1,
+                        fd[x][y - 1] + 1,
+                        fd[x - 1][y - 1] + update_cost(an[x + ioff], bn[y + joff]),
+                    ]
+                    fd[x][y] = min(costs)
+                    min_index = costs.index(fd[x][y])
+                    if min_index == 0:
+                        partial_ops[x][y] = partial_ops[x - 1][y] + [1]
+                    elif min_index == 1:
+                        partial_ops[x][y] = partial_ops[x][y - 1] + [1]
+                    else:
+                        partial_ops[x][y] = partial_ops[x - 1][y - 1] + [1]
+
+                    treedists[x + ioff][y + joff] = fd[x][y]
+                else:
+                    p = al[x + ioff] - 1 - ioff
+                    q = bl[y + joff] - 1 - joff
+                    costs = [
+                        fd[x - 1][y] + 1,
+                        fd[x][y - 1] + 1,
+                        fd[p][q] + treedists[x + ioff][y + joff],
+                    ]
+                    fd[x][y] = min(costs)
+                    min_index = costs.index(fd[x][y])
+                    if min_index == 0:
+                        partial_ops[x][y] = partial_ops[x - 1][y] + [1]
+                    elif min_index == 1:
+                        partial_ops[x][y] = partial_ops[x][y - 1] + [1]
+                    else:
+                        partial_ops[x][y] = partial_ops[p][q] + [1]
+
+    for i in tree_a_helper.keyroots:
+        for j in tree_b_helper.keyroots:
+            treedist(i, j)
+    return int(treedists[-1][-1])
+
+
+def ned(tree_a: TreeNode, tree_b: TreeNode):
+    """
+    Normalized tree edit distance according to:
+    `Li, Y., & Chenguang, Z. (2011). A metric normalization of tree edit distance.
+    Frontiers of Computer Science in China, 5, 119-125.`
+    Examples:
+        >>> gc_1_a = TreeNode(attribute='grand_child_1')
+        >>> gc_1_b = TreeNode(attribute='grand_child_1')
+        >>> ned(gc_1_a, gc_1_b)
+        0.0
+        >>> child_1_a = TreeNode(attribute='child_1', left=gc_1_a)
+        >>> child_1_b = TreeNode(attribute='child_1_', left=gc_1_b)
+        >>> ned(child_1_a, child_1_b)
+        0.4
+        >>> child_2_a = TreeNode(attribute='child_2')
+        >>> child_2_b = TreeNode(attribute='child_2')
+        >>> ned(child_2_a, child_2_b)
+        0.0
+        >>> root_a = TreeNode(attribute='root', left=child_1_a, right=child_2_a)
+        >>> root_b = TreeNode(attribute='root', left=child_1_b, right=child_2_b)
+        >>> ned(root_a, root_b)
+        0.2222222222222222
+        >>> root_a_ = TreeNode(attribute='root', left=child_2_a, right=child_1_a)
+        >>> ned(root_a, root_a_)
+        0.4
+        >>> ned(root_a_, root_b)
+        0.5454545454545454
+    """
+    ed = edit_distance(tree_a, tree_b)
+    return 2 * ed / (tree_a.size + tree_b.size + ed)
 
 
 def check_node_validity(
