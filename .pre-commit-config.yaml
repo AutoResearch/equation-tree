@@ -3,6 +3,8 @@ repos:
     rev: 22.12.0
     hooks:
       - id: black
+        exclude:
+          'playground'
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
@@ -11,6 +13,8 @@ repos:
         - "--profile=black"
         - "--filter-files"
         - "--project=autora"
+        exclude:
+          'playground'
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
     hooks:
@@ -18,6 +22,8 @@ repos:
         args:
         - "--max-line-length=100"
         - "--extend-ignore=E203"
+        exclude:
+          'playground'
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v0.991"
     hooks:

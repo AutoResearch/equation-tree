@@ -116,7 +116,9 @@ def _recursive_sort_dict(input_dict):
         return input_dict
 
     # Sort the dictionary items recursively
-    sorted_items = sorted([(key, _recursive_sort_dict(value)) for key, value in input_dict.items()])
+    sorted_items = sorted(
+        [(key, _recursive_sort_dict(value)) for key, value in input_dict.items()]
+    )
 
     # Create a new sorted dictionary from the sorted items
     sorted_dict = dict(sorted_items)

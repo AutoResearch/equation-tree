@@ -253,7 +253,7 @@ def _is_symbol(chars):
     """
     return (
         (len(chars) == 3 and chars[-1].isdigit() and chars[-2] == "_")
-        or (chars.isdigit() or chars == "e")
+        or (is_numeric(chars) or chars == "e")
         or (chars == "pi")
     )
 
@@ -330,6 +330,7 @@ def _infix_to_postfix(infix, function_test, operator_test):
         ['-', 'sin', 'x_1', 'x_2']
 
         >>> _infix_to_postfix('x_1**x_2', is_function, is_operator)[::-1]
+        ['**', 'x_1', 'x_2']
     """
     infix = _tokenize_infix(infix, function_test, operator_test)
     infix = [el.lower() for el in infix]
