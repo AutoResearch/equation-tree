@@ -42,7 +42,7 @@ def burn(
     alpha=1,
 ):
     adjusted_prior = load(prior, max_num_variables, file)
-    sample_ = sample(n, adjusted_prior, max_num_variables)
+    sample_ = sample_trees(n, adjusted_prior, max_num_variables)
     freq = get_frequencies(sample_)
     difference = subtract(adjusted_prior, freq)
     adjustment = scalar_multiply(alpha, difference)
@@ -195,6 +195,7 @@ def _sample_tree_iter(
             prior,
             max_num_variables,
         )
+
         if equation_tree is not None:
             return equation_tree
 

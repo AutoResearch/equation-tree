@@ -10,6 +10,15 @@ SYMPY_TO_ARITHMETIC = {
     "Pow": "^",
 }
 
+CONVERSIONS_FUNC_OP_CONST = {"squared": "**2", "cubed": "**3"}
+
+CONVERSION_OP_CONST_FUNC = {
+    "**2": "squared",
+    "**3": "cubed",
+    "^2": "squared",
+    "^3": "cubed",
+}
+
 
 def _sympy_fun_to_aritmethic(fun, opertor_test):
     if fun in SYMPY_TO_ARITHMETIC.keys():
@@ -379,84 +388,6 @@ def _infix_to_postfix(infix, function_test, operator_test):
     return output
 
 
-#
-# # TODO: make this more robust. Preferable only using function_test and operator_test. The tests
-# # for the constants and variables are still valid though (we standardize equations to use that)
-# def _infix_to_postfix(infix, function_test, operator_test):
-#     """
-#     """
-#     # infix = list(infix[::-1].lower())
-#     #
-#     # for i in range(n):
-#     #     if infix[i] == "(":
-#     #         infix[i] = ")"
-#     #     elif infix[i] == ")":
-#     #         infix[i] = "("
-#     #
-#     # infix = "".join(infix)
-#     infix = "(" + infix + ")"
-#     n = len(infix)
-#     char_stack = []
-#     output = []
-#     i = 0
-#     while i < n:
-#         # Check if the character is alphabet or digit
-#         if infix[i].isdigit() and infix[i + 1] == "_":
-#             output.append(infix[i: i + 3][::-1])
-#             i += 2
-#         elif infix[i].isdigit() or infix[i] == "e":
-#             output.append(infix[i])
-#         elif infix[i] == "i" and infix[i + 1] == "p":
-#             output.append(infix[i: i + 2][::-1])
-#             i += 1
-#
-#         # If the character is '(' push it in the stack
-#         elif infix[i] == "(":
-#             char_stack.append(infix[i])
-#
-#         # If the character is ')' pop from the stack
-#         elif infix[i] == ")":
-#             while char_stack[-1] != "(":
-#                 output.append(char_stack.pop())
-#             char_stack.pop()
-#         # Found an operator
-#         else:
-#             if (
-#                     function_test(char_stack[-1])
-#                     or operator_test(char_stack[-1])
-#                     or char_stack[-1] in [")", "("]
-#             ):
-#                 if infix[i] == "^":
-#                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
-#                         output.append(char_stack.pop())
-#                     char_stack.append(infix[i])
-#                 elif infix[i] == "*" and i < n - 1 and infix[i + 1] == "*":
-#                     op = "**"
-#                     i += 1
-#                     while _get_priority(infix[i]) <= _get_priority(char_stack[-1]):
-#                         output.append(char_stack.pop())
-#                     char_stack.append(op)
-#                 elif infix[i].isalpha():
-#                     fct = ""
-#                     while infix[i].isalpha() and i < n - 1:
-#                         fct += infix[i]
-#                         i += 1
-#                     i -= 1
-#                     while _get_priority(fct) < _get_priority(char_stack[-1]):
-#                         output.append(char_stack.pop())
-#                     char_stack.append(fct[::-1])
-#                 else:  # + - * / ( )
-#                     while _get_priority(infix[i]) < _get_priority(char_stack[-1]):
-#                         output.append(char_stack.pop())
-#                     char_stack.append(infix[i])
-#
-#         i += 1
-#
-#     while len(char_stack) != 0:
-#         output.append(char_stack.pop())
-#     return output
-
-
 def _get_priority(c):
     if c == "-" or c == "+":
         return 1
@@ -594,3 +525,115 @@ def __find_next_closing_parenthesis(input_string, j):
         if input_string[i] == ")":
             return i
     return -1  # Return -1 if closing parenthesis is not found after index j
+
+
+def _remove_unnecessary_parentheses(expr):
+    while True:
+        # Identify patterns where there's a lone expression inside double parentheses and replace
+        # them
+        new_expr = re.sub(r"\(\((.+?)\)\)", r"(\1)", expr)
+        if new_expr == expr:  # If no more changes, break
+            break
+        expr = new_expr
+    return expr
+
+
+def _op_const_func_rec(expr, el, key):
+    expr = re.sub(r"(?<!\()(\w+_\d+|\w+)(?![\w\(])\*\*(\d)", r"(\1)**\2", expr)
+    match = re.search(re.escape(el), expr)
+    if not match:
+        return expr
+
+    open_count = 0
+    start_idx = match.start() - 1
+    end_idx = match.start()
+
+    # Check if there is already a parentheses around the term
+    if start_idx >= 0 and expr[start_idx] == "(" and expr[match.end()] == ")":
+        return expr
+
+    while start_idx >= 0:
+        if expr[start_idx] == ")":
+            open_count += 1
+        elif expr[start_idx] == "(":
+            open_count -= 1
+            if open_count == 0:
+                break
+        elif (
+            open_count == 0
+            and not expr[start_idx].isalnum()
+            and expr[start_idx] not in ["_", "."]
+        ):
+            start_idx += 1
+            break
+        start_idx -= 1
+
+    return (
+        expr[:start_idx]
+        + key
+        + "("
+        + _op_const_func_rec(expr[start_idx:end_idx], el, key)
+        + ")"
+        + _op_const_func_rec(expr[match.end() :], el, key)
+    )
+
+
+def op_const_to_func(expr):
+    """
+    Known operators with constants to functions. For exampl, e**2->squared
+    Examples:
+        >>> op_const_to_func('x_1*(x_1*3-(c_1/x_1*2)**2-x_3)**3-(x)**2')
+        'x_1*cubed(x_1*3-squared(c_1/x_1*2)-x_3)-squared(x)'
+        >>> op_const_to_func('(x_1)**3')
+        'cubed(x_1)'
+        >>> op_const_to_func('x**2')
+        'squared(x)'
+        >>> op_const_to_func('c_1**3')
+        'cubed(c_1)'
+    """
+
+    for key, el in CONVERSION_OP_CONST_FUNC.items():
+        expr = _op_const_func_rec(expr, key, el)
+    expr = _remove_unnecessary_parentheses(expr)
+
+    return expr
+
+
+def _func_op_const_rec(expr, key, el):
+    match = re.search(rf"{key}\(", expr)
+
+    if not match:
+        return expr
+
+    open_count = 0
+    start_idx = match.end()
+    for idx, char in enumerate(expr[start_idx:], start=start_idx):
+        if char == "(":
+            open_count += 1
+        elif char == ")":
+            if open_count == 0:
+                return (
+                    expr[: match.start()]
+                    + "("
+                    + _func_op_const_rec(expr[start_idx:idx], key, el)
+                    + ")"
+                    + el
+                    + _func_op_const_rec(expr[idx + 1 :], key, el)
+                )
+            open_count -= 1
+
+    raise ValueError("Unmatched parentheses in expression.")
+
+
+def func_to_op_const(expr):
+    """
+    Examples:
+        >>> e_1 = 'x_1*cubed(x_1*3-squared(c_1/x_1*2)-x_3)-squared(x)'
+        >>> func_to_op_const(e_1)
+        'x_1*(x_1*3-(c_1/x_1*2)**2-x_3)**3-(x)**2'
+        >>> func_to_op_const('cubed(x_1)')
+        '(x_1)**3'
+    """
+    for key, el in CONVERSIONS_FUNC_OP_CONST.items():
+        expr = _func_op_const_rec(expr, key, el)
+    return expr
