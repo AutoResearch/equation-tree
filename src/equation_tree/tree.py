@@ -1,5 +1,6 @@
 import copy
 import os
+import signal
 import warnings
 from typing import Callable, Dict, List, Optional, Union
 
@@ -19,7 +20,9 @@ from equation_tree.src.tree_node import (
     sample_tree_full_fast,
 )
 from equation_tree.util.conversions import (
+    func_to_op_const,
     infix_to_prefix,
+    op_const_to_func,
     prefix_to_infix,
     standardize_sympy,
     unary_minus_to_binary,
@@ -53,7 +56,12 @@ FUNCTIONS: Dict[str, UnaryOperator] = {
     "asin": lambda a: np.arcsin(a),
     "sinh": lambda a: np.sinh(a),
     "cosh": lambda a: np.cosh(a),
+    "tanh": lambda a: np.tanh(a),
+    "cubed": lambda a: a**3,
+    "squared": lambda a: a**2,
 }
+
+SIMPLIFY_TIMEOUT = 10
 
 
 class EquationTree:
@@ -478,6 +486,7 @@ class EquationTree:
         """
         standard = standardize_sympy(expression, variable_test, constant_test)
         standard = unary_minus_to_binary(standard, operator_test)
+        standard = op_const_to_func(standard)
         prefix = infix_to_prefix(str(standard), function_test, operator_test)
         root = node_from_prefix(
             prefix,
@@ -559,7 +568,8 @@ class EquationTree:
 
     @property
     def sympy_expr(self):
-        sympy_expr = sympify(self.infix)
+        _infix = func_to_op_const(self.infix)
+        sympy_expr = sympify(_infix)
         if sympy_expr.free_symbols:
             symbol_names = [str(symbol) for symbol in sympy_expr.free_symbols]
             real_symbols = symbols(" ".join(symbol_names), real=True)
@@ -1226,7 +1236,19 @@ class EquationTree:
             def operator_test(x):
                 return tmp_o(x) or x in self.operators
 
-        simplified_equation = simplify(self.sympy_expr)
+        class TimeoutError(Exception):
+            pass
+
+        def timeout_handler(signum, frame):
+            raise TimeoutError("Function call timed out")
+
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(SIMPLIFY_TIMEOUT)
+        try:
+            simplified_equation = simplify(self.sympy_expr)
+            signal.alarm(0)
+        except TimeoutError:
+            simplified_equation = self.sympy_expr
         if not check_functions(simplified_equation, function_test):
             warnings.warn(
                 f"{simplified_equation} has functions that are not in function_test type"

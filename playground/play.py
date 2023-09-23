@@ -1,13 +1,44 @@
 # import numpy as np
 # import pandas as pd
 # from sympy import sympify
+# import sympy
+# import pickle
 
-from equation_tree.defaults import functions_prior, operators_prior
-from equation_tree.sample import sample_fast
-
+from equation_tree import burn
+# from equation_tree import sample
+from playground.physics_piriors import prior
+# from equation_tree.defaults import (
+#     functions_prior,
+#     is_function,
+#     is_operator,
+#     operators_prior,
+# )
+# from equation_tree.sample import sample_fast
 # from equation_tree.tree import EquationTree
+# from equation_tree.prior import normalize
 
-# import random
+# p = prior.copy()
+# normalize(p)
+#
+# print(p)
+
+
+#
+#
+#
+# eq = sample(10000, p, 100)
+# print(eq)
+# print(prior)
+#
+import random
+for _ in range(5):
+    burn(
+        prior,
+        100,
+        "../src/equation_tree/data/_hashed_probabilities.json",
+        10_000,
+        0.5,
+    )
 
 
 # from equation_tree.tree import instantiate_constants
@@ -29,17 +60,10 @@ from equation_tree.sample import sample_fast
 #
 # print(equation_tree.sympy_expr)
 
-res = sample_fast(
-    1,
-    {
-        "functions": functions_prior,
-        "operators": operators_prior,
-        "features": {"constants": 0.5, "variables": 0.5},
-    },
-    50,
-    5,
-)
-print(res[0].sympy_expr)
+# expr = '3*x_1+(sin(x_2))'
+# equation_tree = EquationTree.from_sympy(sympy.sympify(expr), is_function, is_operator,
+#                                         lambda x: x in ['x_1', 'x_2'], lambda x: x in ['3'])
+# equation_tree.draw_tree('test.gv')
 
 # expr = sympify("x_a + 3 * y")
 #
