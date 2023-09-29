@@ -483,6 +483,21 @@ class EquationTree:
             >>> equation_tree.expr
             ['min', 'x_1', 'x_2']
 
+            >>> expr = sympify('x_1**2')
+            >>> expr
+            x_1**2
+            >>> is_operator = lambda x : x in ['*', '/', '**', '+']
+            >>> is_variable = lambda x : x in ['x_1']
+            >>> is_function = lambda x : x in ['squared']
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     operator_test=is_operator,
+            ...     variable_test=is_variable,
+            ...     function_test=is_function
+            ... )
+            >>> equation_tree.expr
+            ['squared', 'x_1']
+
         """
         standard = standardize_sympy(expression, variable_test, constant_test)
         standard = unary_minus_to_binary(standard, operator_test)
