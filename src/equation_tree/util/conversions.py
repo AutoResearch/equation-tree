@@ -528,14 +528,28 @@ def __find_next_closing_parenthesis(input_string, j):
 
 
 def _remove_unnecessary_parentheses(expr):
-    while True:
-        # Identify patterns where there's a lone expression inside double parentheses and replace
-        # them
-        new_expr = re.sub(r"\(\((.+?)\)\)", r"(\1)", expr)
-        if new_expr == expr:  # If no more changes, break
-            break
-        expr = new_expr
+    """
+    Examples:
+        >>> _remove_unnecessary_parentheses('((0-.06)*x_1+x_2)/(squared((x_1))+1)')
+        '((0-.06)*x_1+x_2)/(squared(x_1)+1)'
+        >>> _remove_unnecessary_parentheses('x_1*cubed((x_1*3-squared(c_1/x_1*2)-x_3))-squared(x)')
+        'x_1*cubed(x_1*3-squared(c_1/x_1*2)-x_3)-squared(x)'
+    """
     return expr
+    stack = []
+    to_remove = set()
+
+    for i, char in enumerate(expr):
+        if char == '(':
+            stack.append(i)
+        elif char == ')' and stack:
+            if i > 0 and expr[i - 1] == ')' and expr[stack[-1]] == '(':
+                to_remove.add(stack[-1])
+                to_remove.add(i)
+            stack.pop()
+
+    return ''.join([char for i, char in enumerate(expr) if i not in to_remove])
+
 
 
 def _op_const_func_rec(expr, el, key):
@@ -591,7 +605,7 @@ def op_const_to_func(expr):
         >>> op_const_to_func('c_1**3')
         'cubed(c_1)'
         >>> op_const_to_func('(x_2**2)')
-        '(squared(x_2))'
+        'squared(x_2)'
     """
 
     for key, el in CONVERSION_OP_CONST_FUNC.items():
