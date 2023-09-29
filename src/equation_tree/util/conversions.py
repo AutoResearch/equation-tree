@@ -539,7 +539,7 @@ def _remove_unnecessary_parentheses(expr):
 
 
 def _op_const_func_rec(expr, el, key):
-    expr = re.sub(r"(?<!\()(\w+_\d+|\w+)(?![\w\(])\*\*(\d)", r"(\1)**\2", expr)
+    expr = re.sub(r"(\b\w+\b)(\*\*)(\d)", r"(\1)**\3", expr)
     match = re.search(re.escape(el), expr)
     if not match:
         return expr
@@ -590,6 +590,8 @@ def op_const_to_func(expr):
         'squared(x)'
         >>> op_const_to_func('c_1**3')
         'cubed(c_1)'
+        >>> op_const_to_func('(x_2**2)')
+        '(squared(x_2))'
     """
 
     for key, el in CONVERSION_OP_CONST_FUNC.items():
