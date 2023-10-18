@@ -14,7 +14,9 @@ dependencies = [
     "numpy",
     "sympy",
     "importlib_resources",
-    "tqdm"
+    "tqdm",
+    "pandas",
+    "pyyaml"
 ]
 
 [project.optional-dependencies]
