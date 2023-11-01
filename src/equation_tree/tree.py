@@ -726,6 +726,22 @@ class EquationTree:
             >>> equation_tree.evaluate(dataFrame)
             array([3, 3, 3, 4])
 
+            >>> expr = sympify('x_1 + sqrt(x_1)')
+            >>> is_operator = lambda x : x in ['+']
+            >>> is_function = lambda x: x in ['sqrt']
+            >>> is_variable = lambda x : '_' in x or x in ['x_1']
+            >>> equation_tree = EquationTree.from_sympy(
+            ...     expr,
+            ...     operator_test=is_operator,
+            ...     function_test=is_function,
+            ...     variable_test=is_variable,
+            ... )
+            >>> equation_tree.sympy_expr
+            sqrt(x_1) + x_1
+
+            >>> dataFrame = pd.DataFrame({'x_1': [4, 9, 16]})
+            >>> equation_tree.evaluate(dataFrame)
+            array([ 6., 12., 20.])
         """
 
         df = pd.DataFrame(variables)
