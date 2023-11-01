@@ -105,7 +105,7 @@ def __sample_tree_raw_fast(
         return None
 
     # Check if more variables than max:
-    if equation_tree.n_variables > max_num_variables:
+    if equation_tree.n_variables_unique > max_num_variables:
         return None
 
     # Check if tree depth is exact
@@ -155,7 +155,7 @@ def __sample_tree_raw(
         return None
 
     # Check if more variables than max:
-    if equation_tree.n_variables > max_num_variables:
+    if equation_tree.n_variables_unique > max_num_variables:
         return None
 
     if not equation_tree.check_validity():
