@@ -1,12 +1,86 @@
-# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
-INHERIT: mkdocs/base.yml  # use the shared AutoRA configuration by default
-
-site_name: AutoRA equation-tree
+site_name: AutoRA Equation Tree
 repo_url: 'https://github.com/AutoResearch/equation-tree'
 
+site_url: 'https://autoresearch.github.io/equation-tree/'
+edit_uri: 'blob/main/docs/'
+
+extra:
+  colab_base_url: 'https://colab.research.google.com/github/AutoResearch/equation-tree/blob/gh-pages/'
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/AutoResearch
+
 nav:
-- Home: 'index.md'
-- Quickstart: 'quickstart.md'
-- Examples:
-  - Basic Usage: 'Basic Usage.ipynb'
-  - Additional Example: 'Additional Example.ipynb'
+  - Introduction: 'index.md'
+  - Quickstart: 'quickstart.md'
+  - User Guide:
+      - Sampling: 'user-guide/sampling.md'
+      - Equation Formats: 'user-guide/equation-formats.md'
+  - Tutorials:
+      - Equation Sampling: Equation Sampling.ipynb
+  - Code Reference: reference/
+
+theme:
+  name: material
+  features:
+
+  language: en
+  logo: img/logo.png
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  custom_dir: mkdocs/overrides
+
+
+
+
+
+
+watch:
+  - src/
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - mkdocs/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY/index.html
+  - section-index
+  - mkdocstrings:
+      handlers:
+        python:
+          import:
+            - https://scikit-learn.org/stable/objects.inv
+  - mkdocs-jupyter: # required to convert Jupyter notebooks
+      include_source: true
+      execute: false
+      ignore_h1_titles: true
+hooks:
+  - mkdocs/hooks.py
+
+markdown_extensions:
+  admonition: { }
+  pymdownx.details: { }
+  pymdownx.superfences: { }
+  pymdownx.arithmatex: # required for equation display
+    generic: true
+  pymdownx.snippets: { }
+  pymdownx.tabbed:
+    alternate_style: true
+
+extra_javascript: [
+  # requirements for pymdownx.arithmetex:
+  "javascripts/mathjax.js",
+  "https://polyfill.io/v3/polyfill.min.js?features=es6",
+  "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+]

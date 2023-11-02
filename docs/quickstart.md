@@ -7,11 +7,10 @@ You will need:
 
 ```shell
 pip install -U equation-tree
-"]
 ```
 
 
 Check your installation by running:
 ```shell
-python -c "from autora.equation_tree.equation_tree import Example"
+python -c "from equation_tree import EquationTree"
 ```

@@ -23,6 +23,17 @@ dependencies = [
 dev = [
 ]
 
+docs = [
+    "mkdocs-material",
+    "mkdocs-gen-files",
+    "mkdocs-literate-nav",
+    "mkdocs-section-index",
+    "mkdocs-multirepo-plugin",
+    "mkdocstrings-python",
+    "mkdocs-jupyter",
+    "pymdown-extensions",
+]
+
 [project.urls]
 homepage = "http://www.empiricalresearch.ai"
 repository = "https://github.com/AutoResearch/equation-tree"

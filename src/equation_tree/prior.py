@@ -23,6 +23,8 @@ DEFAULT_PRIOR_FUNCTIONS = priors_from_space(DEFAULT_FUNCTION_SPACE)
 DEFAULT_PRIOR_OPERATORS = priors_from_space(DEFAULT_OPERATOR_SPACE)
 
 
+
+
 def prior_from_space(space):
     """
     Uniform prior from a list of strings
