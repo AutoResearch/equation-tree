@@ -1,24 +1,31 @@
-# equation-tree
+# Equation Tree
 
-Explain what your contribution is doing here
+The Equation Tree package is an equation toolbox with symbolic regression in mind. It represents
+expressions as incomplete binary trees and has various features tailored towards testing symbolic
+regression algorithms or training models. The main features are:
 
-You can include inline mathematics by wrapping LaTeX formatted math in `$` symbols: `$(3 < 4)$` will render as:  $(3 < 4)$
+- Equation sampling (including priors)
+- Feature Extraction from equation distributions
+- Distance metrics between equations
 
-To include block mathematics wrap the expression with double `$$`:
+## Equation Sampling
 
-```
-$$
-E(\mathbf{v}, \mathbf{h}) = -\sum_{i,j}w_{ij}v_i h_j - \sum_i b_i v_i - \sum_j c_j h_j
-$$
-```
+coming soon
 
-Will render as:
+## Feature Extraction
 
-$$
-E(\mathbf{v}, \mathbf{h}) = -\sum_{i,j}w_{ij}v_i h_j - \sum_i b_i v_i - \sum_j c_j h_j
-$$
+coming soon
 
+## Distance Metrics
 
-See more information on writing mathematical expressions [here](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions). 
+coming soon
 
+## About
 
+This project is in active development by
+the <a href="https://musslick.github.io/AER_website/Research.html">Autonomous Empirical Research
+Group</a>
+(package developer: <a href="https://younesstrittmatter.github.io/">Younes Strittmatter</a>,
+PI: <a href="https://smusslick.com/">Sebastian Musslick</a>. This research program is supported by
+Schmidt Science Fellows, in partnership with the Rhodes Trust, as well as the Carney BRAINSTORM
+program at Brown University.
