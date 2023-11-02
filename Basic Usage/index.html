@@ -1578,13 +1578,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-1">
@@ -1597,32 +1597,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">equation_tree</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">equation_tree</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">import random
-!pip install equation_tree</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Requirement already satisfied: equation_tree in /Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src (0.0.11.dev27+g1da6b63.d20231102)
-Requirement already satisfied: numpy in /Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/venv/lib/python3.11/site-packages (from equation_tree) (1.25.2)
-Requirement already satisfied: sympy in /Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/venv/lib/python3.11/site-packages (from equation_tree) (1.12)
-Requirement already satisfied: importlib_resources in /Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/venv/lib/python3.11/site-packages (from equation_tree) (6.0.1)
-Requirement already satisfied: tqdm in /Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/venv/lib/python3.11/site-packages (from equation_tree) (4.66.1)
-Requirement already satisfied: mpmath&gt;=0.19 in /Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/venv/lib/python3.11/site-packages (from sympy-&gt;equation_tree) (1.3.0)
-
-<span class="ansi-bold">[</span><span class="ansi-blue-fg">notice</span><span class="ansi-bold">]</span> A new release of pip is available: <span class="ansi-red-fg">23.1.2</span> -&gt; <span class="ansi-green-fg">23.3.1</span>
-<span class="ansi-bold">[</span><span class="ansi-blue-fg">notice</span><span class="ansi-bold">]</span> To update, run: <span class="ansi-green-fg">pip install --upgrade pip</span>
-</pre>
+<div class="clipboard-copy-txt" id="cell-1">!pip install equation_tree</div>
 </div>
 </div>
 </div>
@@ -1635,7 +1612,8 @@ Requirement already satisfied: mpmath&gt;=0.19 in /Users/younesstrittmatter/Docu
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="basic-functionality">Basic Functionality<a class="anchor-link" href="#basic-functionality">¶</a></h2><h3 id="sampling-with-default-settings">Sampling With Default Settings<a class="anchor-link" href="#sampling-with-default-settings">¶</a></h3><p>First, we need to import the functionality. Here we also set a seed to ensure reproducible results.</p>
+<h2 id="basic-functionality">Basic Functionality<a class="anchor-link" href="#basic-functionality">¶</a></h2><h3 id="sampling-with-default-settings">Sampling With Default Settings<a class="anchor-link" href="#sampling-with-default-settings">¶</a></h3><p>First, we need to import the functionality.
+Here we also set a seed to ensure reproducible results.</p>
 </div>
 </div>
 </div>
@@ -1645,7 +1623,7 @@ Requirement already satisfied: mpmath&gt;=0.19 in /Users/younesstrittmatter/Docu
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-2">
@@ -1658,14 +1636,18 @@ Requirement already satisfied: mpmath&gt;=0.19 in /Users/younesstrittmatter/Docu
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">equation_tree</span> <span class="kn">import</span> <span class="n">sample</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">equation_tree</span> <span class="kn">import</span> <span class="n">sample</span>
 
 <span class="c1"># To obtain reproducible results, we set a seed for the following section</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="c1"># Adjusting the input dimension of the equations</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">from equation_tree import sample
+<div class="clipboard-copy-txt" id="cell-2">import random
+
+from equation_tree import sample
 
 # To obtain reproducible results, we set a seed for the following section
 import numpy as np
@@ -1683,17 +1665,17 @@ np.random.seed(42)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We use this to sample an equation:</p>
+<p>Then, we can sample an equation:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-3">
@@ -1713,21 +1695,6 @@ np.random.seed(42)
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/util/io.py:27: UserWarning: No hashed prior found. Sample frequencies may diverge from the prior. Consider burning this prior first.
-  warnings.warn(
-Processing: 100%|██████████| 1/1 [00:00&lt;00:00,  9.77iteration/s]
-</pre>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
@@ -1740,13 +1707,13 @@ Processing: 100%|██████████| 1/1 [00:00&lt;00:00,  9.77itera
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-4">
@@ -1766,18 +1733,6 @@ Processing: 100%|██████████| 1/1 [00:00&lt;00:00,  9.77itera
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>list</pre>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
@@ -1790,13 +1745,13 @@ Processing: 100%|██████████| 1/1 [00:00&lt;00:00,  9.77itera
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-5">
@@ -1809,32 +1764,9 @@ Processing: 100%|██████████| 1/1 [00:00&lt;00:00,  9.77itera
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5">equations = sample(n = 100)</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Processing:   0%|          | 0/100 [00:00&lt;?, ?iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:51: RuntimeWarning: invalid value encountered in log
-  "log": lambda a: np.log(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:55: RuntimeWarning: invalid value encountered in arccos
-  "acos": lambda a: np.arccos(a),
-Processing:   7%|▋         | 7/100 [00:00&lt;00:01, 68.58iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:40: RuntimeWarning: invalid value encountered in scalar power
-  "^": lambda a, b: a**b,
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:52: RuntimeWarning: invalid value encountered in sqrt
-  "sqrt": lambda a: np.sqrt(a),
-Processing:  14%|█▍        | 14/100 [00:00&lt;00:01, 68.71iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:56: RuntimeWarning: invalid value encountered in arcsin
-  "asin": lambda a: np.arcsin(a),
-Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06iteration/s]
-</pre>
+<div class="clipboard-copy-txt" id="cell-5">equations = sample(n=100)</div>
 </div>
 </div>
 </div>
@@ -1851,13 +1783,13 @@ Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06i
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-6">
@@ -1870,33 +1802,36 @@ Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06i
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">equations</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equations</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">])</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6">len(equations)</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>100</pre>
+<div class="clipboard-copy-txt" id="cell-6">print(len(equations))
+print(equations[0])
+print(equations[42])</div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>They are represented as strings, but we can look at other representations. For example, prefix notation (for more details on different representations of the equations, see the respective section of the documentation):</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-7">
@@ -1909,33 +1844,32 @@ Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06i
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7">equations[0]</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>-sin(x_1 - exp(exp(x_1)))</pre>
+<div class="clipboard-copy-txt" id="cell-7">equations[42].prefix</div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>We can also look at various features of the equation. For example, the number of constants, the tree depth of the underlying tree, the number of nodes or the tree structure (for more details on these features, see the respective section of the documentation):</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-8">
@@ -1948,21 +1882,15 @@ Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06i
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">n_constants</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-8">equations[42]</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>-c_2 + tan(c_1*x_1)</pre>
+<div class="clipboard-copy-txt" id="cell-8">print(equations[42].n_constants)
+print(equations[42].depth)
+print(equations[42].n_nodes)
+print(equations[42].structure)</div>
 </div>
 </div>
 </div>
@@ -1975,247 +1903,20 @@ Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06i
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>They are represented as strings, but we can look at other representations as well. For example, prefix notation (for more details on different representations of the equations, see the respective section of the documentation):</p>
+<h3 id="instantiate-equations">Instantiate Equations<a class="anchor-link" href="#instantiate-equations">¶</a></h3><p>Note, the constants in the sampled equation are abstract: symbols starting with c represent constants (c_1, c_2, ...). We can instantiate constants with numbers:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-9">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-9">equations[42].prefix</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>['-', 'tan', '*', 'c_1', 'x_1', 'c_2']</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can also look at features of the equation, for example at the number of constants, the tree depth of the underlying tree, the number of nodes or the tree structure (for more details on these features, see the respective section of the documentation):</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-10">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">n_constants</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-10">equations[42].n_constants</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-11">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">depth</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-11">equations[42].depth</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>3</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-12">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">n_nodes</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-12">equations[42].n_nodes</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>6</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-13">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">structure</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-13">equations[42].structure</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[0, 1, 2, 3, 3, 1]</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="instantiate-equations">Instantiate Equations<a class="anchor-link" href="#instantiate-equations">¶</a></h3><p>Note: the sampled equation are abstract: c_1 are representation of a constant. We can instantiate constants to be numbers:</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-14">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2233,7 +1934,7 @@ Processing: 100%|██████████| 100/100 [00:01&lt;00:00, 85.06i
 <span class="n">instantiated_equation</span> <span class="o">=</span> <span class="n">instantiate_constants</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">],</span> <span class="k">lambda</span> <span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'abstract: </span><span class="si">{</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">', instantiated: </span><span class="si">{</span><span class="n">instantiated_equation</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-14"># first we need to import the functionality
+<div class="clipboard-copy-txt" id="cell-9"># first we need to import the functionality
 from equation_tree import instantiate_constants
 import random
 
@@ -2244,30 +1945,17 @@ print(f'abstract: {equations[42]}', f', instantiated: {instantiated_equation}')<
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>abstract: -c_2 + tan(c_1*x_1) , instantiated: tan(0.2720878822071884*x_1) - 0.4936315339297549
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-15">
+<clipboard-copy for="cell-10">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2281,22 +1969,9 @@ print(f'abstract: {equations[42]}', f', instantiated: {instantiated_equation}')<
 <span class="n">instantiated_equation_</span> <span class="o">=</span> <span class="n">instantiate_constants</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">41</span><span class="p">],</span> <span class="k">lambda</span> <span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'abstract: </span><span class="si">{</span><span class="n">equations</span><span class="p">[</span><span class="mi">41</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">', instantiated: </span><span class="si">{</span><span class="n">instantiated_equation_</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-15"># we can also use other functions (for example all functions to be a constant
+<div class="clipboard-copy-txt" id="cell-10"># we can also use other functions (for example all functions to be a constant
 instantiated_equation_ = instantiate_constants(equations[41], lambda : 1)
 print(f'abstract: {equations[41]}', f', instantiated: {instantiated_equation_}')</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>abstract: c_2*x_1**c_1 , instantiated: x_1
-</pre>
 </div>
 </div>
 </div>
@@ -2309,21 +1984,21 @@ print(f'abstract: {equations[41]}', f', instantiated: {instantiated_equation_}')
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>**We can use arbitrary functions to instantiate the constants.</p>
-<h3 id="evaluating-equations">Evaluating Equations<a class="anchor-link" href="#evaluating-equations">¶</a></h3><p>After instantiating equations, we can also evaluate on arbitrary input:</p>
+<p><em>Note, we can use arbitrary functions to instantiate the constants.</em></p>
+<h3 id="evaluating-equations">Evaluating Equations<a class="anchor-link" href="#evaluating-equations">¶</a></h3><p>After instantiating equations, we can evaluate them arbitrary input:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-16">
+<clipboard-copy for="cell-11">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2337,36 +2012,24 @@ print(f'abstract: {equations[41]}', f', instantiated: {instantiated_equation_}')
 <span class="n">values</span> <span class="o">=</span> <span class="n">instantiated_equation</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
 <span class="n">values</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-16"># import functionality
+<div class="clipboard-copy-txt" id="cell-11"># import functionality
 values = instantiated_equation.evaluate({'x_1': [1, 2, 3, 4]})
 values</div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([-0.21462429,  0.11148855,  0.57008635,  1.41577756])</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-17">
+<clipboard-copy for="cell-12">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2385,7 +2048,7 @@ values</div>
 <span class="n">input_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
 <span class="n">instantiated_equation</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">input_df</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-17"># We can also use pandas dataframes as inputs:
+<div class="clipboard-copy-txt" id="cell-12"># We can also use pandas dataframes as inputs:
 
 # import functionality
 import pandas as pd
@@ -2393,18 +2056,6 @@ import pandas as pd
 # define the input and get the values
 input_df = pd.DataFrame({'x_1': [1, 2, 3, 4]})
 instantiated_equation.evaluate(input_df)</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([-0.21462429,  0.11148855,  0.57008635,  1.41577756])</pre>
 </div>
 </div>
 </div>
@@ -2422,16 +2073,16 @@ instantiated_equation.evaluate(input_df)</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-18">
+<clipboard-copy for="cell-13">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2443,45 +2094,22 @@ instantiated_equation.evaluate(input_df)</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_2d</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-18">equations_2d = sample(n=5, max_num_variables=2)</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/util/io.py:27: UserWarning: No hashed prior found. Sample frequencies may diverge from the prior. Consider burning this prior first.
-  warnings.warn(
-Processing:   0%|          | 0/5 [00:00&lt;?, ?iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:55: RuntimeWarning: invalid value encountered in arccos
-  "acos": lambda a: np.arccos(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:51: RuntimeWarning: invalid value encountered in log
-  "log": lambda a: np.log(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:56: RuntimeWarning: invalid value encountered in arcsin
-  "asin": lambda a: np.arcsin(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:52: RuntimeWarning: invalid value encountered in sqrt
-  "sqrt": lambda a: np.sqrt(a),
-Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 112.51iteration/s]
-</pre>
+<div class="clipboard-copy-txt" id="cell-13">equations_2d = sample(n=5, max_num_variables=2)</div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-19">
+<clipboard-copy for="cell-14">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2493,23 +2121,7 @@ Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 112.51iter
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_2d</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-19">equations_2d</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[acos(Abs(acos(x_1))),
- -Abs(x_2) + asin(log(x_1)),
- Max(c_1, x_1),
- Max(x_1, Abs(sqrt(sin(x_1)))),
- cos(x_1*(c_1 + x_2))]</pre>
+<div class="clipboard-copy-txt" id="cell-14">equations_2d</div>
 </div>
 </div>
 </div>
@@ -2522,21 +2134,21 @@ Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 112.51iter
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>**Note: Not all the equations have exactly 2 input variable. Some of them have only one. This is since equations with only one input variable are still defined on 2 (or more dimensions)</p>
+<p><em>Note, not all the equations have exactly 2 input variable. Some of them have only one. This is since equations with only one input variable are still defined on 2 (or more dimensions)</em></p>
 <h3 id="equation-complexity">Equation Complexity<a class="anchor-link" href="#equation-complexity">¶</a></h3><p>We can also manipulate the equation complexity (as number of nodes)</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-20">
+<clipboard-copy for="cell-15">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2549,53 +2161,23 @@ Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 112.51iter
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_simple</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">equations_complex</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-20">equations_simple = sample(n=5, depth=3)
+<div class="clipboard-copy-txt" id="cell-15">equations_simple = sample(n=5, depth=3)
 equations_complex = sample(n=5, depth=8)</div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/util/io.py:27: UserWarning: No hashed prior found. Sample frequencies may diverge from the prior. Consider burning this prior first.
-  warnings.warn(
-Processing:   0%|          | 0/5 [00:00&lt;?, ?iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:55: RuntimeWarning: invalid value encountered in arccos
-  "acos": lambda a: np.arccos(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:56: RuntimeWarning: invalid value encountered in arcsin
-  "asin": lambda a: np.arcsin(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:40: RuntimeWarning: invalid value encountered in scalar power
-  "^": lambda a, b: a**b,
-Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 312.27iteration/s]
-Processing:   0%|          | 0/5 [00:00&lt;?, ?iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:40: RuntimeWarning: divide by zero encountered in scalar power
-  "^": lambda a, b: a**b,
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:47: RuntimeWarning: invalid value encountered in sin
-  "sin": lambda a: np.sin(a),
-Processing:  40%|████      | 2/5 [00:00&lt;00:00, 12.82iteration/s]/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:52: RuntimeWarning: invalid value encountered in sqrt
-  "sqrt": lambda a: np.sqrt(a),
-/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/tree.py:51: RuntimeWarning: invalid value encountered in log
-  "log": lambda a: np.log(a),
-Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 21.56iteration/s]
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-21">
+<clipboard-copy for="cell-16">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2608,25 +2190,8 @@ Processing: 100%|██████████| 5/5 [00:00&lt;00:00, 21.56itera
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'*** simple equations ***</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">equations_simple</span><span class="p">,</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'*** complex equations ***</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">equations_complex</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-21">print('*** simple equations ***\n', equations_simple, '\n')
+<div class="clipboard-copy-txt" id="cell-16">print('*** simple equations ***\n', equations_simple, '\n')
 print('*** complex equations ***\n', equations_complex)</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>*** simple equations ***
- [acos(exp(x_1)), Max(c_1, x_1), x_1/c_1, asin(exp(x_1)), x_1**c_1] 
-
-*** complex equations ***
- [sin(exp(sqrt(1 - sin(x_1)**2)/sin(x_1))**x_1), (x_1 + Min(x_1, sin(x_1)))/sqrt(1 - (x_1 + Min(x_1, sin(x_1)))**2), sqrt(Min(c_1**sin(sin(x_1)), x_1)), -asin(x_1)**x_1 + Min(c_1, x_1), Max(-x_1 + log(x_1), sqrt(Abs(x_1)))]
-</pre>
 </div>
 </div>
 </div>
@@ -2643,16 +2208,16 @@ print('*** complex equations ***\n', equations_complex)</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-22">
+<clipboard-copy for="cell-17">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2671,7 +2236,7 @@ print('*** complex equations ***\n', equations_complex)</div>
 <span class="n">equations_with_prior</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">equations_with_prior</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-22">p = {
+<div class="clipboard-copy-txt" id="cell-17">p = {
     'structures': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
     'features': {'constants': .2, 'variables': .8},
     'functions': {'sin': .5, 'cos': .5},
@@ -2679,126 +2244,6 @@ print('*** complex equations ***\n', equations_complex)</div>
 }
 equations_with_prior = sample(n=10, prior=p, max_num_variables=10)
 equations_with_prior</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/util/io.py:27: UserWarning: No hashed prior found. Sample frequencies may diverge from the prior. Consider burning this prior first.
-  warnings.warn(
-Processing: 100%|██████████| 100/100 [00:00&lt;00:00, 190.81iteration/s]
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[cos(cos(x_1)),
- sin(sin(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- -x_3 + sin(x_2) + cos(x_1),
- cos(cos(x_1)),
- cos(sin(x_1)),
- sin(cos(x_1)),
- x_1 + x_2,
- sin(cos(x_1)),
- cos(sin(x_1)),
- x_1 + x_2,
- cos(sin(x_1)),
- x_1 - x_2,
- x_1 + x_2,
- sin(sin(x_1)),
- x_1 + x_2,
- sin(cos(x_1)),
- -c_1 + x_1,
- sin(cos(x_1)),
- x_1 + x_2,
- x_1 + x_2,
- x_1 + x_2,
- x_1 + x_2,
- sin(cos(x_1)),
- c_1 + x_1,
- x_1 - x_2,
- x_1 - x_2,
- x_1 + x_2,
- sin(sin(x_1)),
- c_1 + x_1,
- cos(sin(x_1)),
- cos(sin(x_1)),
- cos(sin(x_1)),
- cos(cos(x_1)),
- c_1 + x_1,
- sin(cos(x_1)),
- sin(cos(x_1)),
- x_1 - x_2,
- cos(sin(x_1)),
- cos(sin(x_1)),
- x_1 - x_2,
- cos(cos(x_1)),
- x_1 + x_2,
- x_1 + x_2,
- sin(sin(x_1)),
- c_1 + x_1,
- c_1 + x_1,
- x_1 + x_2,
- x_1 - x_2,
- sin(sin(x_1)),
- cos(cos(x_1)),
- cos(cos(x_1)),
- cos(cos(x_1)),
- sin(cos(x_1)),
- x_1 - x_2,
- sin(sin(x_1)),
- cos(cos(x_1)),
- c_1 + x_1,
- sin(sin(x_1)),
- cos(sin(x_1)),
- cos(sin(x_1)),
- x_1 + x_2,
- cos(sin(x_1)),
- sin(cos(x_1)),
- c_1 + x_1,
- -x_2,
- x_1 - x_2,
- -x_3 + sin(x_1) + sin(x_2),
- c_1 + x_1,
- x_1 + x_2,
- c_1 + x_1,
- c_1 + x_1,
- sin(sin(x_1)),
- cos(cos(x_1)),
- x_1 + x_2,
- c_1 + x_1,
- -x_1 + cos(x_1) + cos(x_2),
- x_1 - x_2,
- cos(sin(x_1)),
- sin(cos(x_1)),
- sin(cos(x_1)),
- sin(cos(x_1)),
- -x_3 + sin(x_1) + cos(x_2),
- x_1 + x_2,
- -x_3 + sin(x_2) + cos(x_1),
- -x_3 + sin(x_1) + sin(x_2),
- c_1 - x_1,
- c_1 + x_1,
- c_1 + x_1,
- cos(cos(x_1)),
- -x_2 + sin(x_2) + cos(x_1),
- c_1 + x_1,
- sin(sin(x_1)),
- c_1 + x_1,
- x_1 + x_2,
- sin(sin(x_1)),
- x_1 + x_2,
- x_1 + x_2,
- cos(sin(x_1)),
- sin(sin(x_1))]</pre>
 </div>
 </div>
 </div>
@@ -2811,20 +2256,20 @@ Processing: 100%|██████████| 100/100 [00:00&lt;00:00, 190.81
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can also use conditional priors conditioned on the parent node:</p>
+<p>This functionality extends to the use of conditional priors conditioned on the respective parent node. For example, we can manipulate the probability of specific features, functions and operators inside a sin function (Here, if a feature is the child of the sin function it will always be a variable, if a function is the child of a sin function it will always be cos, and if an operator is the child of a sin function, it will have a 1:1 chance of being + or -).</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-23">
+<clipboard-copy for="cell-18">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2867,7 +2312,7 @@ Processing: 100%|██████████| 100/100 [00:00&lt;00:00, 190.81
 <span class="n">equations_with_conditional_prior</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="n">p_</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">equations_with_conditional_prior</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-23">p_ = {
+<div class="clipboard-copy-txt" id="cell-18">p_ = {
     'structures': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
     'features': {'constants': .2, 'variables': .8},
     'functions': {'sin': .5, 'cos': .5},
@@ -2903,126 +2348,6 @@ equations_with_conditional_prior</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/Users/younesstrittmatter/Documents/GitHub/AutoRA/equation-tree/src/equation_tree/util/io.py:27: UserWarning: No hashed prior found. Sample frequencies may diverge from the prior. Consider burning this prior first.
-  warnings.warn(
-Processing: 100%|██████████| 100/100 [00:00&lt;00:00, 128.08iteration/s]
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[38]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[cos(cos(x_1)),
- x_1 - x_2,
- -c_1 + x_1,
- sin(cos(x_1)),
- sin(cos(x_1)),
- c_1 + x_1,
- -c_1 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- cos(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- sin(cos(x_1)),
- c_1 - x_1,
- -x_3 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- c_1 - x_1,
- sin(cos(x_1)),
- cos(cos(x_1)),
- x_1 - x_2,
- -c_1 + sin(x_1) + sin(x_2),
- -x_3 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- c_1 - x_1,
- sin(cos(x_1)),
- x_1 - x_2,
- -x_3 - sin(x_2) + cos(x_1),
- -c_1 + x_1,
- sin(cos(x_1)),
- cos(cos(x_1)),
- sin(cos(x_1)),
- x_1 + x_2,
- cos(cos(x_1)),
- -x_3 + sin(x_1) - sin(x_2),
- c_1 + x_1,
- cos(cos(x_1)),
- cos(cos(x_1)),
- sin(cos(x_1)),
- x_1 - x_2,
- -x_3 + sin(x_1) + sin(x_2),
- -c_1 + x_1,
- c_1 - x_1,
- c_1 + x_1,
- c_1 + x_1,
- cos(cos(x_1)),
- -c_1 + sin(x_1) + sin(x_2),
- c_1 + x_1,
- sin(cos(x_1)),
- sin(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- -x_3 + sin(x_1) - cos(x_2),
- sin(cos(x_1)),
- x_1 - x_2,
- -x_3 + cos(x_1) - cos(x_2),
- x_1 - x_2,
- cos(cos(x_1)),
- sin(cos(x_1)),
- -x_2 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- -c_1 + sin(x_1) + sin(x_2),
- -x_2 + sin(x_1) - cos(x_2),
- cos(cos(x_1)),
- -x_2 + sin(x_1) + sin(x_2),
- -x_3 + sin(x_1) + sin(x_2),
- sin(cos(x_1)),
- cos(cos(x_1)),
- cos(cos(x_1)),
- -c_1 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- cos(cos(x_1)),
- cos(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- cos(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- x_1 + x_2,
- c_1 - x_1,
- -x_1 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- -c_1 + sin(x_1) + sin(x_2),
- c_1 - x_1,
- cos(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- c_1 - x_1,
- -x_3 + sin(x_1) + sin(x_2),
- cos(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- c_1 + x_1,
- x_1 - x_2,
- cos(cos(x_1)),
- c_1 + x_1,
- cos(cos(x_1)),
- sin(cos(x_1)),
- sin(cos(x_1)),
- sin(cos(x_1)),
- sin(cos(x_1)),
- sin(cos(x_1)),
- -x_3 + sin(x_1) + sin(x_2),
- c_1 + x_1]</pre>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
@@ -3048,33 +2373,6 @@ After burning, you can load the adjusted priors via:</p>
 <pre><code>    sample(..., file=path_to_file)
 </code></pre>
 <p>*multiple adjusted priors can be stored in the same file.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-24">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-24"></div>
-</div>
-</div>
 </div>
 </div>
 </div>
