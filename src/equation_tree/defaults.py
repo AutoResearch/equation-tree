@@ -11,8 +11,16 @@ operator_space = DEFAULT_OPERATOR_SPACE
 function_space = DEFAULT_FUNCTION_SPACE
 operators_prior = DEFAULT_PRIOR_OPERATORS
 functions_prior = DEFAULT_PRIOR_FUNCTIONS
+features_prior = {'constants': 0.5, 'variables': 0.5}
 structure_prior_from_depth = structure_prior_from_depth
 structure_prior_from_leaves = structure_prior_from_max_depth
+
+DEFAULT_PRIOR = {
+    'structures': structure_prior_from_max_depth(6),
+    'functions': functions_prior,
+    'operators': operators_prior,
+    'features': features_prior
+}
 
 
 def is_operator(a):

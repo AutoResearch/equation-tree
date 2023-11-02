@@ -1,3 +1,4 @@
+import copy
 from typing import Dict, List, Optional, Union
 
 from tqdm import tqdm
@@ -19,6 +20,9 @@ from equation_tree.util.io import load, store
 from equation_tree.util.priors import priors_from_space
 from equation_tree.util.type_check import is_constant_formatted, is_variable_formatted
 
+from equation_tree.defaults import DEFAULT_PRIOR, structure_prior_from_max_depth, \
+    structure_prior_from_depth
+
 PriorType = Union[List, Dict]
 
 MAX_ITER = 10_000
@@ -29,8 +33,21 @@ def sample_fast(n, prior, tree_depth, max_num_variables, file=None):
     return sample_trees_fast(n, adjusted_prior, tree_depth, max_num_variables)
 
 
-def sample(n, prior, max_num_variables, file=None):
-    adjusted_prior = load(prior, max_num_variables, file)
+def sample(n=1,
+           prior=DEFAULT_PRIOR,
+           max_num_variables=1,
+           file=None,
+           max_depth=None,
+           depth=None):
+    _prior = copy.deepcopy(prior)
+    if max_depth is not None and depth is not None:
+        raise Exception("Both depth and max depth are defined. Please only define one of both")
+    elif max_depth is not None:
+        _prior['structures'] = structure_prior_from_max_depth(max_depth)
+    elif depth is not None:
+        _prior['structures'] = structure_prior_from_depth(depth)
+
+    adjusted_prior = load(_prior, max_num_variables, file)
     return sample_trees(n, adjusted_prior, max_num_variables)
 
 

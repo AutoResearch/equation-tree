@@ -186,6 +186,9 @@ class EquationTree:
 
         self._build()
 
+    def __repr__(self):
+        return str(self.sympy_expr)
+
     @classmethod
     def from_prefix(
         cls,
@@ -349,6 +352,8 @@ class EquationTree:
         """
         root = sample_tree_full(prior, max_variables_unique)
         return cls(root)
+
+
 
     @classmethod
     def from_priors(
@@ -624,6 +629,14 @@ class EquationTree:
             return False
         ev = self.evaluation[0, :]
         return np.any(np.isfinite(ev) & ~np.isnan(ev))
+
+    @property
+    def depth(self):
+        return max(self.structure)
+
+    @property
+    def n_nodes(self):
+        return len(self.structure)
 
     @property
     def info(self):
