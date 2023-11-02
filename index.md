@@ -2,7 +2,7 @@
 
 The Equation Tree package is an equation toolbox with symbolic regression in mind. It represents
 expressions as incomplete binary trees and has various features tailored towards testing symbolic
-regression algorithms or training models. The main features are:
+regression algorithms or training models. The most notable features are:
 
 - Equation sampling (including priors)
 - Feature Extraction from equation distributions

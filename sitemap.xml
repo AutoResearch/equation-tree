@@ -6,11 +6,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autoresearch.github.io/equation-tree/Additional%20Example/</loc>
-         <lastmod>2023-11-02</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autoresearch.github.io/equation-tree/Basic%20Usage/</loc>
          <lastmod>2023-11-02</lastmod>
          <changefreq>daily</changefreq>
@@ -92,6 +87,16 @@
     </url>
     <url>
          <loc>https://autoresearch.github.io/equation-tree/reference/src/equation_tree/util/type_check/</loc>
+         <lastmod>2023-11-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://autoresearch.github.io/equation-tree/user-guide/equation-formats/</loc>
+         <lastmod>2023-11-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://autoresearch.github.io/equation-tree/user-guide/sampling/</loc>
          <lastmod>2023-11-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
