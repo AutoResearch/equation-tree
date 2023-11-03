@@ -2,6 +2,7 @@
     * [equation_tree](src/equation_tree/index.md)
         * [analysis](src/equation_tree/analysis.md)
         * [defaults](src/equation_tree/defaults.md)
+        * [metrics](src/equation_tree/metrics.md)
         * [prior](src/equation_tree/prior.md)
         * [sample](src/equation_tree/sample.md)
         * [src](src/equation_tree/src/index.md)

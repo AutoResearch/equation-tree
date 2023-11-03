@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://autoresearch.github.io/equation-tree/tutorials/Basic%20Usage/">
+        <link rel="canonical" href="https://autoresearch.github.io/equation-tree/tutorials/Distance%20Metrics/">
       
       
-        <link rel="prev" href="../../user-guide/additional-features/">
+        <link rel="prev" href="../Basic%20Usage/">
       
       
-        <link rel="next" href="../Distance%20Metrics/">
+        <link rel="next" href="../../reference/SUMMARY/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Basic Usage - Equation Tree</title>
+        <title>Distance Metrics - Equation Tree</title>
       
     
     
@@ -79,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#basic-usage" class="md-skip">
+        <a href="#distance-metrics" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Basic Usage
+              Distance Metrics
             
           </span>
         </div>
@@ -449,6 +449,26 @@
                 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../Basic%20Usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Basic Usage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -464,7 +484,7 @@
           
   
   <span class="md-ellipsis">
-    Basic Usage
+    Distance Metrics
   </span>
   
 
@@ -475,7 +495,7 @@
         
   
   <span class="md-ellipsis">
-    Basic Usage
+    Distance Metrics
   </span>
   
 
@@ -504,37 +524,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#basic-functionality" class="md-nav__link">
-    Basic Functionality
+  <a href="#initialization-of-equations" class="md-nav__link">
+    Initialization of Equations
   </a>
   
-    <nav class="md-nav" aria-label="Basic Functionality">
+    <nav class="md-nav" aria-label="Initialization of Equations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sampling-with-default-settings" class="md-nav__link">
-    Sampling With Default Settings
+  <a href="#sampling" class="md-nav__link">
+    Sampling
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#equation-representations-and-features" class="md-nav__link">
-    Equation Representations And Features
+  <a href="#from-sympystring" class="md-nav__link">
+    From Sympy/String
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#instantiate-equations" class="md-nav__link">
-    Instantiate Equations
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#evaluating-equations" class="md-nav__link">
-    Evaluating Equations
+  <a href="#from-prefix" class="md-nav__link">
+    From Prefix
   </a>
   
 </li>
@@ -545,30 +558,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sample-settings" class="md-nav__link">
-    Sample Settings
+  <a href="#distance-metrics-between-equations" class="md-nav__link">
+    Distance Metrics Between Equations
   </a>
   
-    <nav class="md-nav" aria-label="Sample Settings">
+    <nav class="md-nav" aria-label="Distance Metrics Between Equations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#input-dimensions" class="md-nav__link">
-    Input Dimensions
+  <a href="#prediction-distance" class="md-nav__link">
+    Prediction Distance
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#equation-complexity" class="md-nav__link">
-    Equation Complexity
+  <a href="#symbolic-solution" class="md-nav__link">
+    Symbolic Solution
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#using-priors" class="md-nav__link">
-    Using Priors
+  <a href="#normalized-edit-distance" class="md-nav__link">
+    Normalized Edit Distance
   </a>
   
 </li>
@@ -582,26 +595,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Distance%20Metrics/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Distance Metrics
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -1139,37 +1132,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#basic-functionality" class="md-nav__link">
-    Basic Functionality
+  <a href="#initialization-of-equations" class="md-nav__link">
+    Initialization of Equations
   </a>
   
-    <nav class="md-nav" aria-label="Basic Functionality">
+    <nav class="md-nav" aria-label="Initialization of Equations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sampling-with-default-settings" class="md-nav__link">
-    Sampling With Default Settings
+  <a href="#sampling" class="md-nav__link">
+    Sampling
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#equation-representations-and-features" class="md-nav__link">
-    Equation Representations And Features
+  <a href="#from-sympystring" class="md-nav__link">
+    From Sympy/String
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#instantiate-equations" class="md-nav__link">
-    Instantiate Equations
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#evaluating-equations" class="md-nav__link">
-    Evaluating Equations
+  <a href="#from-prefix" class="md-nav__link">
+    From Prefix
   </a>
   
 </li>
@@ -1180,30 +1166,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sample-settings" class="md-nav__link">
-    Sample Settings
+  <a href="#distance-metrics-between-equations" class="md-nav__link">
+    Distance Metrics Between Equations
   </a>
   
-    <nav class="md-nav" aria-label="Sample Settings">
+    <nav class="md-nav" aria-label="Distance Metrics Between Equations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#input-dimensions" class="md-nav__link">
-    Input Dimensions
+  <a href="#prediction-distance" class="md-nav__link">
+    Prediction Distance
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#equation-complexity" class="md-nav__link">
-    Equation Complexity
+  <a href="#symbolic-solution" class="md-nav__link">
+    Symbolic Solution
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#using-priors" class="md-nav__link">
-    Using Priors
+  <a href="#normalized-edit-distance" class="md-nav__link">
+    Normalized Edit Distance
   </a>
   
 </li>
@@ -1226,11 +1212,11 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="https://autoresearch.github.io/equation-tree/tutorials/Basic%20Usage/Basic%20Usage.ipynb" title="Download Notebook"
+    <a href="https://autoresearch.github.io/equation-tree/tutorials/Distance%20Metrics/Distance%20Metrics.ipynb" title="Download Notebook"
        class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7 7-7Z"/></svg>
     </a>
-    <a href="https://colab.research.google.com/github/AutoResearch/equation-tree/blob/gh-pages/tutorials/Basic%20Usage/Basic%20Usage.ipynb"
+    <a href="https://colab.research.google.com/github/AutoResearch/equation-tree/blob/gh-pages/tutorials/Distance%20Metrics/Distance%20Metrics.ipynb"
        title="Open Notebook in Google Colab" class="md-content__button md-icon">
         <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
     </a>
@@ -1649,10 +1635,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="basic-usage">Basic Usage<a class="anchor-link" href="#basic-usage">¶</a></h1><p>Content:</p>
+<h1 id="distance-metrics">Distance Metrics<a class="anchor-link" href="#distance-metrics">¶</a></h1><p>Content:</p>
 <ul>
-<li>Basic Functionality for sampling and processing equations</li>
-<li>Advanced settings for sampling equations</li>
+<li>Various ways to initialize an equation</li>
+<li>Various ways to compare two equations</li>
 </ul>
 <h2 id="installation">Installation<a class="anchor-link" href="#installation">¶</a></h2><p>The Equation Tree package is available on <a href="https://pypi.org/project/equation-tree/">pyPI</a>:</p>
 </div>
@@ -1677,9 +1663,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">equation_tree</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">equation</span><span class="o">-</span><span class="n">tree</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">!pip install equation_tree</div>
+<div class="clipboard-copy-txt" id="cell-1">!pip install equation-tree</div>
 </div>
 </div>
 </div>
@@ -1692,8 +1678,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="basic-functionality">Basic Functionality<a class="anchor-link" href="#basic-functionality">¶</a></h2><h3 id="sampling-with-default-settings">Sampling With Default Settings<a class="anchor-link" href="#sampling-with-default-settings">¶</a></h3><p>First, we need to import the functionality.
-Here, we also set a seed to ensure reproducible results.</p>
+<h2 id="initialization-of-equations">Initialization of Equations<a class="anchor-link" href="#initialization-of-equations">¶</a></h2><h3 id="sampling">Sampling<a class="anchor-link" href="#sampling">¶</a></h3><p>In the previous tutorial, we learned how to sample an equation:</p>
 </div>
 </div>
 </div>
@@ -1716,23 +1701,27 @@ Here, we also set a seed to ensure reproducible results.</p>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">equation_tree</span> <span class="kn">import</span> <span class="n">sample</span>
 
-<span class="c1"># To obtain reproducible results, we set a seed for the following section</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># Set a seed for reproducible results</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="c1"># Adjusting the input dimension of the equations</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-2">import random
 
+<span class="c1"># Initialization</span>
+<span class="n">sampled_equation</span> <span class="o">=</span> <span class="n">sample</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">sampled_equation</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-2"># Imports
+import numpy as np
 from equation_tree import sample
 
-# To obtain reproducible results, we set a seed for the following section
-import numpy as np
+# Set a seed for reproducible results
 np.random.seed(42)
-# Adjusting the input dimension of the equations</div>
+
+# Initialization
+sampled_equation = sample()[0]
+sampled_equation</div>
 </div>
 </div>
 </div>
@@ -1745,7 +1734,7 @@ np.random.seed(42)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Then, we can sample an equation:</p>
+<h3 id="from-sympystring">From Sympy/String<a class="anchor-link" href="#from-sympystring">¶</a></h3><p>We can also use <a href="https://www.sympy.org/en/index.html">sympy</a> representation to initialize an equation:</p>
 </div>
 </div>
 </div>
@@ -1768,9 +1757,21 @@ np.random.seed(42)
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equation</span> <span class="o">=</span> <span class="n">sample</span><span class="p">()</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Import</span>
+<span class="kn">from</span> <span class="nn">equation_tree</span> <span class="kn">import</span> <span class="n">EquationTree</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">sympify</span>
+
+<span class="n">sympy_equation</span> <span class="o">=</span> <span class="n">sympify</span><span class="p">(</span><span class="s1">'x_1 * 2 + x_2 ** 3'</span><span class="p">)</span>
+<span class="n">equation_from_sympy</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">sympy_equation</span><span class="p">)</span>
+<span class="n">equation_from_sympy</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">equation = sample()</div>
+<div class="clipboard-copy-txt" id="cell-3"># Import
+from equation_tree import EquationTree
+from sympy import sympify
+
+sympy_equation = sympify('x_1 * 2 + x_2 ** 3')
+equation_from_sympy = EquationTree.from_sympy(sympy_equation)
+equation_from_sympy</div>
 </div>
 </div>
 </div>
@@ -1783,7 +1784,7 @@ np.random.seed(42)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="equation-representations-and-features">Equation Representations And Features<a class="anchor-link" href="#equation-representations-and-features">¶</a></h3><p>First, lets look at the type of the equation</p>
+<h3 id="from-prefix">From Prefix<a class="anchor-link" href="#from-prefix">¶</a></h3><p>Or, we can use prefix notation to initialize an equation:</p>
 </div>
 </div>
 </div>
@@ -1806,9 +1807,11 @@ np.random.seed(42)
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">equation</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equation_from_prefix</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_prefix</span><span class="p">([</span><span class="s1">'+'</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">,</span> <span class="s1">'x_1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'**'</span><span class="p">,</span> <span class="s1">'x_2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">])</span>
+<span class="n">equation_from_prefix</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">type(equation)</div>
+<div class="clipboard-copy-txt" id="cell-4">equation_from_prefix = EquationTree.from_prefix(['+', '*', 'x_1', '2', '**', 'x_2', '3'])
+equation_from_prefix</div>
 </div>
 </div>
 </div>
@@ -1821,7 +1824,7 @@ np.random.seed(42)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It is a list! This is because we can sample multiple equations in one go:</p>
+<p>!!!Note: This is feature can be used to manipulate equations:</p>
 </div>
 </div>
 </div>
@@ -1844,9 +1847,39 @@ np.random.seed(42)
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Set a random seed for reproducible results</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Sample an initial equation</span>
+<span class="n">equation</span> <span class="o">=</span> <span class="n">sample</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'original:</span><span class="se">\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">equation</span><span class="p">)</span>
+
+<span class="c1"># Use sympy to multiply the equation with a scalar and reinitialize it</span>
+<span class="n">new_sympy_equation</span> <span class="o">=</span> <span class="n">equation</span><span class="o">.</span><span class="n">sympy_expr</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">equation_scaled</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">new_sympy_equation</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'scaled:</span><span class="se">\t\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">equation_scaled</span><span class="p">)</span>
+
+<span class="c1"># Use prefix notation to replace a function with another</span>
+<span class="n">new_prefix_notation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'sin'</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">'abs'</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">equation_scaled</span><span class="o">.</span><span class="n">prefix</span><span class="p">]</span>
+<span class="n">equation_replaced</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_prefix</span><span class="p">(</span><span class="n">new_prefix_notation</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'replaced:</span><span class="se">\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">equation_replaced</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5">equations = sample(n=100)</div>
+<div class="clipboard-copy-txt" id="cell-5"># Set a random seed for reproducible results
+np.random.seed(42)
+
+# Sample an initial equation
+equation = sample()[0]
+print('original:\t', equation)
+
+# Use sympy to multiply the equation with a scalar and reinitialize it
+new_sympy_equation = equation.sympy_expr * 3
+equation_scaled = EquationTree.from_sympy(new_sympy_equation)
+print('scaled:\t\t', equation_scaled)
+
+# Use prefix notation to replace a function with another
+new_prefix_notation = ['sin' if x == 'abs' else x for x in equation_scaled.prefix]
+equation_replaced = EquationTree.from_prefix(new_prefix_notation)
+print('replaced:\t', equation_replaced)</div>
 </div>
 </div>
 </div>
@@ -1859,7 +1892,8 @@ np.random.seed(42)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This returns 100 equations:</p>
+<h2 id="distance-metrics-between-equations">Distance Metrics Between Equations<a class="anchor-link" href="#distance-metrics-between-equations">¶</a></h2><p>For more indepth information about the distances used, please read the respective documentation</p>
+<h3 id="prediction-distance">Prediction Distance<a class="anchor-link" href="#prediction-distance">¶</a></h3><p>First, we calculate the prediction distance. It is the difference between the values of the equations on a specified input sample.</p>
 </div>
 </div>
 </div>
@@ -1882,13 +1916,45 @@ np.random.seed(42)
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equations</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">])</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Import</span>
+<span class="kn">from</span> <span class="nn">equation_tree.metrics</span> <span class="kn">import</span> <span class="n">prediction_distance</span>
+
+<span class="c1"># First, we define our equations</span>
+<span class="n">sympy_square</span> <span class="o">=</span> <span class="n">sympify</span><span class="p">(</span><span class="s1">'x_1 ** 2'</span><span class="p">)</span>
+<span class="n">equation_square</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">sympy_square</span><span class="p">)</span>
+
+<span class="n">sympy_cube</span> <span class="o">=</span> <span class="n">sympify</span><span class="p">(</span><span class="s1">'x_1 ** 3'</span><span class="p">)</span>
+<span class="n">equation_cube</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">sympy_cube</span><span class="p">)</span>
+
+<span class="c1"># For the prediction distance, we need to define a sample of input values on which the metric is evaluated:</span>
+<span class="n">sample_1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]}</span>
+<span class="n">sample_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)}</span>
+<span class="n">sample_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)}</span>
+
+<span class="c1"># Now, we can calculate the metrics:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'sample_1:</span><span class="se">\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">prediction_distance</span><span class="p">(</span><span class="n">equation_square</span><span class="p">,</span> <span class="n">equation_cube</span><span class="p">,</span> <span class="n">sample_1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'sample_2:</span><span class="se">\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">prediction_distance</span><span class="p">(</span><span class="n">equation_square</span><span class="p">,</span> <span class="n">equation_cube</span><span class="p">,</span> <span class="n">sample_2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'sample_3:</span><span class="se">\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">prediction_distance</span><span class="p">(</span><span class="n">equation_square</span><span class="p">,</span> <span class="n">equation_cube</span><span class="p">,</span> <span class="n">sample_3</span><span class="p">))</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6">print(len(equations))
-print(equations[0])
-print(equations[42])</div>
+<div class="clipboard-copy-txt" id="cell-6"># Import
+from equation_tree.metrics import prediction_distance
+
+# First, we define our equations
+sympy_square = sympify('x_1 ** 2')
+equation_square = EquationTree.from_sympy(sympy_square)
+
+sympy_cube = sympify('x_1 ** 3')
+equation_cube = EquationTree.from_sympy(sympy_cube)
+
+# For the prediction distance, we need to define a sample of input values on which the metric is evaluated:
+sample_1 = {'x_1': [0, 1, 2]}
+sample_2 = {'x_1': np.linspace(0,1)}
+sample_3 = {'x_1': np.linspace(-10, 10)}
+
+# Now, we can calculate the metrics:
+print('sample_1:\t', prediction_distance(equation_square, equation_cube, sample_1))
+print('sample_2:\t', prediction_distance(equation_square, equation_cube, sample_2))
+print('sample_3:\t', prediction_distance(equation_square, equation_cube, sample_3))</div>
 </div>
 </div>
 </div>
@@ -1901,7 +1967,7 @@ print(equations[42])</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>They are represented as strings, but we can look at other representations. For example, prefix notation (for more details on different representations of the equations, see the respective section of the documentation):</p>
+<h3 id="symbolic-solution">Symbolic Solution<a class="anchor-link" href="#symbolic-solution">¶</a></h3><p>Second, we calculate the symbolic solution metric. This metric checks weather equations differ from each other only through scalars or constants.</p>
 </div>
 </div>
 </div>
@@ -1924,9 +1990,51 @@ print(equations[42])</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Import</span>
+<span class="kn">from</span> <span class="nn">equation_tree.metrics</span> <span class="kn">import</span> <span class="n">symbolic_solution_quot</span><span class="p">,</span> <span class="n">symbolic_solution_diff</span>
+
+<span class="c1"># Since x ** 2 and x ** 3 differ not only through multiplying with a scalar or adding a constant, the following returns inf</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'diff|x_1 ** 2, x_1 ** 3| = </span><span class="si">{</span><span class="n">symbolic_solution_diff</span><span class="p">(</span><span class="n">equation_square</span><span class="p">,</span><span class="w"> </span><span class="n">equation_cube</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'quot|x_1 ** 2, x_1 ** 3| = </span><span class="si">{</span><span class="n">symbolic_solution_quot</span><span class="p">(</span><span class="n">equation_square</span><span class="p">,</span><span class="w"> </span><span class="n">equation_cube</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="n">equation_identity</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">sympify</span><span class="p">(</span><span class="s1">'x_1'</span><span class="p">))</span>
+<span class="n">equation_identity_shifted</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">sympify</span><span class="p">(</span><span class="s1">'x_1 + 3'</span><span class="p">))</span>
+<span class="n">equation_scaled</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">sympify</span><span class="p">(</span><span class="s1">'2 * x_1'</span><span class="p">))</span>
+
+<span class="c1"># Since x_1 + 3 is shifted x_1 with the value of three, the following returns 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'diff|x_1 + 3, x_1| = </span><span class="si">{</span><span class="n">symbolic_solution_diff</span><span class="p">(</span><span class="n">equation_identity_shifted</span><span class="p">,</span><span class="w"> </span><span class="n">equation_identity</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="c1"># This still returns inf:</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'quot|x_1 + 3, x_1| = </span><span class="si">{</span><span class="n">symbolic_solution_quot</span><span class="p">(</span><span class="n">equation_identity_shifted</span><span class="p">,</span><span class="w"> </span><span class="n">equation_identity</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># and vice vers for the scaled equations:</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'diff|x_1 * 2, x_1| = </span><span class="si">{</span><span class="n">symbolic_solution_diff</span><span class="p">(</span><span class="n">equation_scaled</span><span class="p">,</span><span class="w"> </span><span class="n">equation_identity</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'quot|x_1 * 2, x_1| = </span><span class="si">{</span><span class="n">symbolic_solution_quot</span><span class="p">(</span><span class="n">equation_scaled</span><span class="p">,</span><span class="w"> </span><span class="n">equation_identity</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7">equations[42].prefix</div>
+<div class="clipboard-copy-txt" id="cell-7"># Import
+from equation_tree.metrics import symbolic_solution_quot, symbolic_solution_diff
+
+# Since x ** 2 and x ** 3 differ not only through multiplying with a scalar or adding a constant, the following returns inf
+print(f'diff|x_1 ** 2, x_1 ** 3| = {symbolic_solution_diff(equation_square, equation_cube)}')
+print(f'quot|x_1 ** 2, x_1 ** 3| = {symbolic_solution_quot(equation_square, equation_cube)}')
+print()
+
+equation_identity = EquationTree.from_sympy(sympify('x_1'))
+equation_identity_shifted = EquationTree.from_sympy(sympify('x_1 + 3'))
+equation_scaled = EquationTree.from_sympy(sympify('2 * x_1'))
+
+# Since x_1 + 3 is shifted x_1 with the value of three, the following returns 3
+print(f'diff|x_1 + 3, x_1| = {symbolic_solution_diff(equation_identity_shifted, equation_identity)}')
+# This still returns inf:
+print(f'quot|x_1 + 3, x_1| = {symbolic_solution_quot(equation_identity_shifted, equation_identity)}')
+print()
+
+# and vice vers for the scaled equations:
+print(f'diff|x_1 * 2, x_1| = {symbolic_solution_diff(equation_scaled, equation_identity)}')
+print(f'quot|x_1 * 2, x_1| = {symbolic_solution_quot(equation_scaled, equation_identity)}')
+print()</div>
 </div>
 </div>
 </div>
@@ -1939,7 +2047,7 @@ print(equations[42])</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can also look at various features of the equation. For example, the number of constants, the tree depth of the underlying tree, the number of nodes or the tree structure (for more details on these features, see the respective section of the documentation):</p>
+<h3 id="normalized-edit-distance">Normalized Edit Distance<a class="anchor-link" href="#normalized-edit-distance">¶</a></h3><p>For a pair of two trees, edit distance computes the minimum cost to transform one to another with a sequence of operations, each of which either 1) inserts, 2) deletes, or 3) renames a node. It is normalized between 0 and 1 (For more details, see the respective documentation)</p>
 </div>
 </div>
 </div>
@@ -1962,566 +2070,23 @@ print(equations[42])</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">n_constants</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-8">print(equations[42].n_constants)
-print(equations[42].depth)
-print(equations[42].n_nodes)
-print(equations[42].structure)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="instantiate-equations">Instantiate Equations<a class="anchor-link" href="#instantiate-equations">¶</a></h3><p>Note, the constants in the sampled equation are abstract: symbols starting with c represent constants (c_1, c_2, ...). We can instantiate constants with numbers:</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-9">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># first we need to import the functionality</span>
-<span class="kn">from</span> <span class="nn">equation_tree</span> <span class="kn">import</span> <span class="n">instantiate_constants</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Import</span>
+<span class="kn">from</span> <span class="nn">src.equation_tree.metrics</span> <span class="kn">import</span> <span class="n">normalized_tree_distance</span>
 
-<span class="c1"># then we can use a function to instantiate the constants. For example for random constants between 0 and 1:</span>
-<span class="n">instantiated_equation</span> <span class="o">=</span> <span class="n">instantiate_constants</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">],</span> <span class="k">lambda</span> <span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'abstract: </span><span class="si">{</span><span class="n">equations</span><span class="p">[</span><span class="mi">42</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">', instantiated: </span><span class="si">{</span><span class="n">instantiated_equation</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="c1"># Here, we use the equations above to give examples:</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'ned|x_1 ** 2, x_1 ** 3| = </span><span class="si">{</span><span class="n">normalized_tree_distance</span><span class="p">(</span><span class="n">equation_square</span><span class="p">,</span><span class="w"> </span><span class="n">equation_cube</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'ned|x_1 + 3, x_1| = </span><span class="si">{</span><span class="n">normalized_tree_distance</span><span class="p">(</span><span class="n">equation_identity_shifted</span><span class="p">,</span><span class="w"> </span><span class="n">equation_identity</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'ned|x_1 * 2, x_1| = </span><span class="si">{</span><span class="n">normalized_tree_distance</span><span class="p">(</span><span class="n">equation_scaled</span><span class="p">,</span><span class="w"> </span><span class="n">equation_identity</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-9"># first we need to import the functionality
-from equation_tree import instantiate_constants
-import random
+<div class="clipboard-copy-txt" id="cell-8"># Import
+from src.equation_tree.metrics import normalized_tree_distance
 
-# then we can use a function to instantiate the constants. For example for random constants between 0 and 1:
-instantiated_equation = instantiate_constants(equations[42], lambda : random.random())
-print(f'abstract: {equations[42]}', f', instantiated: {instantiated_equation}')</div>
+# Here, we use the equations above to give examples:
+print(f'ned|x_1 ** 2, x_1 ** 3| = {normalized_tree_distance(equation_square, equation_cube)}')
+print(f'ned|x_1 + 3, x_1| = {normalized_tree_distance(equation_identity_shifted, equation_identity)}')
+print(f'ned|x_1 * 2, x_1| = {normalized_tree_distance(equation_scaled, equation_identity)}')</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-10">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># we can also use other functions (for example all functions to be a constant</span>
-<span class="n">instantiated_equation_</span> <span class="o">=</span> <span class="n">instantiate_constants</span><span class="p">(</span><span class="n">equations</span><span class="p">[</span><span class="mi">41</span><span class="p">],</span> <span class="k">lambda</span> <span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'abstract: </span><span class="si">{</span><span class="n">equations</span><span class="p">[</span><span class="mi">41</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">', instantiated: </span><span class="si">{</span><span class="n">instantiated_equation_</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-10"># we can also use other functions (for example all functions to be a constant
-instantiated_equation_ = instantiate_constants(equations[41], lambda : 1)
-print(f'abstract: {equations[41]}', f', instantiated: {instantiated_equation_}')</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>Note, we can use arbitrary functions to instantiate the constants.</em></p>
-<h3 id="evaluating-equations">Evaluating Equations<a class="anchor-link" href="#evaluating-equations">¶</a></h3><p>After instantiating equations, we can evaluate them on arbitrary input:</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-11">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># import functionality</span>
-<span class="n">values</span> <span class="o">=</span> <span class="n">instantiated_equation</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
-<span class="n">values</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-11"># import functionality
-values = instantiated_equation.evaluate({'x_1': [1, 2, 3, 4]})
-values</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-12">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># We can also use pandas dataframes as inputs:</span>
-
-<span class="c1"># import functionality</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="c1"># define the input and get the values</span>
-<span class="n">input_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'x_1'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
-<span class="n">instantiated_equation</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">input_df</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-12"># We can also use pandas dataframes as inputs:
-
-# import functionality
-import pandas as pd
-
-# define the input and get the values
-input_df = pd.DataFrame({'x_1': [1, 2, 3, 4]})
-instantiated_equation.evaluate(input_df)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="sample-settings">Sample Settings<a class="anchor-link" href="#sample-settings">¶</a></h2><p>When sampling equations, we can control for a variety of features of the underlying distribution.</p>
-<h3 id="input-dimensions">Input Dimensions<a class="anchor-link" href="#input-dimensions">¶</a></h3><p>We can manipulate the space on witch the equations are defined. For example, if we want equations that are defined on 2-dimensions, we can write:</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-13">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_2d</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-13">equations_2d = sample(n=5, max_num_variables=2)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-14">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_2d</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-14">equations_2d</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>Note, not all the equations have exactly two input variable. Some of them have only one. This is since equations with one input variable are still defined on two (or more) dimensions.</em></p>
-<h3 id="equation-complexity">Equation Complexity<a class="anchor-link" href="#equation-complexity">¶</a></h3><p>We can also manipulate the equation complexity (for example, as tree depth):</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-15">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_simple</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">equations_complex</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-15">equations_simple = sample(n=5, depth=3)
-equations_complex = sample(n=5, depth=8)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-16">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'*** simple equations ***</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">equations_simple</span><span class="p">,</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'*** complex equations ***</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">equations_complex</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-16">print('*** simple equations ***\n', equations_simple, '\n')
-print('*** complex equations ***\n', equations_complex)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Instead of an exact depth, we can also sample all equations up to a specified depth:</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-17">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">equations_simple</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">equations_complex</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-17">equations_simple = sample(n=5, max_depth=3)
-equations_complex = sample(n=5, max_depth=8)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-18">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'*** simple equations ***</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">equations_simple</span><span class="p">,</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'*** complex equations ***</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">equations_complex</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-18">print('*** simple equations ***\n', equations_simple, '\n')
-print('*** complex equations ***\n', equations_complex)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="using-priors">Using Priors<a class="anchor-link" href="#using-priors">¶</a></h3><p>We can also make use of priors to fully customize the sampling. Here, the entries for the structures, features, functions and operators represent the probability of the respective attribute being sampled.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-19">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'structures'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'[0, 1, 1]'</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">'[0, 1, 2]'</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">'[0, 1, 2, 3, 2, 3, 1]'</span><span class="p">:</span> <span class="mf">.4</span><span class="p">},</span>
-    <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'constants'</span><span class="p">:</span> <span class="mf">.2</span><span class="p">,</span> <span class="s1">'variables'</span><span class="p">:</span> <span class="mf">.8</span><span class="p">},</span>
-    <span class="s1">'functions'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'sin'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">'cos'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
-    <span class="s1">'operators'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'+'</span><span class="p">:</span> <span class="mf">.8</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">:</span> <span class="mf">.2</span><span class="p">}</span>
-<span class="p">}</span>
-<span class="n">equations_with_prior</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">equations_with_prior</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-19">p = {
-    'structures': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
-    'features': {'constants': .2, 'variables': .8},
-    'functions': {'sin': .5, 'cos': .5},
-    'operators': {'+': .8, '-': .2}
-}
-equations_with_prior = sample(n=10, prior=p, max_num_variables=10)
-equations_with_prior</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This functionality extends to the use of conditional priors conditioned on the respective parent node. For example, we can manipulate the probability of specific features, functions and operators inside a sin function (Here, if a feature is the child of the sin function it will always be a variable, if a function is the child of a sin function it will always be cos, and if an operator is the child of a sin function, it will have a 1:1 chance of being + or -).</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy for="cell-20">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">p_</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'structures'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'[0, 1, 1]'</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">'[0, 1, 2]'</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">'[0, 1, 2, 3, 2, 3, 1]'</span><span class="p">:</span> <span class="mf">.4</span><span class="p">},</span>
-    <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'constants'</span><span class="p">:</span> <span class="mf">.2</span><span class="p">,</span> <span class="s1">'variables'</span><span class="p">:</span> <span class="mf">.8</span><span class="p">},</span>
-    <span class="s1">'functions'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'sin'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">'cos'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
-    <span class="s1">'operators'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'+'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
-    <span class="s1">'function_conditionals'</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">'sin'</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'constants'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">'variables'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">},</span>
-            <span class="s1">'functions'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'sin'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">'cos'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">},</span>
-            <span class="s1">'operators'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'+'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s1">'cos'</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'constants'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">'variables'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">},</span>
-            <span class="s1">'functions'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'cos'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">'sin'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">},</span>
-            <span class="s1">'operators'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'+'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="s1">'operator_conditionals'</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">'+'</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'constants'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">'variables'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
-            <span class="s1">'functions'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'sin'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">'cos'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">},</span>
-            <span class="s1">'operators'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'+'</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s1">'-'</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'constants'</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">'variables'</span><span class="p">:</span> <span class="mf">.7</span><span class="p">},</span>
-            <span class="s1">'functions'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'cos'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">'sin'</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
-            <span class="s1">'operators'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'+'</span><span class="p">:</span> <span class="mf">.9</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">:</span> <span class="mf">.1</span><span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-<span class="p">}</span>
-<span class="n">equations_with_conditional_prior</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="n">p_</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">equations_with_conditional_prior</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-20">p_ = {
-    'structures': {'[0, 1, 1]': .3, '[0, 1, 2]': .3, '[0, 1, 2, 3, 2, 3, 1]': .4},
-    'features': {'constants': .2, 'variables': .8},
-    'functions': {'sin': .5, 'cos': .5},
-    'operators': {'+': .5, '-': .5},
-    'function_conditionals': {
-        'sin': {
-            'features': {'constants': 0., 'variables': 1.},
-            'functions': {'sin': 0., 'cos': 1.},
-            'operators': {'+': .5, '-': .5}
-        },
-        'cos': {
-            'features': {'constants': 0., 'variables': 1.},
-            'functions': {'cos': 1., 'sin': 0.},
-            'operators': {'+': 0., '-': 1.}
-        }
-    },
-    'operator_conditionals': {
-        '+': {
-            'features': {'constants': .5, 'variables': .5},
-            'functions': {'sin': 1., 'cos': 0.},
-            'operators': {'+': 1., '-': 0.}
-        },
-        '-': {
-            'features': {'constants': .3, 'variables': .7},
-            'functions': {'cos': .5, 'sin': .5},
-            'operators': {'+': .9, '-': .1}
-        }
-    },
-}
-equations_with_conditional_prior = sample(n=10, prior=p_, max_num_variables=10)
-equations_with_conditional_prior</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>WARNING</strong>
-If your application is dependent on these priors, you should "burn" samples before starting the sampling.
-During the sampling process, equations get simplified and invalid equations are discarded. This is likely to lead to disparities between the priors and the sampled frequencies.
-To counteract this, the package offers the functionality to "burn" samples and adjust the priors so that the outcome frequency match them more closely. To burn samples, use the following code (We don't run it in the notebook since the adjusted priors are saved to disk for future use):</p>
-<pre><code>burn(
-    prior,
-    max_number_variables,
-    path_to_file,
-    number_of_burned_samples,
-    learning_rate
-    )
-</code></pre>
-<p>*this function should be run multiple times. The learning rate defines how much adjusted from previous runs are adjusted.
-After burning, you can load the adjusted priors via:</p>
-<pre><code>    sample(..., file=path_to_file)
-</code></pre>
-<p>*multiple adjusted priors can be stored in the same file.</p>
 </div>
 </div>
 </div>

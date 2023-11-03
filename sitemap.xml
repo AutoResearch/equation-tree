@@ -31,6 +31,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autoresearch.github.io/equation-tree/reference/src/equation_tree/metrics/</loc>
+         <lastmod>2023-11-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autoresearch.github.io/equation-tree/reference/src/equation_tree/prior/</loc>
          <lastmod>2023-11-03</lastmod>
          <changefreq>daily</changefreq>
@@ -87,6 +92,11 @@
     </url>
     <url>
          <loc>https://autoresearch.github.io/equation-tree/tutorials/Basic%20Usage/</loc>
+         <lastmod>2023-11-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://autoresearch.github.io/equation-tree/tutorials/Distance%20Metrics/</loc>
          <lastmod>2023-11-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
