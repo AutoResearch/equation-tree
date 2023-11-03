@@ -29,6 +29,8 @@ from equation_tree.util.conversions import (
 )
 from equation_tree.util.type_check import check_functions, is_known_constant, is_numeric
 
+from equation_tree import defaults
+
 UnaryOperator = Callable[[Union[int, float]], Union[int, float]]
 BinaryOperator = Callable[[Union[int, float], Union[int, float]], Union[int, float]]
 
@@ -37,8 +39,8 @@ OPERATORS: Dict[str, BinaryOperator] = {
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
     "/": lambda a, b: a / b,
-    "^": lambda a, b: a**b,
-    "**": lambda a, b: a**b,
+    "^": lambda a, b: a ** b,
+    "**": lambda a, b: a ** b,
     "max": lambda a, b: np.max([a, b]),
     "min": lambda a, b: np.min([a, b]),
 }
@@ -57,8 +59,8 @@ FUNCTIONS: Dict[str, UnaryOperator] = {
     "sinh": lambda a: np.sinh(a),
     "cosh": lambda a: np.cosh(a),
     "tanh": lambda a: np.tanh(a),
-    "cubed": lambda a: a**3,
-    "squared": lambda a: a**2,
+    "cubed": lambda a: a ** 3,
+    "squared": lambda a: a ** 2,
 }
 
 SIMPLIFY_TIMEOUT = 10
@@ -191,12 +193,12 @@ class EquationTree:
 
     @classmethod
     def from_prefix(
-        cls,
-        prefix_notation: List[str],
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+            cls,
+            prefix_notation: List[str],
+            function_test: Callable = defaults.is_function,
+            operator_test: Callable = defaults.is_operator,
+            variable_test: Callable = defaults.is_variable,
+            constant_test: Callable = defaults.is_constant
     ):
         """
         Instantiate a tree from prefix notation
@@ -353,15 +355,13 @@ class EquationTree:
         root = sample_tree_full(prior, max_variables_unique)
         return cls(root)
 
-
-
     @classmethod
     def from_priors(
-        cls,
-        feature_priors={},
-        function_priors={},
-        operator_priors={},
-        structure_priors={},
+            cls,
+            feature_priors={},
+            function_priors={},
+            operator_priors={},
+            structure_priors={},
     ):
         """
         Instantiate a tree from priors
@@ -419,12 +419,12 @@ class EquationTree:
 
     @classmethod
     def from_sympy(
-        cls,
-        expression,
-        function_test: Callable = lambda _: False,
-        operator_test: Callable = lambda _: False,
-        variable_test: Callable = lambda _: False,
-        constant_test: Callable = lambda _: False,
+            cls,
+            expression,
+            function_test: Callable = defaults.is_function,
+            operator_test: Callable = defaults.is_operator,
+            variable_test: Callable = defaults.is_variable,
+            constant_test: Callable = defaults.is_constant
     ):
         """
         Instantiate a tree from a sympy function
@@ -488,25 +488,27 @@ class EquationTree:
             >>> equation_tree.expr
             ['min', 'x_1', 'x_2']
 
-            >>> expr = sympify('x_1**2')
+            >>> expr = sympify('x_1**2 + x_2')
             >>> expr
-            x_1**2
+            x_1**2 + x_2
             >>> is_operator = lambda x : x in ['*', '/', '**', '+']
-            >>> is_variable = lambda x : x in ['x_1']
-            >>> is_function = lambda x : x in ['squared']
+            >>> is_variable = lambda x : x in ['x_1', 'x_2']
+            >>> is_function = lambda x : x in ['sin']
             >>> equation_tree = EquationTree.from_sympy(
             ...     expr,
             ...     operator_test=is_operator,
             ...     variable_test=is_variable,
             ...     function_test=is_function
             ... )
-            >>> equation_tree.expr
-            ['squared', 'x_1']
+            >>> equation_tree.sympy_expr
+            x_1**2 + x_2
+
 
         """
         standard = standardize_sympy(expression, variable_test, constant_test)
         standard = unary_minus_to_binary(standard, operator_test)
-        standard = op_const_to_func(standard)
+        if function_test('squared') and function_test('cubed'):
+            standard = op_const_to_func(standard)
         prefix = infix_to_prefix(str(standard), function_test, operator_test)
         root = node_from_prefix(
             prefix,
@@ -594,7 +596,7 @@ class EquationTree:
             symbol_names = [str(symbol) for symbol in sympy_expr.free_symbols]
             real_symbols = symbols(" ".join(symbol_names), real=True)
             if not isinstance(real_symbols, list) and not isinstance(
-                real_symbols, tuple
+                    real_symbols, tuple
             ):
                 real_symbols = [real_symbols]
             subs_dict = {old: new for old, new in zip(symbol_names, real_symbols)}
@@ -782,14 +784,14 @@ class EquationTree:
         return np.array(res)
 
     def save_samples(
-        self,
-        path,
-        num_samples,
-        ranges: Optional[Dict] = None,
-        default_range: float = 10,
-        dv_name: str = "y",
-        random_state: Optional[int] = None,
-        compression: str = "gzip",
+            self,
+            path,
+            num_samples,
+            ranges: Optional[Dict] = None,
+            default_range: float = 10,
+            dv_name: str = "y",
+            random_state: Optional[int] = None,
+            compression: str = "gzip",
     ):
         """
         Creates a file with samples of ivs and dvs
@@ -839,12 +841,12 @@ class EquationTree:
         conditions_.to_csv(path, compression=compression, index=False, sep="\t")
 
     def save_samples_srbench(
-        self,
-        path,
-        num_samples,
-        ranges: Optional[Dict] = None,
-        default_range: float = 10,
-        random_state: Optional[int] = None,
+            self,
+            path,
+            num_samples,
+            ranges: Optional[Dict] = None,
+            default_range: float = 10,
+            random_state: Optional[int] = None,
     ):
         self.save_samples(
             path, num_samples, ranges, default_range, "target", random_state
@@ -875,14 +877,14 @@ class EquationTree:
             yaml.dump(info, f, sort_keys=False)
 
     def export_to_srbench(
-        self,
-        folder: str,
-        data_file_name: Optional[str] = None,
-        num_samples: int = 1000,
-        name_target: str = "y",
-        ranges: Optional[Dict] = None,
-        default_range: float = 10,
-        random_state: Optional[int] = None,
+            self,
+            folder: str,
+            data_file_name: Optional[str] = None,
+            num_samples: int = 1000,
+            name_target: str = "y",
+            ranges: Optional[Dict] = None,
+            default_range: float = 10,
+            random_state: Optional[int] = None,
     ):
         """
         Creates a folder and adds data and metadata to the folder that can be used with sr bench:
@@ -908,11 +910,11 @@ class EquationTree:
         self.save_meta_srbench(path_meta, "data", name_target)
 
     def check_validity(
-        self,
-        zero_representations=["0"],
-        log_representations=["log", "Log"],
-        division_representations=["/", ":"],
-        verbose=False,
+            self,
+            zero_representations=["0"],
+            log_representations=["log", "Log"],
+            division_representations=["/", ":"],
+            verbose=False,
     ):
         """
         Check if the tree is valid:
@@ -977,11 +979,11 @@ class EquationTree:
         src.render(out, view=False)
 
     def check_possible(
-        self,
-        feature_priors: Dict,
-        function_priors: Dict,
-        operator_priors: Dict,
-        structure_priors: Dict,
+            self,
+            feature_priors: Dict,
+            function_priors: Dict,
+            operator_priors: Dict,
+            structure_priors: Dict,
     ):
         """
         Check weather a tree is a possible tree given the priors
@@ -1005,8 +1007,8 @@ class EquationTree:
                     return False
         if structure_priors != {}:
             if (
-                str(self.structure) not in structure_priors.keys()
-                or structure_priors[str(self.structure)] <= 0
+                    str(self.structure) not in structure_priors.keys()
+                    or structure_priors[str(self.structure)] <= 0
             ):
                 return False
         return True
@@ -1028,23 +1030,23 @@ class EquationTree:
         )
         if structure_priors:
             if (
-                str(self.structure) not in structure_priors.keys()
-                or structure_priors[str(self.structure)] <= 0
+                    str(self.structure) not in structure_priors.keys()
+                    or structure_priors[str(self.structure)] <= 0
             ):
                 return False
         if feature_priors:
             if (
-                self.n_variables > 0
-                and (
-                    "variables" not in feature_priors.keys()
-                    or feature_priors["variables"] <= 0
-                )
+                    self.n_variables > 0
+                    and (
+                            "variables" not in feature_priors.keys()
+                            or feature_priors["variables"] <= 0
+                    )
             ) or (
-                self.n_constants > 0
-                and (
-                    "constants" not in feature_priors.keys()
-                    or feature_priors["constants"] <= 0
-                )
+                    self.n_constants > 0
+                    and (
+                            "constants" not in feature_priors.keys()
+                            or feature_priors["constants"] <= 0
+                    )
             ):
                 return False
         if function_priors:
@@ -1067,45 +1069,45 @@ class EquationTree:
             node = child.parent
             _prior = {}
             if (
-                node.kind == NodeKind.FUNCTION
-                and node.attribute in function_conditionals.keys()
+                    node.kind == NodeKind.FUNCTION
+                    and node.attribute in function_conditionals.keys()
             ):
                 _prior = function_conditionals[node.attribute]
             elif (
-                node.kind == NodeKind.OPERATOR
-                and node.attribute in operator_conditionals.keys()
+                    node.kind == NodeKind.OPERATOR
+                    and node.attribute in operator_conditionals.keys()
             ):
                 _prior = operator_conditionals[node.attribute]
             if child.kind == NodeKind.FUNCTION:
                 _p = _prior[node.attribute]["functions"]
                 if (
-                    _p != {}
-                    and node.attribute not in _p.keys()
-                    or _p[node.attribute] <= 0
+                        _p != {}
+                        and node.attribute not in _p.keys()
+                        or _p[node.attribute] <= 0
                 ):
                     test_lst.append(False)
             elif child.kind == NodeKind.OPERATOR:
                 _p = _prior[node.attribute]["operators"]
                 if (
-                    _p != {}
-                    and node.attribute not in _p.keys()
-                    or _p[node.attribute] <= 0
+                        _p != {}
+                        and node.attribute not in _p.keys()
+                        or _p[node.attribute] <= 0
                 ):
                     test_lst.append(False)
             else:
                 _p = _prior["features"] if "features" in _prior else {}
                 if child.kind == NodeKind.VARIABLE:
                     if (
-                        _p != {}
-                        and "variables" not in _p.keys()
-                        or _p["variables"] <= 0
+                            _p != {}
+                            and "variables" not in _p.keys()
+                            or _p["variables"] <= 0
                     ):
                         test_lst.append(False)
                 if child.kind == NodeKind.CONSTANT:
                     if (
-                        _p != {}
-                        and "constants" not in _p.keys()
-                        or _p["constants"] <= 0
+                            _p != {}
+                            and "constants" not in _p.keys()
+                            or _p["constants"] <= 0
                     ):
                         test_lst.append(False)
             for c in child.children:
@@ -1173,12 +1175,12 @@ class EquationTree:
         self._build()
 
     def simplify(
-        self,
-        function_test: Union[Callable, None] = None,
-        operator_test: Union[Callable, None] = None,
-        is_binary_minus_only: bool = True,
-        is_power_caret: bool = True,
-        verbose: bool = False,
+            self,
+            function_test: Union[Callable, None] = None,
+            operator_test: Union[Callable, None] = None,
+            is_binary_minus_only: bool = True,
+            is_power_caret: bool = False,
+            verbose: bool = False,
     ):
         """
         Simplify equation if the simplified equation has a shorter prefix
@@ -1196,7 +1198,7 @@ class EquationTree:
         Examples:
             >>> is_variable = lambda x: 'x_' in x
             >>> is_constant = lambda x: 'c_' in x or is_numeric(x) or is_known_constant(x)
-            >>> is_operator = lambda x: x in ['+', '*', '/', '^', '-']
+            >>> is_operator = lambda x: x in ['+', '*', '/', '**', '-']
             >>> is_function = lambda x: x.lower() in ['sqrt', 'abs']
             >>> prefix_notation = ['+', 'x_1', 'x_1' ]
             >>> equation_tree = EquationTree.from_prefix(
@@ -1255,7 +1257,7 @@ class EquationTree:
             (-c_1 + x_1)**2
 
             # >>> equation_tree.expr
-            # ['^', '-', 'x_1', 'c_1', '2']
+            # ['**', '-', 'x_1', 'c_1', '2']
         """
 
         if function_test is None:
@@ -1301,8 +1303,8 @@ class EquationTree:
             self._build()
             return
         if (
-            "I" in str(simplified_equation)
-            or "accumbounds" in str(simplified_equation).lower()
+                "I" in str(simplified_equation)
+                or "accumbounds" in str(simplified_equation).lower()
         ):
             if verbose:
                 print(f"Simplify {str(self.sympy_expr)} results in complex values")
@@ -1311,6 +1313,8 @@ class EquationTree:
             return
         if is_power_caret:
             simplified_equation = str(simplified_equation).replace("**", "^")
+        else:
+            simplified_equation = str(simplified_equation)
         simplified_equation = simplified_equation.replace("re", "")
         if is_binary_minus_only:
             simplified_equation = unary_minus_to_binary(
@@ -1342,7 +1346,7 @@ class EquationTree:
         self._build()
 
     def get_evaluation(
-        self, min_val: int = -1, max_val: int = 1, num_samples: int = 100
+            self, min_val: int = -1, max_val: int = 1, num_samples: int = 100
     ):
         """
         Evaluate the nodes with random samples for variables and constants.
@@ -1425,7 +1429,7 @@ class EquationTree:
         return values
 
     def _create_crossing(
-        self, min_val: float = -1, max_val: float = 1, num_samples: int = 100
+            self, min_val: float = -1, max_val: float = 1, num_samples: int = 100
     ):
         crossings = []
 
@@ -1485,7 +1489,7 @@ class EquationTree:
         self._collect_expr(expression, node.right)
 
     def _collect_attributes(
-        self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
+            self, attribute_identifier: Callable = lambda _: True, attributes=[], node=None
     ):
         if node is None:
             return list()
@@ -1579,9 +1583,9 @@ def instantiate_constants(tree, fct: Callable):
 
     def _rec_apply(node):
         if (
-            node.kind == NodeKind.CONSTANT
-            and not is_known_constant(node.attribute)
-            and not is_numeric(node.attribute)
+                node.kind == NodeKind.CONSTANT
+                and not is_known_constant(node.attribute)
+                and not is_numeric(node.attribute)
         ):
             node.attribute = str(fct())
         for c in node.children:
@@ -1604,7 +1608,7 @@ def normalized_tree_distance(e_a: EquationTree, e_b: EquationTree):
 
 
 def prediction_distance(
-    e_a: EquationTree, e_b: EquationTree, X: Union[dict, pd.DataFrame]
+        e_a: EquationTree, e_b: EquationTree, X: Union[dict, pd.DataFrame]
 ):
     """
     Mean squared difference between the prediction of two equations on X

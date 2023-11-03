@@ -1,4 +1,4 @@
-site_name: AutoRA Equation Tree
+site_name: Equation Tree
 repo_url: 'https://github.com/AutoResearch/equation-tree'
 
 site_url: 'https://autoresearch.github.io/equation-tree/'
@@ -14,10 +14,13 @@ nav:
   - Introduction: 'index.md'
   - Quickstart: 'quickstart.md'
   - User Guide:
-      - Sampling: 'user-guide/sampling.md'
       - Equation Formats: 'user-guide/equation-formats.md'
+      - Equation Sampling: 'user-guide/equation-sampling.md'
+      - Distance Metrics: 'user-guide/distance-metrics.md'
+      - Additional Features: 'user-guide/additional-features.md'
   - Tutorials:
-      - Basic Usage: Basic Usage.ipynb
+      - Basic Usage: 'tutorials/Basic Usage.ipynb'
+      - Distance Metrics: 'tutorials/Distance Metrics.ipynb'
   - Code Reference: reference/
 
 theme:

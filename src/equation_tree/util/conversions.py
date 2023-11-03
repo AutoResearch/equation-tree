@@ -2,7 +2,7 @@ import re
 
 from sympy import symbols
 
-from equation_tree.util.type_check import is_numeric
+from equation_tree.util.type_check import is_numeric, is_variable_formatted, is_constant_formatted
 
 SYMPY_TO_ARITHMETIC = {
     "Add": "+",
@@ -174,7 +174,11 @@ def standardize_sympy(
     def replace_symbols(node):
         nonlocal variable_count, constant_count, variables, constants
         if variable_test(str(node)):
-            if not str(node) in variables.keys():
+            if is_variable_formatted(str(node)):
+                new_symbol = symbols(str(node))
+                variables[str(node)] = new_symbol
+                return new_symbol
+            if not str(node) in variables.keys() or str(node):
                 variable_count += 1
                 new_symbol = symbols(f"x_{variable_count}")
                 variables[str(node)] = new_symbol
@@ -182,6 +186,10 @@ def standardize_sympy(
                 new_symbol = variables[str(node)]
             return new_symbol
         elif constant_test(str(node)) and not is_numeric(str(node)):
+            if is_constant_formatted(str(node)):
+                new_symbol = symbols(str(node))
+                constants[str(node)] = new_symbol
+                return new_symbol
             if not str(node) in constants.keys():
                 constant_count += 1
                 new_symbol = symbols(f"c_{constant_count}")
@@ -207,6 +215,7 @@ def unary_minus_to_binary(expr, operator_test):
 
     Examples:
         >>> o = lambda x: x in ['+', '-', '*', '/', '^']
+        >>> o_ = lambda x : x in ['+', '-', '*', '/', '**']
         >>> unary_minus_to_binary('-x_1+x_2', o)
         'x_2-x_1'
 
@@ -233,6 +242,9 @@ def unary_minus_to_binary(expr, operator_test):
 
         >>> unary_minus_to_binary('-(c_1 - x_2)*(x_1 + x_2)', o)
         '(0-(c_1-x_2))*(x_1+x_2)'
+
+        >>> unary_minus_to_binary('x_1**2 + x_2', o_)
+        'x_1**2+x_2'
 
     """
     _temp = _find_unary("-", str(expr), operator_test)
