@@ -37,7 +37,7 @@ For benchmarking or training, the Equation Tree package features a list of dista
 
 For reference and informations about the evaluation of our package, read our Neuroips 2023 paper:
 
-Marinescu*, I., Strittmatter*, Y, Williams, C, Musslick, S. "Expression Sampler as a Dynamic Benchmark for Symbolic Regression." In *NeurIPS 2023 AI for Science Workshop*. (2023), [Read the publication](https://openreview.net/forum?id=i3PecpoiPG). [*equal contribution]
+Marinescu\*, I., Strittmatter\*, Y, Williams, C, Musslick, S. "Expression Sampler as a Dynamic Benchmark for Symbolic Regression." In *NeurIPS 2023 AI for Science Workshop*. (2023), [Read the publication](https://openreview.net/forum?id=i3PecpoiPG). [*equal contribution]
 
 
 
