@@ -1,2 +1,0 @@
-# Sampling Method
-coming soon

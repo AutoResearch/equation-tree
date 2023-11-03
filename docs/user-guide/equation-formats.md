@@ -1,16 +1,19 @@
 # Equation Formats
-Equations can be represented in multiple formats. Depending on the use case, some of these formats might be more useful than others. While the underlying format of the Equation Tree is a incomplete binary tree, it supports multiple formats as initialisation and output.
+
+While the underlying format of the Equation Tree is an incomplete binary tree, it supports multiple formats as initialisation and output. Depending on the use case, some of these formats might be more useful than others. 
+
+- [Tree Representation](#tree-representation)
+- [String Representation](#string-representation)
+- [Prefix Notation](#prefix-notation)
 
 ## Tree Representation
-### Tree Structure 
-coming soon
-
+coming soon ...
 
 ## String Representation
-coming soon
+coming soon ...
 
 ## Prefix Notation
-coming soon
+coming soon ...
 
 
 
