@@ -8,7 +8,7 @@ regression algorithms or training models. The most notable features are:
 - Feature Extraction from equation distributions
 - Distance metrics between equations
 
-![Equation Tree](img/main.gif)
+![Equation Tree](img/equation-sampler.gif)
 
 ## Equation Sampling
 
