@@ -17,7 +17,7 @@ nav:
       - Sampling: 'user-guide/sampling.md'
       - Equation Formats: 'user-guide/equation-formats.md'
   - Tutorials:
-      - Equation Sampling: Equation Sampling.ipynb
+      - Basic Usage: Basic Usage.ipynb
   - Code Reference: reference/
 
 theme:
