@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://autoresearch.github.io/equation-tree/user-guide/sampling/">
+        <link rel="canonical" href="https://autoresearch.github.io/equation-tree/user-guide/equation-sampling/">
       
       
-        <link rel="prev" href="../../quickstart/">
+        <link rel="prev" href="../equation-formats/">
       
       
-        <link rel="next" href="../equation-formats/">
+        <link rel="next" href="../distance-metrics/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Sampling - AutoRA Equation Tree</title>
+        <title>Equation Sampling - AutoRA Equation Tree</title>
       
     
     
@@ -79,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sampling-method" class="md-skip">
+        <a href="#equation-sampling" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sampling
+              Equation Sampling
             
           </span>
         </div>
@@ -326,6 +326,26 @@
                 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../equation-formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Equation Formats
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -337,15 +357,59 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Equation Sampling
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Sampling
+    Equation Sampling
   </span>
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sampling-features" class="md-nav__link">
+    Sampling Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method" class="md-nav__link">
+    Method
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -358,11 +422,31 @@
   
   
     <li class="md-nav__item">
-      <a href="../equation-formats/" class="md-nav__link">
+      <a href="../distance-metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Equation Formats
+    Distance Metrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../additional-features/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional Features
   </span>
   
 
@@ -421,7 +505,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Basic%20Usage/" class="md-nav__link">
+      <a href="../../tutorials/Basic%20Usage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -933,6 +1017,28 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sampling-features" class="md-nav__link">
+    Sampling Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method" class="md-nav__link">
+    Method
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -951,8 +1057,17 @@
   
 
 
-<h1 id="sampling-method">Sampling Method</h1>
-<p>coming soon</p>
+<h1 id="equation-sampling">Equation Sampling</h1>
+<p><img alt="Equation Tree" src="../../img/equation-sampler.gif" /></p>
+<h2 id="sampling-features">Sampling Features</h2>
+<p>The sampling of equations allows for dynamic benchmarking of symbolic regression algorithms. It also allows generating a large training dataset for deep learning symbolic regression.</p>
+<p>Various features of the underlying equation distribution can be customized. For example, to mimic the distribution in specific scientific fields. This customization is implemented twofold:
+- We can adjust equation <strong>complexity</strong>, dimension of the domain, and other attributes.
+- We can use <strong>prior frequency information</strong> about the occurrence of specific operators (like +, -, and *) and functions (like sine, cosine, and logarithm).</p>
+<h2 id="method">Method</h2>
+<p>In our sampling method, we distinct equation structure and equation content and sample both separately:
+- First, in the <em>(1) Structure Sampling</em> step, we sample the structure of the underlying tree. Here, complexity is adjusted, and we can use prior information about structures.
+- Second, in the <em>(2) Attribute Sampling</em> step, we sample the content of each tree node individually. Here, we can use prior information about the occurrence probabilities of specific operators and frequencies. This information can be conditioned on the parent nodes. For example, we can use prior information about the likelihood of + appearing in a sine function.</p>
 
 
 
