@@ -407,6 +407,74 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-to-use-the-sampler" class="md-nav__link">
+    How To Use The Sampler
+  </a>
+  
+    <nav class="md-nav" aria-label="How To Use The Sampler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#possible-attributes" class="md-nav__link">
+    Possible Attributes
+  </a>
+  
+    <nav class="md-nav" aria-label="Possible Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structures" class="md-nav__link">
+    Structures
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    Features
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    Operators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditionals" class="md-nav__link">
+    Conditionals
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convenience" class="md-nav__link">
+    Convenience
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1077,6 +1145,74 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-to-use-the-sampler" class="md-nav__link">
+    How To Use The Sampler
+  </a>
+  
+    <nav class="md-nav" aria-label="How To Use The Sampler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#possible-attributes" class="md-nav__link">
+    Possible Attributes
+  </a>
+  
+    <nav class="md-nav" aria-label="Possible Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structures" class="md-nav__link">
+    Structures
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    Features
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    Operators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditionals" class="md-nav__link">
+    Conditionals
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convenience" class="md-nav__link">
+    Convenience
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1108,6 +1244,113 @@
 <p>In our sampling method, we distinct equation structure and equation content and sample both separately:
 - First, in the <em>(1) Structure Sampling</em> step, we sample the structure of the underlying tree. Here, complexity is adjusted, and we can use prior information about structures.
 - Second, in the <em>(2) Attribute Sampling</em> step, we sample the content of each tree node individually. Here, we can use prior information about the occurrence probabilities of specific operators and frequencies. This information can be conditioned on the parent nodes. For example, we can use prior information about the likelihood of + appearing in a sine function.</p>
+<h2 id="how-to-use-the-sampler">How To Use The Sampler</h2>
+<p>To use our sampler, import the functionality and call the sample function: 
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">equation_tree</span> <span class="kn">import</span> <span class="n">sample</span>
+
+<span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">()</span>
+</code></pre></div>
+This will return a list of sampled equations. You can customize the number of equations and the dimension of the input via the keyword arguments <code>n</code> and <code>max_num_variables</code>. For example to sample 100 equations with a maximum of 3 input variables, write:
+<div class="highlight"><pre><span></span><code><span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_num_variables</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+The most versatile way to further customize the sampling is the use of a prior. You can pass this to the sampler as a dictionary with entries for a structures prior, features, functions and operators. Here, we give an example:
+<div class="highlight"><pre><span></span><code><span class="n">prior</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;structures&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;[0, 1, 1]&#39;</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">&#39;[0, 1, 2]&#39;</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">&#39;[0, 1, 2, 3]&#39;</span><span class="p">:</span> <span class="mf">.4</span><span class="p">},</span>
+    <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constants&#39;</span><span class="p">:</span> <span class="mf">.2</span><span class="p">,</span> <span class="s1">&#39;variables&#39;</span><span class="p">:</span> <span class="mf">.8</span><span class="p">},</span>
+    <span class="s1">&#39;functions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
+    <span class="s1">&#39;operators&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="mf">.0</span><span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># To use the prior use the keyword argument `prior`</span>
+<span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">prior</span><span class="o">=</span><span class="n">prior</span><span class="p">)</span>
+</code></pre></div>
+You can also include conditionals. These influence the likelihood of a specific attribute being sampled given its parent node. For example, how likely does a - occur in a sine function:
+<div class="highlight"><pre><span></span><code><span class="n">prior</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;structures&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;[0, 1, 1]&#39;</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">&#39;[0, 1, 2]&#39;</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">&#39;[0, 1, 2, 3]&#39;</span><span class="p">:</span> <span class="mf">.4</span><span class="p">},</span>
+    <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constants&#39;</span><span class="p">:</span> <span class="mf">.2</span><span class="p">,</span> <span class="s1">&#39;variables&#39;</span><span class="p">:</span> <span class="mf">.8</span><span class="p">},</span>
+    <span class="s1">&#39;functions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
+    <span class="s1">&#39;operators&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="mf">.0</span><span class="p">},</span>
+        <span class="s1">&#39;function_conditionals&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constants&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;variables&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">},</span>
+                <span class="s1">&#39;functions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">},</span>
+                <span class="s1">&#39;operators&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constants&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;variables&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">},</span>
+                <span class="s1">&#39;functions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">},</span>
+                <span class="s1">&#39;operators&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}</span>
+            <span class="p">}</span>
+    <span class="p">},</span>
+        <span class="s1">&#39;operator_conditionals&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constants&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">&#39;variables&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
+                <span class="s1">&#39;functions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">},</span>
+                <span class="s1">&#39;operators&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constants&#39;</span><span class="p">:</span> <span class="mf">.3</span><span class="p">,</span> <span class="s1">&#39;variables&#39;</span><span class="p">:</span> <span class="mf">.7</span><span class="p">},</span>
+                <span class="s1">&#39;functions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cos&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
+                <span class="s1">&#39;operators&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mf">.9</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="mf">.1</span><span class="p">}</span>
+            <span class="p">}</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="possible-attributes">Possible Attributes</h3>
+<p>Here, we present which attributes are supported natively. </p>
+<p><em>You can use custom attributes for operators and functions, but other functionality like distance metrics or the evaluation of equations might not work with custom attributes.</em></p>
+<h4 id="structures">Structures</h4>
+<p>Here, we use the structure notion highlighted in the <a href="../equation-formats/#tree-structure">format</a>. </p>
+<p>The Equation Tree package provides convenience functions to obtain uniform structure priors from the tree depth or from the maximum number of nodes. To call them, you can use the keyword argument in the sample function: 
+<div class="highlight"><pre><span></span><code><span class="c1"># Sample equations with only a specified tree depth</span>
+<span class="n">equations</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">depth</span><span class="o">=...</span><span class="p">)</span>
+
+<span class="c1"># Sample equations up to a specified depth</span>
+<span class="n">equatons</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=...</span><span class="p">)</span>
+</code></pre></div></p>
+<h4 id="features">Features</h4>
+<p><code>constants</code>: the likelihood of a leaf being a constant. In the Equation Tree package, constants are represented as c followed by an index (<code>c_{}</code>). The sampler doesn't sample the same constant twice. </p>
+<p><code>variables</code>: the likelihood of a leaf being a variable. Variables are represented as a x followed by an index (<code>x_{}</code>). Variables are sampled with replacement. </p>
+<p><em>Attention</em>: A function will never have a constant as it's child, since a constant in a function can be simplified to a single constant</p>
+<h4 id="functions">Functions</h4>
+<p>Functions are mathematical operations with only one input value. Our package supports the following natively. Please ues the exact notion.
+- sin
+- cos
+- tan
+- exp
+- log
+- sqrt
+- abs</p>
+<p>The following operators can be added, but are not in the default priors:
+- acos
+- arg
+- asin
+- sinh
+- cosh
+- tanh
+- cot</p>
+<p><em>Additionally, you can use <code>squared</code> and <code>cubed</code> as keys, but this might not be fully supported in all functions of the equation sampler. For example, converting to sympy expressions might lead to unexpected results.</em></p>
+<h4 id="operators">Operators</h4>
+<p>Operators are mathematical operations with two input values. Our package supports the following natively.
+- +
+- -
+- *
+- \/
+- **
+- max
+- min</p>
+<h4 id="conditionals">Conditionals</h4>
+<ul>
+<li>In the function conditionals each function can has it's own prior consisting of a feature, function, and operator prior.</li>
+<li>In the operator conditionals each operator can has it's own prior consisting of a feature, function, and operator prior.</li>
+</ul>
+<h4 id="convenience">Convenience</h4>
+<p>The Equation Tree package has a convenience function that allows to transform a space into a uniform prior:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">equation_tree.prior</span> <span class="kn">import</span> <span class="n">prior_from_space</span>
+
+<span class="c1"># For example if you only want to include primitive operators</span>
+<span class="n">operator_prior</span> <span class="o">=</span> <span class="n">prior_from_space</span><span class="p">([</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">])</span>
+</code></pre></div></p>
 
 
 
