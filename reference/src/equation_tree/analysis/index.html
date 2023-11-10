@@ -1137,7 +1137,7 @@
 
 
 <h2 id="src.equation_tree.analysis.get_counts" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_counts</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span></code>
+          <code class="highlight language-python"><span class="n">get_counts</span><span class="p">(</span><span class="n">equations</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1260,22 +1260,7 @@
 
           <details class="quote">
             <summary>Source code in <code>src/equation_tree/analysis.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span>
-<span class="normal">222</span>
-<span class="normal">223</span>
-<span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">228</span>
 <span class="normal">229</span>
 <span class="normal">230</span>
 <span class="normal">231</span>
@@ -1443,7 +1428,26 @@
 <span class="normal">393</span>
 <span class="normal">394</span>
 <span class="normal">395</span>
-<span class="normal">396</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_counts</span><span class="p">(</span><span class="n">trees</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EquationTree</span><span class="p">]):</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_counts</span><span class="p">(</span><span class="n">equations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">equation_type</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
@@ -1564,7 +1568,11 @@
     <span class="n">operators</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">function_conditionals</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">operator_conditionals</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">_t</span> <span class="ow">in</span> <span class="n">equations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_t</span><span class="p">,</span> <span class="n">Expr</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">_t</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">_t</span>
         <span class="n">_info</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">info</span>
         <span class="k">if</span> <span class="s2">&quot;max_depth&quot;</span> <span class="ow">in</span> <span class="n">_info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">_update</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_info</span><span class="p">[</span><span class="s2">&quot;max_depth&quot;</span><span class="p">])</span>
@@ -1640,7 +1648,7 @@
 
 
 <h2 id="src.equation_tree.analysis.get_frequencies" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_frequencies</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span></code>
+          <code class="highlight language-python"><span class="n">get_frequencies</span><span class="p">(</span><span class="n">equations</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1771,15 +1779,7 @@
 
           <details class="quote">
             <summary>Source code in <code>src/equation_tree/analysis.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  7</span>
-<span class="normal">  8</span>
-<span class="normal">  9</span>
-<span class="normal"> 10</span>
-<span class="normal"> 11</span>
-<span class="normal"> 12</span>
-<span class="normal"> 13</span>
-<span class="normal"> 14</span>
-<span class="normal"> 15</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 15</span>
 <span class="normal"> 16</span>
 <span class="normal"> 17</span>
 <span class="normal"> 18</span>
@@ -1974,7 +1974,19 @@
 <span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
-<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_frequencies</span><span class="p">(</span><span class="n">trees</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EquationTree</span><span class="p">]):</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_frequencies</span><span class="p">(</span><span class="n">equations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">equation_type</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
@@ -2103,7 +2115,11 @@
     <span class="n">operators</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">function_conditionals</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">operator_conditionals</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">_t</span> <span class="ow">in</span> <span class="n">equations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_t</span><span class="p">,</span> <span class="n">Expr</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">EquationTree</span><span class="o">.</span><span class="n">from_sympy</span><span class="p">(</span><span class="n">_t</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">_t</span>
         <span class="n">_info</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">info</span>
         <span class="k">if</span> <span class="s2">&quot;max_depth&quot;</span> <span class="ow">in</span> <span class="n">_info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">_update</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_info</span><span class="p">[</span><span class="s2">&quot;max_depth&quot;</span><span class="p">])</span>
