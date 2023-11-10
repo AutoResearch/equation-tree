@@ -4,7 +4,15 @@ from equation_tree.tree import EquationTree
 from equation_tree.util.priors import normalized_dict
 
 
-def get_frequencies(trees: List[EquationTree]):
+
+from sympy import Expr
+
+from typing import Union, List
+
+equation_type = Union[EquationTree, Expr]
+
+
+def get_frequencies(equations: List[equation_type]):
     """
     Examples:
         >>> import numpy as np
@@ -133,7 +141,11 @@ def get_frequencies(trees: List[EquationTree]):
     operators: Dict = {}
     function_conditionals: Dict = {}
     operator_conditionals: Dict = {}
-    for t in trees:
+    for _t in equations:
+        if isinstance(_t, Expr):
+            t = EquationTree.from_sympy(_t)
+        else:
+            t = _t
         _info = t.info
         if "max_depth" in _info.keys():
             _update(max_depth, _info["max_depth"])
@@ -210,7 +222,10 @@ def get_frequencies(trees: List[EquationTree]):
     return info
 
 
-def get_counts(trees: List[EquationTree]):
+
+
+
+def get_counts(equations: List[equation_type]):
     """
     Examples:
         >>> import numpy as np
@@ -331,7 +346,11 @@ def get_counts(trees: List[EquationTree]):
     operators: Dict = {}
     function_conditionals: Dict = {}
     operator_conditionals: Dict = {}
-    for t in trees:
+    for _t in equations:
+        if isinstance(_t, Expr):
+            t = EquationTree.from_sympy(_t)
+        else:
+            t = _t
         _info = t.info
         if "max_depth" in _info.keys():
             _update(max_depth, _info["max_depth"])

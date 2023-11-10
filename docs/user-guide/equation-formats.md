@@ -9,6 +9,9 @@ While the underlying format of the Equation Tree is an incomplete binary tree, i
 ## Tree Representation
 coming soon ...
 
+### Tree Structure
+coming soon ...
+
 ## String Representation
 coming soon ...
 

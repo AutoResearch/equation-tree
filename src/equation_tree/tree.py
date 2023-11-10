@@ -53,14 +53,15 @@ FUNCTIONS: Dict[str, UnaryOperator] = {
     "log": lambda a: np.log(a),
     "sqrt": lambda a: np.sqrt(a),
     "abs": lambda a: np.abs(a),
-    "arg": lambda a: np.pi * a / 180,
     "acos": lambda a: np.arccos(a),
+    "arg": lambda a: np.pi * a / 180,
     "asin": lambda a: np.arcsin(a),
     "sinh": lambda a: np.sinh(a),
     "cosh": lambda a: np.cosh(a),
     "tanh": lambda a: np.tanh(a),
     "cubed": lambda a: a ** 3,
     "squared": lambda a: a ** 2,
+    "cot": lambda a: 1/np.tan(a)
 }
 
 SIMPLIFY_TIMEOUT = 10

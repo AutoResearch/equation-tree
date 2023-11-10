@@ -5,7 +5,7 @@ The Equation Tree package is an equation toolbox with symbolic regression in min
 - [**Equation Sampling**](user-guide/equation-sampling.md)
 - Calculating [Distance Metrics](user-guide/distance-metrics.md) between equations
 
-It also encompasses a variety of [additional features](user-guide/additional-features.md). For example, to obtain information about existing equation list that can, in turn, be used in our sampling method.
+It also encompasses a variety of [additional features](user-guide/additional-features.md) including the capability to analyse distribution parameters for a given set of equations. For example, to obtain information about a specific field one can use the [equation scraper](https://autoresearch.github.io/equation-scraper/tutorials/equation_scraper_tutorial/) to scrape equations from wikipedia and then use the sampler to generate equations that resemble a equations of a scientific field. 
 
 ## Relevant Publication
 
