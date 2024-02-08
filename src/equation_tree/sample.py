@@ -100,6 +100,7 @@ def __sample_tree_raw_fast(
         max_num_variables,
 ):
     equation_tree = EquationTree.from_prior_fast(prior, tree_depth, max_num_variables)
+    _tmp = equation_tree.prefix.copy()
 
     # Check if tree is valid
     if not equation_tree.check_validity():
@@ -110,6 +111,8 @@ def __sample_tree_raw_fast(
             function_test=lambda x: x in get_defined_functions(prior),
             operator_test=lambda x: x in get_defined_operators(prior),
         )
+        if equation_tree.prefix != _tmp:
+            return None
     except ValueError:
         return None
 
@@ -150,6 +153,7 @@ def __sample_tree_raw(
         max_num_variables,
 ):
     equation_tree = EquationTree.from_prior(prior, max_num_variables)
+    _tmp = equation_tree.prefix.copy()
 
     # Check if tree is valid
     if not equation_tree.check_validity():
@@ -160,6 +164,8 @@ def __sample_tree_raw(
             function_test=lambda x: x in get_defined_functions(prior),
             operator_test=lambda x: x in get_defined_operators(prior),
         )
+        if equation_tree.prefix != _tmp:
+            return None
     except ValueError:
         return None
 

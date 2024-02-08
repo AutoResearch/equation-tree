@@ -21,6 +21,7 @@ nav:
   - Tutorials:
       - Basic Usage: 'tutorials/Basic Usage.ipynb'
       - Distance Metrics: 'tutorials/Distance Metrics.ipynb'
+      - Analysing Equation Distributions: 'tutorials/Analysing Equation Distribution.ipynb'
   - Code Reference: reference/
 
 theme:
