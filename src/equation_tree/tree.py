@@ -1248,8 +1248,6 @@ class EquationTree:
             >>> equation_tree.sympy_expr
             (-c_1 + x_1)*(c_1 - x_1)
 
-            # it is good practice to define tests at the begining of a script and use them
-            # throughout the project
             >>> equation_tree.simplify(
             ...     operator_test=is_operator,
             ...     function_test=is_function
@@ -1283,18 +1281,18 @@ class EquationTree:
             def operator_test(x):
                 return tmp_o(x) or x in self.operators
 
-        class TimeoutError(Exception):
-            pass
+        # class TimeoutError(Exception):
+        #     pass
 
-        def timeout_handler(signum, frame):
-            raise TimeoutError("Function call timed out")
+        # def timeout_handler(signum, frame):
+        #     raise TimeoutError("Function call timed out")
 
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(SIMPLIFY_TIMEOUT)
+        # signal.signal(signal.SIGALRM, timeout_handler)
+        # signal.alarm(SIMPLIFY_TIMEOUT)
         try:
             simplified_equation = simplify(self.sympy_expr)
-            signal.alarm(0)
-        except TimeoutError:
+            # signal.alarm(0)
+        except:
             simplified_equation = self.sympy_expr
         if not check_functions(simplified_equation, function_test):
             warnings.warn(
