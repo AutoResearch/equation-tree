@@ -98,13 +98,15 @@ def __sample_tree_raw_fast(
         prior,
         tree_depth,
         max_num_variables,
+        structure=None
 ):
-    equation_tree = EquationTree.from_prior_fast(prior, tree_depth, max_num_variables)
+    equation_tree = EquationTree.from_prior_fast(prior, tree_depth, max_num_variables, structure=structure)
     _tmp = equation_tree.prefix.copy()
+    _tmp_structure = equation_tree.standard_structure.copy()
 
     # Check if tree is valid
     if not equation_tree.check_validity():
-        return None
+        return None, _tmp_structure
 
     try:
         equation_tree.simplify(
@@ -112,20 +114,20 @@ def __sample_tree_raw_fast(
             operator_test=lambda x: x in get_defined_operators(prior),
         )
         if equation_tree.prefix != _tmp:
-            return None
+            return None, _tmp_structure
     except ValueError:
-        return None
+        return None, _tmp_structure
 
     # Check is nan
     if equation_tree.is_nan:
-        return None
+        return None, _tmp_structure
 
     # Check if duplicate constants
     if (
             equation_tree.n_non_numeric_constants
             > equation_tree.n_non_numeric_constants_unique
     ):
-        return None
+        return None, _tmp_structure
 
     # Check if more variables than max:
     if equation_tree.n_variables_unique > max_num_variables:
@@ -133,31 +135,33 @@ def __sample_tree_raw_fast(
 
     # Check if tree depth is exact
     if len(equation_tree.structure) != tree_depth:
-        return None
+        return None, _tmp_structure
 
     if not equation_tree.check_validity():
-        return None
+        return None, _tmp_structure
 
     if not equation_tree.check_possible_from_prior(prior):
-        return None
+        return None, _tmp_structure
 
     equation_tree.get_evaluation()
     if not equation_tree.has_valid_value:
-        return None
+        return None, _tmp_structure
 
-    return equation_tree
+    return equation_tree, _tmp_structure
 
 
 def __sample_tree_raw(
         prior,
         max_num_variables,
+        structure=None
 ):
-    equation_tree = EquationTree.from_prior(prior, max_num_variables)
+    equation_tree = EquationTree.from_prior(prior, max_num_variables, structure=structure)
     _tmp = equation_tree.prefix.copy()
+    _tmp_structure = equation_tree.standard_structure.copy()
 
     # Check if tree is valid
     if not equation_tree.check_validity():
-        return None
+        return None, _tmp_structure
 
     try:
         equation_tree.simplify(
@@ -165,36 +169,36 @@ def __sample_tree_raw(
             operator_test=lambda x: x in get_defined_operators(prior),
         )
         if equation_tree.prefix != _tmp:
-            return None
+            return None, _tmp_structure
     except ValueError:
-        return None
+        return None, _tmp_structure
 
     # Check is nan
     if equation_tree.is_nan:
-        return None
+        return None, _tmp_structure
 
     # Check if duplicate constants
     if (
             equation_tree.n_non_numeric_constants
             > equation_tree.n_non_numeric_constants_unique
     ):
-        return None
+        return None, _tmp_structure
 
     # Check if more variables than max:
     if equation_tree.n_variables_unique > max_num_variables:
-        return None
+        return None, _tmp_structure
 
     if not equation_tree.check_validity():
-        return None
+        return None, _tmp_structure
 
     if not equation_tree.check_possible_from_prior(prior):
-        return None
+        return None, _tmp_structure
 
     equation_tree.get_evaluation()
     if not equation_tree.has_valid_value:
-        return None
+        return None, _tmp_structure
 
-    return equation_tree
+    return equation_tree, _tmp_structure
 
 
 def _sample_tree_iter_fast(
@@ -202,11 +206,13 @@ def _sample_tree_iter_fast(
         tree_depth,
         max_num_variables,
 ):
+    _structure = None
     for _ in range(MAX_ITER):
-        equation_tree = __sample_tree_raw_fast(
+        equation_tree, _structure = __sample_tree_raw_fast(
             prior,
             tree_depth,
             max_num_variables,
+            structure=_structure
         )
         if equation_tree is not None:
             return equation_tree
@@ -216,10 +222,12 @@ def _sample_tree_iter(
         prior,
         max_num_variables,
 ):
+    _structure = None
     for _ in range(MAX_ITER):
-        equation_tree = __sample_tree_raw(
+        equation_tree, _structure = __sample_tree_raw(
             prior,
             max_num_variables,
+            structure=_structure
         )
 
         if equation_tree is not None:

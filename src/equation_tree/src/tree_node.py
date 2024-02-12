@@ -697,7 +697,7 @@ def sample_tree(
     return tree
 
 
-def sample_tree_full(prior, max_var_unique):
+def sample_tree_full(prior, max_var_unique, structure=None):
     """
     Examples:
         >>> np.random.seed(42)
@@ -780,7 +780,9 @@ def sample_tree_full(prior, max_var_unique):
         True
 
     """
-    tree_structure = sample_tree_structure(prior["structures"])
+    tree_structure = structure
+    if tree_structure is None:
+        tree_structure = sample_tree_structure(prior["structures"])
     function_conditionals = None
     operator_conditionals = None
     if "function_conditionals" in prior.keys():
@@ -801,7 +803,7 @@ def sample_tree_full(prior, max_var_unique):
     return tree
 
 
-def sample_tree_full_fast(prior, tree_depth, max_var_unique):
+def sample_tree_full_fast(prior, tree_depth, max_var_unique, structure=None):
     """
     Examples:
         >>> np.random.seed(42)
@@ -883,7 +885,9 @@ def sample_tree_full_fast(prior, tree_depth, max_var_unique):
         True
 
     """
-    tree_structure = sample_tree_structure_fast(tree_depth)
+    tree_structure = structure
+    if tree_structure is None:
+        tree_structure = sample_tree_structure_fast(tree_depth)
     function_conditionals = None
     operator_conditionals = None
     if "function_conditionals" in prior.keys():

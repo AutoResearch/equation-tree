@@ -256,7 +256,7 @@ class EquationTree:
         return cls(root)
 
     @classmethod
-    def from_prior_fast(cls, prior: Dict, tree_depth, max_variables_unique: int):
+    def from_prior_fast(cls, prior: Dict, tree_depth, max_variables_unique: int, structure=None):
         """
         Initiate a tree from a prior with fast sampling
         Attention: structure prior is not supported
@@ -267,11 +267,11 @@ class EquationTree:
             max_variables_unique: The maximum number of unique variables (a tree can have less then
                 this number)
         """
-        root = sample_tree_full_fast(prior, tree_depth, max_variables_unique)
+        root = sample_tree_full_fast(prior, tree_depth, max_variables_unique, structure=structure)
         return cls(root)
 
     @classmethod
-    def from_prior(cls, prior: Dict, max_variables_unique: int):
+    def from_prior(cls, prior: Dict, max_variables_unique: int, structure=None):
         """
         Initiate a tree from a prior
 
@@ -353,7 +353,7 @@ class EquationTree:
 
             # Note: this would be discarded in a future step as unnecesarry complex
         """
-        root = sample_tree_full(prior, max_variables_unique)
+        root = sample_tree_full(prior, max_variables_unique, structure=structure)
         return cls(root)
 
     @classmethod
