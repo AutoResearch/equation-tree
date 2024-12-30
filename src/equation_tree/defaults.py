@@ -57,7 +57,7 @@ def is_operator(a):
 
 
 def is_function(a):
-    return a.lower() in function_space
+    return a.lower() in DEFAULT_FUNCTION_SPACE + ADDITIONAL_FUNCTIONS
 
 
 def is_variable(a):
