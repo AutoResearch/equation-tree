@@ -552,7 +552,7 @@ class EquationTree:
 
     @property
     def variables_unique(self):
-        return list(set(self.variables))
+        return sorted(list(set(self.variables)))
 
     @property
     def n_variables(self):
