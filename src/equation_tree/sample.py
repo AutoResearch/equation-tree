@@ -43,6 +43,8 @@ def sample(n=1,
            max_depth=None,
            depth=None):
     _prior = copy.deepcopy(prior)
+    for prior_type in _prior.keys():
+        _prior[prior_type] = {key: _prior[prior_type][key] for key in sorted(_prior[prior_type])}
     if max_depth is not None and depth is not None:
         raise Exception("Both depth and max depth are defined. Please only define one of both")
     elif max_depth is not None:
