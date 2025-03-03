@@ -22,7 +22,7 @@ def is_numeric(s):
         False
 
     """
-    if isinstance(s, str) and (not s[0].isnumeric() and s[0] != "."):
+    if isinstance(s, str) and (not s[0].isnumeric() and not (s[0] in [".", "-"])):
         return False
     try:
         float(s)
